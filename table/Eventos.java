@@ -5,12 +5,12 @@ public class Eventos {
     private String descricao;
     private Integer data;
     private String local;
-    private Palestrante palestrantes;
+    private palestrante palestrantes;
     
     public Eventos() {
     }
 
-    public Eventos(String nome, String descricao, Integer data, String local, Palestrante palestrantes) {
+    public Eventos(String nome, String descricao, Integer data, String local, palestrante palestrantes) {
         this.nome = nome;
         this.descricao = descricao;
         this.data = data;
@@ -41,10 +41,10 @@ public class Eventos {
     public void setLocal(String local) {
         this.local = local;
     }
-    public Palestrante getPalestrantes() {
+    public palestrante getPalestrantes() {
         return palestrantes;
     }
-    public void setPalestrantes(Palestrante palestrantes) {
+    public void setPalestrantes(palestrante palestrantes) {
         this.palestrantes = palestrantes;
     }
  
