@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import table.Palestrante;
+//import table.Participante; ?pode vir a ser util
 import util.SQLiteConnection;
 
 public class PalestranteDao {
@@ -21,14 +22,18 @@ public class PalestranteDao {
     public List<Palestrante> listarTodos() {
         try {
             List<Palestrante> lista = new ArrayList<Palestrante>();
-            String sql = "SELECT * FROM participante";
+            String sql = "SELECT * FROM Palestrante";
             Connection conn = this.sqlConn.connect();
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(sql);
             while (rs.next()) {
-                Palestrante palestrante = new Palestrante(rs.getInt("id"), rs.getString("nome"),
-                        rs.getString("sexo"), rs.getString("email"), rs.getString("celular"));
-                lista.add(participante);
+                //nome, currículo, área de atuação
+                Palestrante palestrante = new Palestrante(
+                    rs.getInt("id"), 
+                    rs.getString("nome"),
+                    rs.getString("curriculo"), 
+                    rs.getString("areaAtuacao"));
+                lista.add(palestrante);
             }
             rs.close();
             stm.close();
@@ -36,7 +41,7 @@ public class PalestranteDao {
             return lista;
         } catch (SQLException e) {
             System.err.println(
-                    "Erro no método listarTodos() da classe ParticipanteDao ao executar SELECT: " + e.getMessage());
+                    "Erro no método listarTodos() da classe PalestanteDao ao executar SELECT: " + e.getMessage());
             e.printStackTrace();
             return new ArrayList<Palestrante>();
         }
@@ -45,17 +50,17 @@ public class PalestranteDao {
     public List<Palestrante> listarPorParametro(String nome, String sexo) {
         try {
             List<Palestrante> lista = new ArrayList<Palestrante>();
-            String sql = "SELECT * FROM participante";
+            String sql = "SELECT * FROM Palestrante";
             String sqlWhere = "";
             if (((nome != null) && (!nome.isEmpty())) || ((sexo != null) && (!sexo.isEmpty()))) {
                 sqlWhere = " WHERE";
                 if ((nome != null) && (!nome.isEmpty()))
                     sqlWhere += " nome LIKE ?";
-                if ((sexo != null) && (!sexo.isEmpty())) {
-                    if (sqlWhere.equals(""))
-                        sqlWhere += " email = ?";
-                    else
-                        sqlWhere += " AND email = ?";
+                    if ((sexo != null) && (!sexo.isEmpty())) {
+                        if (sqlWhere.equals(""))
+                            sqlWhere += " email = ?";
+                        else
+                            sqlWhere += " AND email = ?";
                 }
             }
             sql += sqlWhere;
@@ -70,8 +75,11 @@ public class PalestranteDao {
                 pstm.setString(1, sexo);
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
-                Palestrante palestrante = new Palestrante(rs.getInt("id"), rs.getString("nome"),
-                        rs.getString("sexo"), rs.getString("email"), rs.getString("celular"));
+                Palestrante palestrante = new Palestrante(
+                    rs.getInt("id"), 
+                    rs.getString("nome"),
+                    rs.getString("sexo"), 
+                    rs.getString("email"));
                 lista.add(palestrante);
             }
             rs.close();
@@ -95,8 +103,11 @@ public class PalestranteDao {
             pstm.setInt(1, id);
             ResultSet rs = pstm.executeQuery();
             if (rs.next())
-                palestrante = new Palestrante(rs.getInt("id"), rs.getString("nome"),
-                        rs.getString("sexo"), rs.getString("email"), rs.getString("celular"));
+                palestrante = new Palestrante(
+                    rs.getInt("id"), 
+                    rs.getString("nome"),
+                    rs.getString("curriculo"), 
+                    rs.getString("areaAtuacao"));
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
@@ -111,15 +122,18 @@ public class PalestranteDao {
 
     public Palestrante buscarPorEmail(String email) {
         try {
-            Palestrante participante = new Palestrante();
-            String sql = "SELECT * FROM participante where email = ?";
+            Palestrante palestrante = new Palestrante();
+            String sql = "SELECT * FROM palestrante where email = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, email);
             ResultSet rs = pstm.executeQuery();
             if (rs.next())
-                palestrante = new Palestrante(rs.getInt("id"), rs.getString("nome"),
-                        rs.getString("sexo"), rs.getString("email"), rs.getString("celular"));
+                palestrante = new Palestrante(
+                    rs.getInt("id"), 
+                    rs.getString("nome"),
+                    rs.getString("curriculo"), 
+                    rs.getString("areaAtuacao"));
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
@@ -136,14 +150,17 @@ public class PalestranteDao {
     public Palestrante buscarPorCelular(String celular) {
         try {
             Palestrante palestrante = new Palestrante();
-            String sql = "SELECT * FROM participante where celular = ?";
+            String sql = "SELECT * FROM palestrante where celular = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, celular);
             ResultSet rs = pstm.executeQuery();
             if (rs.next())
-                participante = new Participante(rs.getInt("id"), rs.getString("nome"),
-                        rs.getString("sexo"), rs.getString("email"), rs.getString("celular"));
+             palestrante = new Palestrante(
+                    rs.getInt("id"), 
+                    rs.getString("nome"),
+                    rs.getString("curriculo"), 
+                    rs.getString("areaAtuacao"));
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
@@ -156,18 +173,17 @@ public class PalestranteDao {
             return new Palestrante();
         }
     }
-
-    public String inserir(String nome, String sexo, String email, String celular) {
+// campos nome, currículo, área de atuação
+    public String inserir(String nome, String sexo, String curriculo, String areadeatuacao) {
         try {
             Integer id = this.getNewId();
-            String sql = "INSERT INTO participante(id, nome, sexo, email, celular) VALUES(?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO palestrante(id, nome, curriculo, areadeatuacao) VALUES(?, ?, ?, ?)";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setInt(1, id);
             pstm.setString(2, nome);
-            pstm.setString(3, sexo);
-            pstm.setString(4, email);
-            pstm.setString(5, celular);
+            pstm.setString(3, curriculo);
+            pstm.setString(4, areadeatuacao);
             System.out.println("Resposta: " + pstm.executeUpdate());
             pstm.close();
             this.sqlConn.close(conn);
@@ -184,7 +200,7 @@ public class PalestranteDao {
     private Integer getNewId() {
         try {
             Integer id = 1;
-            String sql = "SELECT MAX(id) AS max_id FROM participante";
+            String sql = "SELECT MAX(id) AS max_id FROM palestrante";
             Connection conn = this.sqlConn.connect();
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(sql);

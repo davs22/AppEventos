@@ -8,19 +8,20 @@ import util.SQLiteConnection;
 public class TexteConnection {
     public static void main(String[] args) {
         try {
-            String sql = "SELECT * FROM participante";
+            String sql = "PRAGMA table_info(evento_participante);";
             SQLiteConnection sqlConn = new SQLiteConnection();
             Connection conn = sqlConn.connect();
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(sql);
             while (rs.next()) {
-                System.out.println(rs.getString("nome"));
+                System.out.println(rs.getString("name"));
             }
             rs.close();
             stm.close();
             sqlConn.close(conn);
         } catch (SQLException e) {
             System.err.println("Erro ao executar SELECT: " + e.getMessage());
+
         }
     }
 }

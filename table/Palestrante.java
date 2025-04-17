@@ -1,6 +1,7 @@
 package table;
 
 public class Palestrante {
+    private Integer id;
     private String nome;
     private String curriculo;
     private String areaAtuacao;
@@ -8,11 +9,13 @@ public class Palestrante {
     public Palestrante() {
     }
 
-    public Palestrante(String nome, String curriculo, String areaAtuacao) {
+    public Palestrante(Integer id, String nome, String curriculo, String areaAtuacao) {
+        this.id = id;
         this.nome = nome;
         this.curriculo = curriculo;
         this.areaAtuacao = areaAtuacao;
     }
+    
     public String getNome() {
         return nome;
     }
@@ -30,6 +33,14 @@ public class Palestrante {
     }
     public void setAreaAtuacao(String areaAtuacao) {
         this.areaAtuacao = areaAtuacao;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     
