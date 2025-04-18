@@ -7,13 +7,10 @@ import java.util.Scanner;
 import java.io.IOException;
 
 public class SQLiteTesterMaster {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException{
         // Conectando ao DB
         SQLiteConnection sqlconn = new SQLiteConnection();
         Connection conn = sqlconn.connect();
-        
-        // Mostrar o diretório de execução (debug)
-        System.out.println("Diretório de execução: " + System.getProperty("user.dir"));
         
         // Solicitar escolha do usuário
         System.out.println("Digite 1 para: criar DB\nDigite 2 para: Deletar DB\nDigite 3 para: deletar-DB e criar-DB");
@@ -23,11 +20,10 @@ public class SQLiteTesterMaster {
         // Ação com base na escolha do usuário
         if (opcao == 1) {
             System.out.println("Criando DB");
-
-            String sql = new String();
-            
             // Executar SQL
             try (Statement stm = conn.createStatement()) {
+                //sql aqui
+                String sql = "";
                 stm.execute(sql);  // Executa o comando SQL
                 System.out.println("DB criado com sucesso!");
             } catch (SQLException e) {
