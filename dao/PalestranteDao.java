@@ -8,33 +8,27 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import table.palestrante;
-//import table.Participante; ?pode vir a ser util porem
+import table.Palestrante;
 import util.SQLiteConnection;
 
 public class PalestranteDao {
-    /*
-    seleção por id ------------- falta executar
-    seleção por curriculo ------ falta executar
-    seleção por areaAtuacao ---- falta executar
-    seleção listarPorParametro - necesario corrigir e discutir para compreenção
-    */
+    
     private SQLiteConnection sqlConn;
 
     public PalestranteDao() {
         this.sqlConn = new SQLiteConnection();
     }
 
-    public List<palestrante> listarTodos() {
+    public List<Palestrante> listarTodos() {
         try {
-            List<palestrante> lista = new ArrayList<palestrante>();
+            List<Palestrante> lista = new ArrayList<Palestrante>();
             String sql = "SELECT * FROM Palestrante";
             Connection conn = this.sqlConn.connect();
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(sql);
             while (rs.next()) {
-                //nome, currículo, área de atuação
-                palestrante palestrante = new palestrante(
+                
+                Palestrante palestrante = new Palestrante(
                     rs.getInt("id"), 
                     rs.getString("nome"),
                     rs.getString("curriculo"), 
@@ -47,41 +41,41 @@ public class PalestranteDao {
             return lista;
         } catch (SQLException e) {
             System.err.println(
-                    "Erro no método listarTodos() da classe PalestanteDao ao executar SELECT: " + e.getMessage());
+                    "Erro ao listarTodos() de Palestrantes " + e.getMessage());
             e.printStackTrace();
-            return new ArrayList<palestrante>();
+            return new ArrayList<Palestrante>();
         }
     }
-//buscar discutir e corrigir
-    public List<palestrante> listarPorParametro(String nome, String sexo) {
+
+    public List<Palestrante> listarPorParametro(String nome, String areaAtuacao) {
         try {
-            List<palestrante> lista = new ArrayList<palestrante>();
+            List<Palestrante> lista = new ArrayList<Palestrante>();
             String sql = "SELECT * FROM Palestrante";
             String sqlWhere = "";
-            if (((nome != null) && (!nome.isEmpty())) || ((sexo != null) && (!sexo.isEmpty()))) {
+            if (((nome != null) && (!nome.isEmpty())) || ((areaAtuacao != null) && (!areaAtuacao.isEmpty()))) {
                 sqlWhere = " WHERE";
                 if ((nome != null) && (!nome.isEmpty()))
                     sqlWhere += " nome LIKE ?";
-                    if ((sexo != null) && (!sexo.isEmpty())) {
+                    if ((areaAtuacao != null) && (!areaAtuacao.isEmpty())) {
                         if (sqlWhere.equals(""))
-                            sqlWhere += " email = ?";
+                            sqlWhere += " areaAtuacao = ?";
                         else
-                            sqlWhere += " AND email = ?";
+                            sqlWhere += " areaAtuacao = ?";
                 }
             }
             sql += sqlWhere;
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
-            if ((nome != null) && (!nome.isEmpty()) && (sexo != null) && (!sexo.isEmpty())) {
+            if ((nome != null) && (!nome.isEmpty()) && (areaAtuacao != null) && (!areaAtuacao.isEmpty())) {
                 pstm.setString(1, nome);
-                pstm.setString(2, sexo);
+                pstm.setString(2, areaAtuacao);
             } else if ((nome != null) && (!nome.isEmpty()))
                 pstm.setString(1, nome);
             else if ((nome != null) && (!nome.isEmpty()))
-                pstm.setString(1, sexo);
+                pstm.setString(1, areaAtuacao);
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
-                palestrante palestrante = new palestrante(
+                Palestrante palestrante = new Palestrante(
                     rs.getInt("id"), 
                     rs.getString("nome"),
                     rs.getString("curriculo"), 
@@ -94,22 +88,22 @@ public class PalestranteDao {
             return lista;
         } catch (SQLException e) {
             System.err.println(
-                    "Erro no método listarPorParametro(String nome, String sexo) da classe PalestranteteDao ao executar SELECT: "
+                    "Erro no método listarPorParametro: "
                             + e.getMessage());
-            return new ArrayList<palestrante>();
+            return new ArrayList<Palestrante>();
         }
     }
 
-    public palestrante buscarPorId(Integer id) {
+    public Palestrante buscarPorId(Integer id) {
         try {
-            palestrante palestrante = new palestrante();
+            Palestrante palestrante = new Palestrante();
             String sql = "SELECT * FROM palestrante where id = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setInt(1, id);
             ResultSet rs = pstm.executeQuery();
             if (rs.next())
-                palestrante = new palestrante(
+                palestrante = new Palestrante(
                     rs.getInt("id"), 
                     rs.getString("nome"),
                     rs.getString("curriculo"), 
@@ -122,20 +116,20 @@ public class PalestranteDao {
             System.err.println("Erro no método buscarPorId(Integer id) da classe PalestranteDao ao executar SELECT: "
                     + e.getMessage());
             e.printStackTrace();
-            return new palestrante();
+            return new Palestrante();
         }
     }
 
-    public palestrante buscarPorCurriculo(String curriculo) {
+    public Palestrante buscarPorCurriculo(String curriculo) {
         try {
-            palestrante palestrante = new palestrante();
+            Palestrante palestrante = new Palestrante();
             String sql = "SELECT * FROM palestrante where curriculo = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, curriculo);
             ResultSet rs = pstm.executeQuery();
             if (rs.next())
-                palestrante = new palestrante(
+                palestrante = new Palestrante(
                     rs.getInt("id"), 
                     rs.getString("nome"),
                     rs.getString("curriculo"), 
@@ -149,20 +143,20 @@ public class PalestranteDao {
                     "Erro no método buscarPorCurriculo(String curriculo) da classe PalestranteDao ao executar SELECT: "
                             + e.getMessage());
             e.printStackTrace();
-            return new palestrante();
+            return new Palestrante();
         }
     }
 
-    public palestrante buscarPorAreaAtuacao(String areaAtuacao) {
+    public Palestrante buscarPorAreaAtuacao(String areaAtuacao) {
         try {
-            palestrante palestrante = new palestrante();
+            Palestrante palestrante = new Palestrante();
             String sql = "SELECT * FROM palestrante where areaAtuacao = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, areaAtuacao);
             ResultSet rs = pstm.executeQuery();
             if (rs.next())
-             palestrante = new palestrante(
+             palestrante = new Palestrante(
                     rs.getInt("id"), 
                     rs.getString("nome"),
                     rs.getString("curriculo"), 
@@ -176,10 +170,10 @@ public class PalestranteDao {
                     "Erro no método buscarPorAreaAtuacao(String areaAtuacao) da classe PalestranteDao ao executar SELECT: "
                             + e.getMessage());
             e.printStackTrace();
-            return new palestrante();
+            return new Palestrante();
         }
     }
-// campos nome, currículo, área de atuação
+
     public String inserir(String nome, String curriculo, String areadeatuacao) {
         try {
             Integer id = this.getNewId();
@@ -224,6 +218,25 @@ public class PalestranteDao {
             return -1;
         }
     }
+
+    public String excluir(int id) {
+        try {
+            String sql = "DELETE FROM palestrante WHERE id = ?";
+            Connection conn = this.sqlConn.connect();
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, id);
+            int linhasAfetadas = pstm.executeUpdate();
+            System.out.println("Linhas afetadas: " + linhasAfetadas);
+            pstm.close();
+            this.sqlConn.close(conn);
+            return linhasAfetadas > 0 ? "sucesso" : "nenhum registro encontrado";
+        } catch (Exception e) {
+            System.err.println("Erro no método excluir(int id) da classe PalestranteDao: " + e.getMessage());
+            e.printStackTrace();
+            return "erro";
+        }
+    }
+    
 }
 
 

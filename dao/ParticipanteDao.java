@@ -185,6 +185,44 @@ public class ParticipanteDao {
         }
     }
 
+    // Método para atualizar os dados do participante
+    public String atualizarParticipante(int idParticipante, String novoNome, String novoEmail, String novoTelefone) {
+        try {
+            Connection conn = this.sqlConn.connect();
+
+            // Verifica se o participante existe
+            String verificaSql = "SELECT COUNT(*) FROM participante WHERE id = ?";
+            PreparedStatement verificaStmt = conn.prepareStatement(verificaSql);
+            verificaStmt.setInt(1, idParticipante);
+            ResultSet rs = verificaStmt.executeQuery();
+
+            if (!rs.next() || rs.getInt(1) == 0) {
+                verificaStmt.close();
+                this.sqlConn.close(conn);
+                return "Participante não encontrado!";
+            }
+
+            // Atualiza os dados do participante
+            String sqlUpdate = "UPDATE participante SET nome = ?, email = ?, celular = ? WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sqlUpdate);
+            stmt.setString(1, novoNome);
+            stmt.setString(2, novoEmail);
+            stmt.setString(3, novoTelefone);
+            stmt.setInt(4, idParticipante);
+
+            int resultado = stmt.executeUpdate();
+            stmt.close();
+            this.sqlConn.close(conn);
+
+            return resultado > 0 ? "Dados atualizados com sucesso!" : "Erro ao atualizar dados do participante.";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Erro ao atualizar dados.";
+        }
+    }
+
+    // Método para gerar um novo ID
     private Integer getNewId() {
         try {
             Integer id = 1;
@@ -199,11 +237,9 @@ public class ParticipanteDao {
             this.sqlConn.close(conn);
             return id;
         } catch (Exception e) {
-            System.err.println(
-                    "Erro no método getNewId() da classe ParticipanteDao ao executar SELECT: "
-                            + e.getMessage());
+            System.err.println("Erro no método getNewId() da classe ParticipanteDao ao executar SELECT: " + e.getMessage());
             e.printStackTrace();
             return -1;
         }
-    }
+}
 }
