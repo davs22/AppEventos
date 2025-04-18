@@ -7,16 +7,18 @@ public class Eventos {
     private Date data;
     private String local;
     private int palestranteId;
+    private String capacidade;
     
     public Eventos() {
     }
 
-    public Eventos(String nome, String descricao, Date data, String local, int palestranteId) {
+    public Eventos(String nome, String descricao, Date data, String local, int palestranteId, String capacidade) {
         this.nome = nome;
         this.descricao = descricao;
         this.data = data;
         this.local = local;
         this.palestranteId = palestranteId;
+        this.capacidade = capacidade;
     }
     public String getNome() {
         return nome;
@@ -47,6 +49,14 @@ public class Eventos {
     }
     public void setPalestranteId(int palestranteId) {
         this.palestranteId = palestranteId;
+    }
+
+    public String getCapacidade() {
+        return capacidade;
+    }
+
+    public void setCapacidade(String capacidade) {
+        this.capacidade = capacidade;
     }
  
     
