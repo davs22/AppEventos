@@ -1,15 +1,15 @@
 package table;
 
-public class palestrante {
+public class Palestrante {
     private Integer id;
     private String nome;
     private String curriculo;
     private String areaAtuacao;
     
-    public palestrante() {
+    public Palestrante() {
     }
 
-    public palestrante(Integer id, String nome, String curriculo, String areaAtuacao) {
+    public Palestrante(Integer id, String nome, String curriculo, String areaAtuacao) {
         this.id = id;
         this.nome = nome;
         this.curriculo = curriculo;

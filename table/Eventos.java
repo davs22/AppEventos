@@ -1,21 +1,22 @@
 package table;
+import java.util.Date;
 
 public class Eventos {
     private String nome;
     private String descricao;
-    private Integer data;
+    private Date data;
     private String local;
-    private palestrante palestrantes;
+    private int palestranteId;
     
     public Eventos() {
     }
 
-    public Eventos(String nome, String descricao, Integer data, String local, palestrante palestrantes) {
+    public Eventos(String nome, String descricao, Date data, String local, int palestranteId) {
         this.nome = nome;
         this.descricao = descricao;
         this.data = data;
         this.local = local;
-        this.palestrantes = palestrantes;
+        this.palestranteId = palestranteId;
     }
     public String getNome() {
         return nome;
@@ -29,10 +30,10 @@ public class Eventos {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    public Integer getData() {
+    public Date getData() {
         return data;
     }
-    public void setData(Integer data) {
+    public void setData(Date data) {
         this.data = data;
     }
     public String getLocal() {
@@ -41,11 +42,11 @@ public class Eventos {
     public void setLocal(String local) {
         this.local = local;
     }
-    public palestrante getPalestrantes() {
-        return palestrantes;
+    public int getpalestranteId() {
+        return palestranteId;
     }
-    public void setPalestrantes(palestrante palestrantes) {
-        this.palestrantes = palestrantes;
+    public void setPalestrantes(int palestranteId) {
+        this.palestranteId = palestranteId;
     }
  
     
