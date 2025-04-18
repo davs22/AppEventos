@@ -2,7 +2,7 @@
 
 -- Tabela de Participantes
 CREATE TABLE Participante (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY,
     nome TEXT NOT NULL,
     sexo TEXT,
     email TEXT,
@@ -11,7 +11,7 @@ CREATE TABLE Participante (
 
 -- Tabela de Palestrantes
 CREATE TABLE Palestrante (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY,
     nome TEXT NOT NULL,
     curriculo TEXT,
     areaAtuacao TEXT
@@ -19,7 +19,7 @@ CREATE TABLE Palestrante (
 
 -- Tabela de Eventos (sem campo palestranteId, pois haverá tabela associativa depois)
 CREATE TABLE Eventos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY,
     nome TEXT NOT NULL,
     descricao TEXT,
     data DATE,
@@ -29,7 +29,7 @@ CREATE TABLE Eventos (
 
 -- Tabela associativa entre Evento e Participante (Inscrição)
 CREATE TABLE Inscricao (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY,
     id_eventos INTEGER NOT NULL,
     id_participante INTEGER NOT NULL,
     FOREIGN KEY (id_eventos) REFERENCES Eventos(id) ON DELETE CASCADE,
