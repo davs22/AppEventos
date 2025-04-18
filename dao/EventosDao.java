@@ -99,7 +99,7 @@ public class EventosDao {
     
     // Método para criar evento
     public void criarEvento(Eventos evento) throws SQLException {
-        String sql = "INSERT INTO eventos (nome, descricao, data, local, palestrante_id) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO eventos (nome, descricao, data, local, palestrante_id, capacidade) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = this.sqlConn.connect();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -125,7 +125,7 @@ public class EventosDao {
 
     // Método para editar evento
     public void editarEvento(Eventos evento) throws SQLException {
-        String sql = "UPDATE eventos SET nome = ?, descricao = ?, data = ?, local = ?, palestrante_id = ? WHERE id = ?";
+        String sql = "UPDATE eventos SET nome = ?, descricao = ?, data = ?, local = ?, palestrante_id = ? ,capacidade = ? WHERE id = ?";
 
         try (Connection conn = this.sqlConn.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

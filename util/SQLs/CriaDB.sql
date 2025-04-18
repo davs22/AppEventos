@@ -23,7 +23,8 @@ CREATE TABLE Eventos (
     nome TEXT NOT NULL,
     descricao TEXT,
     data DATE,
-    local TEXT
+    local TEXT,
+    capacidade INTEGER,
 );
 
 -- Tabela associativa entre Evento e Participante (Inscrição)
