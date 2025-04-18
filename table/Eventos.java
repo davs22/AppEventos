@@ -42,10 +42,10 @@ public class Eventos {
     public void setLocal(String local) {
         this.local = local;
     }
-    public int getpalestranteId() {
+    public int getPalestranteId() {
         return palestranteId;
     }
-    public void setPalestrantes(int palestranteId) {
+    public void setPalestranteId(int palestranteId) {
         this.palestranteId = palestranteId;
     }
  

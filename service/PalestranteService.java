@@ -3,7 +3,7 @@ package service;
 import java.util.List;
 
 import dao.PalestranteDao;
-import table.palestrante;
+import table.Palestrante;
 
 public class PalestranteService {
     private PalestranteDao dao;
