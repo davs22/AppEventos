@@ -3,12 +3,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
+
 import util.SQLiteConnection;
 
 public class TexteConnection {
     public static void main(String[] args) {
         try {
-            String sql = "PRAGMA table_info(evento_participante);";
+            String sql = "SELECT name FROM sqlite_master WHERE type = 'table';";
             SQLiteConnection sqlConn = new SQLiteConnection();
             Connection conn = sqlConn.connect();
             Statement stm = conn.createStatement();
