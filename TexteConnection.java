@@ -3,12 +3,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
-
 import util.SQLiteConnection;
 
 public class TexteConnection {
     public static void main(String[] args) {
+         
         try {
             //String VerTabelas = "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%';";
             //String VerSeExiste = "SELECT name FROM sqlite_master WHERE type='table' AND name='Participante';";
@@ -45,10 +44,6 @@ public class TexteConnection {
         } catch (SQLException e) {
             System.err.println("Erro ao executar SELECT: " + e.getMessage());
         }
-
-       
-       
-        
 
     }
     
