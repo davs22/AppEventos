@@ -35,4 +35,8 @@ public class ParticipanteService {
     public String inserir(String nome, String sexo, String email, String celular) {
         return this.dao.inserir(nome, sexo, email, celular);
     }
+
+    public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail, String novoTelefone) {
+        return this.dao.atualizarParticipante(idParticipante, novoNome, novoSexo, novoEmail, novoTelefone);
+    }
 }

@@ -186,7 +186,7 @@ public class ParticipanteDao {
     }
 
     // Método para atualizar os dados do participante
-    public String atualizarParticipante(int idParticipante, String novoNome, String novoEmail, String novoTelefone) {
+    public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail, String novoTelefone) {
         try {
             Connection conn = this.sqlConn.connect();
 
@@ -203,12 +203,13 @@ public class ParticipanteDao {
             }
 
             // Atualiza os dados do participante
-            String sqlUpdate = "UPDATE participante SET nome = ?, email = ?, celular = ? WHERE id = ?";
+            String sqlUpdate = "UPDATE participante SET nome = ?, sexo = ?, email = ?, celular = ? WHERE id = ?";
             PreparedStatement stmt = conn.prepareStatement(sqlUpdate);
             stmt.setString(1, novoNome);
-            stmt.setString(2, novoEmail);
-            stmt.setString(3, novoTelefone);
-            stmt.setInt(4, idParticipante);
+            stmt.setString(2, novoSexo);
+            stmt.setString(3, novoEmail);
+            stmt.setString(4, novoTelefone);
+            stmt.setInt(5, idParticipante);
 
             int resultado = stmt.executeUpdate();
             stmt.close();
