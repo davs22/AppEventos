@@ -4,9 +4,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ParticipanteTest {
 
     @Test
-    void CriarParticipante() {
+    void CriarParticipanteEmailValido() {
         Participante participante = new Participante();
         assertEquals("João", participante.getNome());
-        assertEquals("João@gmail.com", participante.getemail());
+        assertEquals("João@email.com", participante.getemail());
+    }
+
+    @Test
+    void CriarExcecaoParticipanteInvalido () {
+        assertThrows(IlegalArgumentException.class, () --> new Participante("Ana","anaemail.com"));
     }
 }
