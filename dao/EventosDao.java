@@ -29,6 +29,7 @@ public class EventosDao {
 
             while (rs.next()) {
                 Eventos evento = new Eventos();
+                evento.setId( rs.getInt("id"));
                 evento.setNome(rs.getString("nome"));
                 evento.setDescricao(rs.getString("descricao"));
                 evento.setData(rs.getDate("data"));
@@ -74,13 +75,14 @@ public class EventosDao {
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
                 Eventos eventos = new Eventos(
-                    rs.getString("nome"), 
+                    rs.getInt("id"),
+                    rs.getString("nome"),
                     rs.getString("descricao"),
-                    rs.getDate("data"), 
-                    rs.getString("local"), 
-                    rs.getInt("palestrante"),
+                    rs.getDate("data"),
+                    rs.getString("local"),
+                    rs.getInt("palestranteId"),
                     rs.getString("capacidade")
-
+                   
                 );
                 lista.add(eventos);
             }
@@ -99,6 +101,7 @@ public class EventosDao {
     
     // Método para criar evento
     public void criarEvento(Eventos evento) throws SQLException {
+        
         String sql = "INSERT INTO eventos (nome, descricao, data, local, palestrante_id, capacidade) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = this.sqlConn.connect();

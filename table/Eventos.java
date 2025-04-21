@@ -8,11 +8,13 @@ public class Eventos {
     private String local;
     private int palestranteId;
     private String capacidade;
+    private Integer id;
     
     public Eventos() {
     }
 
-    public Eventos(String nome, String descricao, Date data, String local, int palestranteId, String capacidade) {
+    public Eventos(Integer id, String nome, String descricao, Date data, String local, int palestranteId, String capacidade) {
+        this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.data = data;
@@ -57,6 +59,14 @@ public class Eventos {
 
     public void setCapacidade(String capacidade) {
         this.capacidade = capacidade;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
  
     

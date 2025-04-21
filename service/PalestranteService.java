@@ -12,23 +12,23 @@ public class PalestranteService {
         this.dao = new PalestranteDao();
     }
 
-    public List<palestrante> listarTodos() {
+    public List<Palestrante> listarTodos() {
         return this.dao.listarTodos();
     }
 
-    public List<palestrante> listarPorParamentro(String nome, String sexo) {
+    public List<Palestrante> listarPorParamentro(String nome, String sexo) {
         return this.dao.listarPorParametro(nome, sexo);
     }
 
-    public palestrante buscarPorId(Integer id) {
+    public Palestrante buscarPorId(Integer id) {
         return this.dao.buscarPorId(id);
     }
 
-    public palestrante buscarPorCurriculo(String curriculo) {
+    public Palestrante buscarPorCurriculo(String curriculo) {
         return this.dao.buscarPorCurriculo(curriculo);
     }
 
-    public palestrante buscarPorAreaAtuacao(String areaAtuacao) {
+    public Palestrante buscarPorAreaAtuacao(String areaAtuacao) {
         return this.dao.buscarPorAreaAtuacao(areaAtuacao);
     }
 

@@ -74,8 +74,12 @@ public class ParticipanteDao {
                 pstm.setString(1, sexo);
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
-                Participante participante = new Participante(rs.getInt("id"), rs.getString("nome"),
-                        rs.getString("sexo"), rs.getString("email"), rs.getString("celular"));
+                Participante participante = new Participante(
+                    rs.getInt("id"), 
+                    rs.getString("nome"),
+                    rs.getString("sexo"), 
+                    rs.getString("email"), 
+                    rs.getString("celular"));
                 lista.add(participante);
             }
             rs.close();
