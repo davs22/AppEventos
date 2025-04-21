@@ -2,6 +2,8 @@ import java.time.LocalTime;;
 
 public class PalestraTest{
 
-    @Test
-    void criarPalestra 
+    //@Test
+    public void criarPalestra(){
+        System.out.println("salamaleiko se loko falta algumas coisas");
+    } 
 }
