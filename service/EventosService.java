@@ -37,7 +37,24 @@ public class EventosService {
         return "Erro ao criar evento: " + e.getMessage();
     }
 }
+ // Método para editar evento
+ public String editarEvento(int eventoId, String nome, String descricao, Date data, String local, String capacidade) {
+    Eventos evento = new Eventos();
+    evento.setId(eventoId);
+    evento.setNome(nome);
+    evento.setDescricao(descricao);
+    evento.setData(data);
+    evento.setLocal(local);
+    evento.setCapacidade(capacidade);
 
+    try {
+        this.dao.editarEvento(evento);
+        return "Evento atualizado com sucesso!";
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return "Erro ao atualizar evento: " + e.getMessage();
+    }
+}
 
 public String excluirEvento(int eventoId) {
     try {
