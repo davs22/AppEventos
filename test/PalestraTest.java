@@ -1,5 +1,5 @@
 import java.time.LocalTime;
-import org.juni.jupiter.api.Test;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import table.Palestrante.
 
