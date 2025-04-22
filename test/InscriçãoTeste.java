@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Asseetions;
-import table.Insxricao;
+import table.Inscricao;
 
 public class Inscricao {
 
