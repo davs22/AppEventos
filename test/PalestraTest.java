@@ -1,6 +1,6 @@
 import java.time.LocalTime;
 import org.juni.jupiter.api.Test;
-imoort static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import table.Palestrante.
 
 public class PalestraTest{
