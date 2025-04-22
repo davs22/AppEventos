@@ -1,3 +1,4 @@
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -29,10 +30,9 @@ public class StartApp {
         // System.out.println(ps.inserir("Ana", "F", "ana@gmail.com", "(27) 99734
         // 9870"));
 
-
+        EventosService eventosService = new EventosService();
           try {
-            EventosService eventosService = new EventosService();
-
+            
             // Criando um novo evento
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             Date dataEvento = sdf.parse("10/05/2025");
@@ -49,11 +49,18 @@ public class StartApp {
           }
 
             // Listando todos os eventos
-            List<Eventos> listaEventos = eventosService.listarEventos();
-            System.out.println("\n--- Lista de Eventos ---");
+            List<Eventos> listaEventos;
+            try {
+                listaEventos = eventosService.listarEventos();
+                System.out.println("\n--- Lista de Eventos ---");
             for (Eventos e : listaEventos) {
                 System.out.println("ID: " + e.getId() + " | Nome: " + e.getNome() + " | Data: " + e.getData());
             }
+            } catch (SQLException e) {
+                System.out.println("erro ao listar Eventos");
+                e.printStackTrace();
+            }
+            
 
             // Buscar evento por parâmetro (exemplo: nome + data string)
             Eventos eventoFiltrado = eventosService.listarPorParametro("Eduardo lindo", "29/01/2023" );
@@ -79,10 +86,10 @@ public class StartApp {
             String msgExclusao = eventosService.excluirEvento(eventoExcluirId);
             System.out.println(msgExclusao);
 
-        } catch (Exception e) {
+         /*catch (Exception e) {
             System.out.println("Erro no sistema: " + e.getMessage());
             e.printStackTrace();
-        }
+        }*/
 
 
            InscricaoService inscricaoService = new InscricaoService();
@@ -110,31 +117,31 @@ public class StartApp {
         System.out.println("Solicitação de certificado: " + certificado);
 
         // 5. Excluir uma inscrição
-        String msgExclusao = inscricaoService.excluirInscricao(idParticipante, idEvento);
-        System.out.println("Exclusão da inscrição: " + msgExclusao);
+        String msgExcluido = inscricaoService.excluirInscricao(idParticipante, idEvento);
+        System.out.println("Exclusão da inscrição: " + msgExcluido);
 
 
            // Criando instância do PalestranteService
         PalestranteService palestranteService = new PalestranteService();
 
         // Listando todos os palestrantes
-        List<Palestrante> lista = palestranteService.listarTodos();
+        List<Palestrante> listapales = palestranteService.listarTodos();
         System.out.println("--- Lista de Palestrantes ---");
-        for (Palestrante item : lista) {
+        for (Palestrante item : listapales) {
             System.out.println("Nome: " + item.getNome() + " | Currículo: " + item.getCurriculo());
         }
 
         // Listando palestrantes por parâmetro (nome)
-        lista = palestranteService.listarPorParamentro("João", null); // Substitua por parâmetros válidos
+        listapales = palestranteService.listarPorParamentro("João", null); // Substitua por parâmetros válidos
         System.out.println("\n--- Palestrantes Filtrados ---");
-        for (Palestrante item : lista) {
+        for (Palestrante item : listapales) {
             System.out.println("Nome: " + item.getNome() + " | Área de Atuação: " + item.getAreaAtuacao());
         }
 
         // Buscando palestrante por ID
-        Palestrante p = palestranteService.buscarPorId(1); // Substitua por ID válido
+        Palestrante pale = palestranteService.buscarPorId(1); // Substitua por ID válido
         System.out.println("\n--- Palestrante Encontrado ---");
-        System.out.println("ID: " + p.getId() + " | Nome: " + p.getNome());
+        System.out.println("ID: " + pale.getId() + " | Nome: " + pale.getNome());
 
         // Buscando palestrante por Currículo
         Palestrante pCurriculo = palestranteService.buscarPorCurriculo("Currículo de Exemplo"); // Substitua por currículo válido
