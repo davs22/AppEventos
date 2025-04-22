@@ -1,15 +1,10 @@
-import java.beans.Transient;
-import java.time.LocalTime;;
+import java.time.LocalTime;
+import org.juni.jupiter.api.Test;
+imoort static org.junit.jupiter.api.Assertions.*;
+import table.Palestrante.
 
 public class PalestraTest{
 
-<<<<<<< HEAD
-    //@Test
-    public void criarPalestra(){
-        System.out.println("salamaleiko se loko falta algumas coisas");
-    } 
-}
-=======
     @Test
     void criarPalestracomHorário() {
       Palestra palestra = new Palestra("Java Avançado", LocalTime.of(10,0), LocalTime.of(12,0));
@@ -20,7 +15,6 @@ public class PalestraTest{
     
     @Test
     void LancarHorárioVálido {
-      assertThrows(IlegalArgumentException.class, () -> new Palestra("Spring Boot", LOcalTime));
+      assertThrows(IllegalArgumentException.class, () -> new Palestra("Spring Boot", LocalTime));
    }
 }  
->>>>>>> 09bf6fbc3c1eb5a44a1139589b313ba8a101714c
