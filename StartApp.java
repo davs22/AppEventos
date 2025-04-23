@@ -2,6 +2,9 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 import service.EventosService;
 import service.InscricaoService;
@@ -19,28 +22,27 @@ public class StartApp {
         for (Participante item : lista) {
             System.out.println("Nome: " + item.getNome() + "    E-mail: " + item.getEmail());
         }
-        lista = ps.listarPorParamentro("Vito", null);
-        for (Participante item : lista) {
-            System.out.println("Nome: " + item.getNome() + "    Celular: " + item.getCelular());
-        }
-        ps.inserir(null, null, null, null);
+        
+        //ps.inserir("Matheus", "M", "matheus@gmail.com", "(27) 99563224");
 
         EventosService es = new EventosService();
-       
-        es.criarEvento(null, null, null, null, null);
-        es.editarEvento(0, null, null, null, null, null);
-        es.associarPalestrante(0, 0);
-        es.excluirEvento(0);
-        
-        InscricaoService is = new InscricaoService();
-        is.inscreverParticipante(0, 0);
-        is.excluirInscricao(0, 0);
-        is.solicitarCertificado(0, 0);
 
-        PalestranteService ps2 = new PalestranteService();
-        ps2.inserir(null, null, null);
+        es.criarEvento("GamesCon", "Encontro de jogadores", "22-05-2025", "Sao Paulo", 1, "50");
+        //es.editarEvento(0, null, null, null, null, null);
+        //es.associarPalestrante(0, 0);
+        //es.excluirEvento(0);
+        
+        //InscricaoService is = new InscricaoService();
+        //is.inscreverParticipante(0, 0);
+        //is.excluirInscricao(0, 0);
+        //is.solicitarCertificado(0, 0); 
+
+        //PalestranteService ps2 = new PalestranteService();
+        //ps2.inserir("Matheus", "Empresario, full stack e gamer", "Tecnologia");
     }
 }
+    
+
   
 
     

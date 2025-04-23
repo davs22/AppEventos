@@ -11,6 +11,10 @@ public class PalestranteService {
     public PalestranteService() {
         this.dao = new PalestranteDao();
     }
+   
+    public PalestranteService(PalestranteDao dao) {
+        this.dao = dao;
+    }
 
     public List<Palestrante> listarTodos() {
         return this.dao.listarTodos();
@@ -32,7 +36,7 @@ public class PalestranteService {
         return this.dao.buscarPorAreaAtuacao(areaAtuacao);
     }
 
-    public String inserir(String nome, String curriculo, String areadeatuacao) {
-        return this.dao.inserir(nome, curriculo, areadeatuacao);
+    public String inserir(String nome, String curriculo, String areaAtuacao) {
+        return this.dao.inserir(nome, curriculo, areaAtuacao);
     }
 }

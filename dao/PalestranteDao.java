@@ -174,16 +174,16 @@ public class PalestranteDao {
         }
     }
 
-    public String inserir(String nome, String curriculo, String areadeatuacao) {
+    public String inserir(String nome, String curriculo, String areaAtuacao) {
         try {
             Integer id = this.getNewId();
-            String sql = "INSERT INTO palestrante(id, nome, curriculo, areadeatuacao) VALUES(?, ?, ?, ?)";
+            String sql = "INSERT INTO palestrante(id, nome, curriculo, areaAtuacao) VALUES(?, ?, ?, ?)";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setInt(1, id);
             pstm.setString(2, nome);
             pstm.setString(3, curriculo);
-            pstm.setString(4, areadeatuacao);
+            pstm.setString(4, areaAtuacao);
             System.out.println("Resposta: " + pstm.executeUpdate());
             pstm.close();
             this.sqlConn.close(conn);

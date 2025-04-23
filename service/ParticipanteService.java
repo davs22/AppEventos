@@ -6,8 +6,13 @@ import dao.ParticipanteDao;
 import table.Participante;
 
 public class ParticipanteService {
+    
     private ParticipanteDao dao;
-
+    
+    public ParticipanteService(ParticipanteDao dao) {
+        this.dao = dao;
+    }
+    
     public ParticipanteService() {
         this.dao = new ParticipanteDao();
     }
