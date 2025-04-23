@@ -1,4 +1,7 @@
 import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 import service.ParticipanteService;
 import table.Participante;
@@ -26,5 +29,26 @@ public class StartApp {
 
         //System.out.println(ps1.inserir("Ana", "F", "ana@gmail.com", "(27) 99734676"
         //));
+        
+        //ps.inserir("Matheus", "M", "matheus@gmail.com", "(27) 99563224");
+
+        EventosService es = new EventosService();
+
+        es.criarEvento("GamesCon", "Encontro de jogadores", "22-05-2025", "Sao Paulo", 1, "50");
+        //es.editarEvento(0, null, null, null, null, null);
+        //es.associarPalestrante(0, 0);
+        //es.excluirEvento(0);
+        
+        //InscricaoService is = new InscricaoService();
+        //is.inscreverParticipante(0, 0);
+        //is.excluirInscricao(0, 0);
+        //is.solicitarCertificado(0, 0); 
+
+        //PalestranteService ps2 = new PalestranteService();
+        //ps2.inserir("Matheus", "Empresario, full stack e gamer", "Tecnologia");
     }
 }
+  
+
+    
+

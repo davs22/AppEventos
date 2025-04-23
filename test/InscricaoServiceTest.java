@@ -21,14 +21,16 @@ public class InscricaoServiceTest {
 
     @Test
     public void testInscreverParticipante() {
+        // Arrange
         int idParticipante = 1;
         int idEvento = 2;
         String mensagemEsperada = "Inscrição realizada com sucesso!";
         when(daoMock.inscreverParticipante(idParticipante, idEvento)).thenReturn(mensagemEsperada);
 
-
+        // Act
         String resultado = service.inscreverParticipante(idParticipante, idEvento);
 
+        // Assert
         assertEquals(mensagemEsperada, resultado);
         verify(daoMock).inscreverParticipante(idParticipante, idEvento);
     }
