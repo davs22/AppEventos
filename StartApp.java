@@ -23,7 +23,22 @@ public class StartApp {
         for (Participante item : lista) {
             System.out.println("Nome: " + item.getNome() + "    Celular: " + item.getCelular());
         }
-    
+        ps.inserir(null, null, null, null);
+
+        EventosService es = new EventosService();
+       
+        es.criarEvento(null, null, null, null, null);
+        es.editarEvento(0, null, null, null, null, null);
+        es.associarPalestrante(0, 0);
+        es.excluirEvento(0);
+        
+        InscricaoService is = new InscricaoService();
+        is.inscreverParticipante(0, 0);
+        is.excluirInscricao(0, 0);
+        is.solicitarCertificado(0, 0);
+
+        PalestranteService ps2 = new PalestranteService();
+        ps2.inserir(null, null, null);
     }
 }
   
