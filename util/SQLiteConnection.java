@@ -10,10 +10,10 @@ public class SQLiteConnection {
 
     public Connection connect() {
         try {
-            // Carrega o driver do SQLite (opcional para versões modernas do Java)
+            
             Class.forName("org.sqlite.JDBC");
 
-            // Estabelece a conexão com o banco de dados
+            
             this.conn = DriverManager.getConnection(URL);
             System.out.println("Conexão com SQLite estabelecida.");
         } catch (ClassNotFoundException e) {

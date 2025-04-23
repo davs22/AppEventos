@@ -99,7 +99,7 @@ public class EventosDao {
         }
     }
     
-    // Método para criar evento
+    
     public void criarEvento(Eventos evento) throws SQLException {
         
         String sql = "INSERT INTO eventos (nome, descricao, data, local, palestrante_id, capacidade) VALUES (?, ?, ?, ?, ?, ?)";
@@ -114,19 +114,17 @@ public class EventosDao {
             stmt.setInt(5, evento.getPalestranteId());
             stmt.setString(6, evento.getCapacidade());
 
-
             int affectedRows = stmt.executeUpdate();
             if (affectedRows > 0) {
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        evento.setPalestranteId(generatedKeys.getInt(1)); // Obtém o ID gerado para o evento
+                        evento.setPalestranteId(generatedKeys.getInt(1)); 
                     }
                 }
             }
         }
     }
 
-    // Método para editar evento
     public void editarEvento(Eventos evento) throws SQLException {
         String sql = "UPDATE eventos SET nome = ?, descricao = ?, data = ?, local = ?, palestrante_id = ? ,capacidade = ? WHERE id = ?";
 
@@ -145,7 +143,6 @@ public class EventosDao {
         }
     }
 
-    // Método para excluir evento
     public void excluirEvento(int eventoId) throws SQLException {
         String sql = "DELETE FROM eventos WHERE id = ?";
 
@@ -157,7 +154,6 @@ public class EventosDao {
         }
     }
 
-    // Método para associar palestrante a um evento
     public void associarPalestrante(Eventos evento) throws SQLException {
         String sql = "UPDATE eventos SET palestrante_id = ? WHERE id = ?";
 
@@ -171,20 +167,19 @@ public class EventosDao {
         }
     }
 
-    // Método para verificar se o palestrante existe
     public boolean palestranteExiste(int palestranteId) throws SQLException {
         String sql = "SELECT COUNT(*) FROM palestrantes WHERE id = ?";
 
-        try (Connection conn = this.sqlConn.connect(); // Usando o método connect() corretamente
+        try (Connection conn = this.sqlConn.connect(); 
      PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-    stmt.setInt(1, palestranteId); // Definindo o ID do palestrante
-    ResultSet rs = stmt.executeQuery(); // Executando a consulta
+    stmt.setInt(1, palestranteId); 
+    ResultSet rs = stmt.executeQuery(); 
 
-    if (rs.next()) { // Verifica se há resultados
-        return rs.getInt(1) > 0; // Retorna true se houver registros
+    if (rs.next()) { 
+        return rs.getInt(1) > 0; 
     } else {
-        return false; // Caso não haja registros
+        return false; 
     }
 }
 

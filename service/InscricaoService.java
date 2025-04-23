@@ -6,12 +6,17 @@ import table.Inscricao;
 import util.SQLiteConnection;
 
 public class InscricaoService {
+    
     private InscricaoDao dao;
 
     public InscricaoService() {
         this.dao = new InscricaoDao(new SQLiteConnection());
     }
-
+    
+    public InscricaoService(InscricaoDao dao) {
+        this.dao = dao;
+    }
+    
     public String inscreverParticipante(int idParticipante, int idEvento) {
         return dao.inscreverParticipante(idParticipante, idEvento);
     }
@@ -26,9 +31,5 @@ public class InscricaoService {
 
     public String excluirInscricao(int idParticipante, int idEvento) {
         return dao.excluirInscricao(idParticipante, idEvento);
-    }
-
-    public String solicitarCertificado(int idParticipante, int idEvento) {
-        return dao.solicitarCertificado(idParticipante, idEvento);
     }
 }
