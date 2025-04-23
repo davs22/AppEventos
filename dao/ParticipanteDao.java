@@ -21,7 +21,7 @@ public class ParticipanteDao {
     public List<Participante> listarTodos() {
         try {
             List<Participante> lista = new ArrayList<Participante>();
-            String sql = "SELECT * FROM participante";
+            String sql = "SELECT * FROM Participante";
             Connection conn = this.sqlConn.connect();
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(sql);
@@ -97,7 +97,7 @@ public class ParticipanteDao {
     public Participante buscarPorId(Integer id) {
         try {
             Participante participante = new Participante();
-            String sql = "SELECT * FROM participante where id = ?";
+            String sql = "SELECT * FROM Participante where id = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setInt(1, id);
@@ -120,7 +120,7 @@ public class ParticipanteDao {
     public Participante buscarPorEmail(String email) {
         try {
             Participante participante = new Participante();
-            String sql = "SELECT * FROM participante where email = ?";
+            String sql = "SELECT * FROM Participante where email = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, email);
@@ -144,7 +144,7 @@ public class ParticipanteDao {
     public Participante buscarPorCelular(String celular) {
         try {
             Participante participante = new Participante();
-            String sql = "SELECT * FROM participante where celular = ?";
+            String sql = "SELECT * FROM Participante where celular = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, celular);
@@ -195,7 +195,7 @@ public class ParticipanteDao {
             Connection conn = this.sqlConn.connect();
 
             // Verifica se o participante existe
-            String verificaSql = "SELECT COUNT(*) FROM participante WHERE id = ?";
+            String verificaSql = "SELECT COUNT(*) FROM Participante WHERE id = ?";
             PreparedStatement verificaStmt = conn.prepareStatement(verificaSql);
             verificaStmt.setInt(1, idParticipante);
             ResultSet rs = verificaStmt.executeQuery();
@@ -207,7 +207,7 @@ public class ParticipanteDao {
             }
 
             // Atualiza os dados do participante
-            String sqlUpdate = "UPDATE participante SET nome = ?, sexo = ?, email = ?, celular = ? WHERE id = ?";
+            String sqlUpdate = "UPDATE Participante SET nome = ?, sexo = ?, email = ?, celular = ? WHERE id = ?";
             PreparedStatement stmt = conn.prepareStatement(sqlUpdate);
             stmt.setString(1, novoNome);
             stmt.setString(2, novoSexo);
@@ -231,7 +231,7 @@ public class ParticipanteDao {
     private Integer getNewId() {
         try {
             Integer id = 1;
-            String sql = "SELECT MAX(id) AS max_id FROM participante";
+            String sql = "SELECT MAX(id) AS max_id FROM Participante";
             Connection conn = this.sqlConn.connect();
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(sql);
