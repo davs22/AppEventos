@@ -14,7 +14,7 @@ import util.SQLiteConnection;
 
 public class EventosDao {
     private SQLiteConnection sqlConn;
-
+    
     public EventosDao() {
         this.sqlConn = new SQLiteConnection();
     }
@@ -34,7 +34,7 @@ public class EventosDao {
                 evento.setDescricao(rs.getString("descricao"));
                 evento.setData(rs.getDate("data"));
                 evento.setLocal(rs.getString("local"));
-                evento.setPalestranteId(rs.getInt("palestrante_id"));
+                evento.setPalestranteId(rs.getInt("palestranteId"));
                 evento.setCapacidade(rs.getString("capacidade"));
 
                 eventosList.add(evento);
@@ -102,7 +102,7 @@ public class EventosDao {
     
     public void criarEvento(Eventos evento) throws SQLException {
         
-        String sql = "INSERT INTO Eventos (nome, descricao, data, local, palestrante_id, capacidade) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Eventos (nome, descricao, data, local, palestranteId, capacidade) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = this.sqlConn.connect();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -126,7 +126,7 @@ public class EventosDao {
     }
 
     public void editarEvento(Eventos evento) throws SQLException {
-        String sql = "UPDATE Eventos SET nome = ?, descricao = ?, data = ?, local = ?, palestrante_id = ? ,capacidade = ? WHERE id = ?";
+        String sql = "UPDATE Eventos SET nome = ?, descricao = ?, data = ?, local = ?, palestranteId = ? ,capacidade = ? WHERE id = ?";
 
         try (Connection conn = this.sqlConn.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -136,7 +136,7 @@ public class EventosDao {
             stmt.setDate(3, new java.sql.Date(evento.getData().getTime()));
             stmt.setString(4, evento.getLocal());
             stmt.setInt(5, evento.getPalestranteId());
-            stmt.setInt(6, evento.getPalestranteId());
+            stmt.setInt(7, evento.getPalestranteId());
             stmt.setString(6, evento.getCapacidade());
 
             stmt.executeUpdate();
@@ -155,7 +155,7 @@ public class EventosDao {
     }
 
     public void associarPalestrante(Eventos evento) throws SQLException {
-        String sql = "UPDATE Eventos SET palestrante_id = ? WHERE id = ?";
+        String sql = "UPDATE Eventos SET palestranteId = ? WHERE id = ?";
 
         try (Connection conn = this.sqlConn.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

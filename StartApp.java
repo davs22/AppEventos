@@ -2,7 +2,7 @@ import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
+import service.EventosService;
 import service.ParticipanteService;
 import table.Participante;
 

@@ -103,8 +103,11 @@ public class ParticipanteDao {
             pstm.setInt(1, id);
             ResultSet rs = pstm.executeQuery();
             if (rs.next())
-                participante = new Participante(rs.getInt("id"), rs.getString("nome"),
-                        rs.getString("sexo"), rs.getString("email"), rs.getString("celular"));
+                participante = new Participante(rs.getInt("id"), 
+                rs.getString("nome"),
+                rs.getString("sexo"), 
+                rs.getString("email"), 
+                rs.getString("celular"));
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
