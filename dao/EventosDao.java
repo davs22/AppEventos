@@ -21,7 +21,7 @@ public class EventosDao {
 
     public List<Eventos> listarEventos() throws SQLException {
         List<Eventos> eventosList = new ArrayList<>();
-        String sql = "SELECT * FROM eventos";
+        String sql = "SELECT * FROM Eventos";
 
         try (Connection conn = this.sqlConn.connect();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -50,7 +50,7 @@ public class EventosDao {
     public List<Eventos> listarPorParametro(String nome, String data) {
         try {
             List<Eventos> lista = new ArrayList<Eventos>();
-            String sql = "SELECT * FROM eventos";
+            String sql = "SELECT * FROM Eventos";
             String sqlWhere = "";
             boolean temNome = (nome != null && !nome.isEmpty());
             boolean temData = (data != null && !data.isEmpty());
@@ -102,7 +102,7 @@ public class EventosDao {
     
     public void criarEvento(Eventos evento) throws SQLException {
         
-        String sql = "INSERT INTO eventos (nome, descricao, data, local, palestrante_id, capacidade) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Eventos (nome, descricao, data, local, palestrante_id, capacidade) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = this.sqlConn.connect();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -126,7 +126,7 @@ public class EventosDao {
     }
 
     public void editarEvento(Eventos evento) throws SQLException {
-        String sql = "UPDATE eventos SET nome = ?, descricao = ?, data = ?, local = ?, palestrante_id = ? ,capacidade = ? WHERE id = ?";
+        String sql = "UPDATE Eventos SET nome = ?, descricao = ?, data = ?, local = ?, palestrante_id = ? ,capacidade = ? WHERE id = ?";
 
         try (Connection conn = this.sqlConn.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -144,7 +144,7 @@ public class EventosDao {
     }
 
     public void excluirEvento(int eventoId) throws SQLException {
-        String sql = "DELETE FROM eventos WHERE id = ?";
+        String sql = "DELETE FROM Eventos WHERE id = ?";
 
         try (Connection conn = this.sqlConn.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -155,7 +155,7 @@ public class EventosDao {
     }
 
     public void associarPalestrante(Eventos evento) throws SQLException {
-        String sql = "UPDATE eventos SET palestrante_id = ? WHERE id = ?";
+        String sql = "UPDATE Eventos SET palestrante_id = ? WHERE id = ?";
 
         try (Connection conn = this.sqlConn.connect();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -168,7 +168,7 @@ public class EventosDao {
     }
 
     public boolean palestranteExiste(int palestranteId) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM palestrantes WHERE id = ?";
+        String sql = "SELECT COUNT(*) FROM Palestrantes WHERE id = ?";
 
         try (Connection conn = this.sqlConn.connect(); 
      PreparedStatement stmt = conn.prepareStatement(sql)) {
