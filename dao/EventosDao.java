@@ -35,7 +35,7 @@ public class EventosDao {
                 evento.setData(rs.getDate("data"));
                 evento.setLocal(rs.getString("local"));
                 evento.setPalestranteId(rs.getInt("palestranteId"));
-                evento.setCapacidade(rs.getString("capacidade"));
+                evento.setCapacidade(rs.getInt("capacidade"));
 
                 eventosList.add(evento);
             }
@@ -81,7 +81,7 @@ public class EventosDao {
                     rs.getDate("data"),
                     rs.getString("local"),
                     rs.getInt("palestranteId"),
-                    rs.getString("capacidade")
+                    rs.getInt("capacidade")
                    
                 );
                 lista.add(eventos);
@@ -112,7 +112,7 @@ public class EventosDao {
             stmt.setDate(3, new java.sql.Date(evento.getData().getTime()));
             stmt.setString(4, evento.getLocal());
             stmt.setInt(5, evento.getPalestranteId());
-            stmt.setString(6, evento.getCapacidade());
+            stmt.setInt(6, evento.getCapacidade());
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows > 0) {
@@ -136,8 +136,8 @@ public class EventosDao {
             stmt.setDate(3, new java.sql.Date(evento.getData().getTime()));
             stmt.setString(4, evento.getLocal());
             stmt.setInt(5, evento.getPalestranteId());
-            stmt.setInt(7, evento.getPalestranteId());
-            stmt.setString(6, evento.getCapacidade());
+            stmt.setInt(6, evento.getCapacidade());
+            stmt.setInt(7, evento.getId());     
 
             stmt.executeUpdate();
         }

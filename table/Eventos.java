@@ -7,13 +7,13 @@ public class Eventos {
     private Date data;
     private String local;
     private int palestranteId;
-    private String capacidade;
+    private int capacidade;
     private Integer id;
     
     public Eventos() {
     }
 
-    public Eventos(Integer id, String nome, String descricao, Date data, String local, int palestranteId, String capacidade) {
+    public Eventos(Integer id, String nome, String descricao, Date data, String local, int palestranteId, int capacidade) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -53,11 +53,11 @@ public class Eventos {
         this.palestranteId = palestranteId;
     }
 
-    public String getCapacidade() {
+    public int getCapacidade() {
         return capacidade;
     }
 
-    public void setCapacidade(String capacidade) {
+    public void setCapacidade(int capacidade) {
         this.capacidade = capacidade;
     }
 

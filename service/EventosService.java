@@ -27,7 +27,7 @@ public class EventosService {
         return dao.listarPorParametro(nome, data);
     }    
     
-    public void criarEvento(String nome, String descricao, String dataString, String local, int palestranteId, String capacidade) {
+    public void criarEvento(String nome, String descricao, String dataString, String local, int palestranteId, int capacidade) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         try {
             
@@ -50,13 +50,14 @@ public class EventosService {
     }
 
     // Método para editar evento
-    public String editarEvento(int eventoId, String nome, String descricao, Date data, String local, String capacidade) {
+    public String editarEvento(int eventoId, String nome, String descricao, Date data, String local, int palestranteId,int capacidade) {
         Eventos evento = new Eventos();
         evento.setId(eventoId);
         evento.setNome(nome);
         evento.setDescricao(descricao);
         evento.setData(data);
         evento.setLocal(local);
+        evento.setPalestranteId(palestranteId);
         evento.setCapacidade(capacidade);
 
         try {
