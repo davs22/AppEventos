@@ -34,7 +34,7 @@ public class StartApp {
 
         EventosService es = new EventosService();
 
-        es.criarEvento("GamesCon", "Encontro de jogadores", "22-05-2025", "Sao Paulo", 1, "50");
+        es.criarEvento("GamesCon", "Encontro de jogadores", "22-05-2025", "Sao Paulo", 1, 50);
         //es.editarEvento(0, null, null, null, null, null);
         //es.associarPalestrante(0, 0);
         //es.excluirEvento(0);
