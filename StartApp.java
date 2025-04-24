@@ -41,7 +41,7 @@ public class StartApp {
         //es.excluirEvento(0);
         
         InscricaoService is = new InscricaoService();
-        is.inscreverParticipante(3, 1);
+        is.inscreverParticipante(1, 1);
         //is.excluirInscricao(0, 0);
         //is.solicitarCertificado(0, 0); 
 
