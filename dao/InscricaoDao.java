@@ -125,8 +125,8 @@ public class InscricaoDao {
 
             String sql = "SELECT p.nome AS nome_participante, e.nome AS nome_evento " +
                          "FROM Inscricao i " +
-                         "JOIN participante p ON i.id_participante = p.id " +
-                         "JOIN evento e ON i.id_evento = e.id " +
+                         "JOIN Participante p ON i.id_participante = p.id " +
+                         "JOIN Evento e ON i.id_evento = e.id " +
                          "WHERE i.id_participante = ? AND i.id_evento = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, idParticipante);
@@ -168,7 +168,7 @@ public class InscricaoDao {
     private int getNewId() {
         try {
             Connection conn = this.sqlConn.connect();
-            String sql = "SELECT MAX(id) AS max_id FROM inscricao";
+            String sql = "SELECT MAX(id) AS max_id FROM Inscricao";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             int id = 1;
