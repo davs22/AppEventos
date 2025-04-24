@@ -17,8 +17,8 @@ public class InscricaoService {
         this.dao = dao;
     }
     
-    public String inscreverParticipante(int idParticipante, int idEvento) {
-        return dao.inscreverParticipante(idParticipante, idEvento);
+    public String inscreverParticipante(int idParticipante, int idEventos) {
+        return dao.inscreverParticipante(idParticipante, idEventos);
     }
 
     public List<Inscricao> listarInscricoesPorParticipante(int idParticipante) {

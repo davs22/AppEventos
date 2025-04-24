@@ -19,15 +19,15 @@ public class InscricaoDao {
     }
 
     // Método para inscrever um participante no evento
-    public String inscreverParticipante(int idParticipante, int idEvento) {
+    public String inscreverParticipante(int idParticipante, int idEventos) {
         try {
             Connection conn = this.sqlConn.connect();
 
             // Verifica se o participante já está inscrito no evento
-            String verificaSql = "SELECT COUNT(*) FROM Inscricao WHERE id_participante = ? AND id_evento = ?";
+            String verificaSql = "SELECT COUNT(*) FROM Inscricao WHERE id_participante = ? AND id_eventos = ?";
             PreparedStatement verificaStmt = conn.prepareStatement(verificaSql);
             verificaStmt.setInt(1, idParticipante);
-            verificaStmt.setInt(2, idEvento);
+            verificaStmt.setInt(2, idEventos);
             ResultSet rs = verificaStmt.executeQuery();
 
             if (rs.next() && rs.getInt(1) > 0) {
@@ -37,10 +37,10 @@ public class InscricaoDao {
             }
 
             // Inserir nova inscrição
-            String sql = "INSERT INTO Inscricao (id_participante, id_evento) VALUES (?, ?)";
+            String sql = "INSERT INTO Inscricao (id_participante, id_eventos) VALUES (?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, idParticipante);
-            stmt.setInt(2, idEvento);
+            stmt.setInt(2, idEventos);
             int resultado = stmt.executeUpdate();
 
             stmt.close();
