@@ -97,7 +97,7 @@ public class PalestranteDao {
     public Palestrante buscarPorId(Integer id) {
         try {
             Palestrante palestrante = new Palestrante();
-            String sql = "SELECT * FROM palestrante where id = ?";
+            String sql = "SELECT * FROM Palestrante where id = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setInt(1, id);
@@ -123,7 +123,7 @@ public class PalestranteDao {
     public Palestrante buscarPorCurriculo(String curriculo) {
         try {
             Palestrante palestrante = new Palestrante();
-            String sql = "SELECT * FROM palestrante where curriculo = ?";
+            String sql = "SELECT * FROM Palestrante where curriculo = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, curriculo);
@@ -150,7 +150,7 @@ public class PalestranteDao {
     public Palestrante buscarPorAreaAtuacao(String areaAtuacao) {
         try {
             Palestrante palestrante = new Palestrante();
-            String sql = "SELECT * FROM palestrante where areaAtuacao = ?";
+            String sql = "SELECT * FROM Palestrante where areaAtuacao = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, areaAtuacao);
@@ -177,7 +177,7 @@ public class PalestranteDao {
     public String inserir(String nome, String curriculo, String areaAtuacao) {
         try {
             Integer id = this.getNewId();
-            String sql = "INSERT INTO palestrante(id, nome, curriculo, areaAtuacao) VALUES(?, ?, ?, ?)";
+            String sql = "INSERT INTO Palestrante(id, nome, curriculo, areaAtuacao) VALUES(?, ?, ?, ?)";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setInt(1, id);
@@ -200,7 +200,7 @@ public class PalestranteDao {
     private Integer getNewId() {
         try {
             Integer id = 1;
-            String sql = "SELECT MAX(id) AS max_id FROM palestrante";
+            String sql = "SELECT MAX(id) AS max_id FROM Palestrante";
             Connection conn = this.sqlConn.connect();
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(sql);
@@ -221,7 +221,7 @@ public class PalestranteDao {
 
     public String excluir(int id) {
         try {
-            String sql = "DELETE FROM palestrante WHERE id = ?";
+            String sql = "DELETE FROM Palestrante WHERE id = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setInt(1, id);
