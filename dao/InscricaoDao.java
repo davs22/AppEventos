@@ -58,14 +58,14 @@ public class InscricaoDao {
         List<Inscricao> inscricoes = new ArrayList<>();
         try {
             Connection conn = this.sqlConn.connect();
-            String sql = "SELECT id, id_participante, id_evento FROM Inscricao WHERE id_participante = ?";
+            String sql = "SELECT id, id_participante, id_eventos FROM Inscricao WHERE id_participante = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, idParticipante);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("id");
-                int idEvento = rs.getInt("id_evento");
+                int idEvento = rs.getInt("id_eventos");
                 inscricoes.add(new Inscricao(id, idParticipante, idEvento));
             }
 
@@ -82,7 +82,7 @@ public class InscricaoDao {
     public boolean verificarInscricao(int idParticipante, int idEvento) {
         try {
             Connection conn = this.sqlConn.connect();
-            String sql = "SELECT COUNT(*) FROM Inscricao WHERE id_participante = ? AND id_evento = ?";
+            String sql = "SELECT COUNT(*) FROM Inscricao WHERE id_participante = ? AND id_eventos = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, idParticipante);
             stmt.setInt(2, idEvento);
@@ -103,7 +103,7 @@ public class InscricaoDao {
     public String excluirInscricao(int idParticipante, int idEvento) {
         try {
             Connection conn = this.sqlConn.connect();
-            String sql = "DELETE FROM Inscricao WHERE id_participante = ? AND id_evento = ?";
+            String sql = "DELETE FROM Inscricao WHERE id_participante = ? AND id_eventos = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, idParticipante);
             stmt.setInt(2, idEvento);
@@ -123,11 +123,11 @@ public class InscricaoDao {
         try {
             Connection conn = this.sqlConn.connect();
 
-            String sql = "SELECT p.nome AS nome_participante, e.nome AS nome_evento " +
+            String sql = "SELECT p.nome AS nome_participante, e.nome AS nome_eventos " +
                          "FROM Inscricao i " +
                          "JOIN Participante p ON i.id_participante = p.id " +
-                         "JOIN Evento e ON i.id_evento = e.id " +
-                         "WHERE i.id_participante = ? AND i.id_evento = ?";
+                         "JOIN Eventos e ON i.id_eventos = e.id " +
+                         "WHERE i.id_participante = ? AND i.id_eventos = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, idParticipante);
             stmt.setInt(2, idEvento);
@@ -136,7 +136,7 @@ public class InscricaoDao {
 
             if (rs.next()) {
                 String nomeParticipante = rs.getString("nome_participante");
-                String nomeEvento = rs.getString("nome_evento");
+                String nomeEvento = rs.getString("nome_eventos");
 
                 stmt.close();
                 this.sqlConn.close(conn);

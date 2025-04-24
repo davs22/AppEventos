@@ -39,4 +39,8 @@ public class PalestranteService {
     public String inserir(String nome, String curriculo, String areaAtuacao) {
         return this.dao.inserir(nome, curriculo, areaAtuacao);
     }
+
+    public String excluirPalestrante(Integer id) {
+        return dao.excluir(id);
+    }
 }

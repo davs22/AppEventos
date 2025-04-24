@@ -4,15 +4,17 @@ import java.util.Date;
 
 import service.EventosService;
 import service.InscricaoService;
+import service.PalestranteService;
 import service.ParticipanteService;
 import table.Eventos;
+import table.Inscricao;
+import table.Palestrante;
 import table.Participante;
 
 public class StartApp {
     public static void main(String[] args) {
         
         ParticipanteService ps1 = new ParticipanteService();
-        
         ps1.atualizarParticipante(1, "Victor", "M", "victor@gmail.com", "(27) 99982552");
         
         List<Participante> lista = ps1.listarTodos();
@@ -21,21 +23,7 @@ public class StartApp {
             "    Sexo: " + item.getSexo() + "    Celular: " + item.getCelular());
         }
     
-        /*lista = ps1.listarPorParamentro("Vito", null);
-        for (Participante item : lista) {
-            System.out.println("Nome: " + item.getNome() + "    Celular: " + item.getCelular());
-        }
-        Participante p = new Participante();
-        p = ps1.buscarPorId(1);
-        System.out.println("Id: " + p.getId() + "   Nome: " + p.getNome());*/
-
-        //System.out.println(ps1.inserir("Ana", "F", "ana@gmail.com", "(27) 99734676"
-        //));
-        
-        //ps.inserir("Matheus", "M", "matheus@gmail.com", "(27) 99563224");
-
         EventosService es = new EventosService();
-
         try {
             List<Eventos> eventos = es.listarEventos();
             
@@ -53,20 +41,39 @@ public class StartApp {
         } catch (Exception e) {
             System.err.println("Erro ao listar eventos: " + e.getMessage());
         }
-    }
-        //es.criarEvento("GamesCon", "Encontro de jogadores", "22-05-2025", "Sao Paulo", 1, 50);
-        
-        //es.editarEvento(0, null, null, null, null, null);
-        //es.associarPalestrante(0, 0);
-        //es.excluirEvento(0);
-        
-       //InscricaoService is = new InscricaoService();
-        //is.inscreverParticipante(1, 1);
-        //is.excluirInscricao(0, 0);
-        //is.solicitarCertificado(0, 0); 
 
-        //PalestranteService ps2 = new PalestranteService();
-        //ps2.inserir("Matheus", "Empresario, full stack e gamer", "Tecnologia");
+        InscricaoService is = new InscricaoService();
+        int idParticipante = 1; 
+        List<Inscricao> inscricoes = is.listarInscricoesPorParticipante(idParticipante);
+
+        for (Inscricao i : inscricoes) {
+            System.out.println("ID da inscrição: " + i.getId());
+            System.out.println("Participante: " + i.getIdParticipante());
+            System.out.println("Evento: " + i.getIdEvento());
+            System.out.println("------------------------");
+        }
+
+        PalestranteService pale = new PalestranteService();
+
+        List<Palestrante> lista2 = pale.listarTodos();
+        for (Palestrante itemPale : lista2) {
+            System.out.println("Id "+itemPale.getId() +"    Nome: "+ itemPale.getNome() + "   curriculo" + itemPale.getCurriculo() +
+            "    areaAtuacao: " + itemPale.getAreaAtuacao());
+}
+        ps1.inserir(null, null, null, null);
+        ps1.atualizarParticipante(idParticipante, null, null, null, null);
+        es.criarEvento(null, null, null, null, idParticipante, idParticipante);
+        es.editarEvento(idParticipante, null, null, null, null, idParticipante, idParticipante);
+        es.associarPalestrante(idParticipante, idParticipante);
+        es.excluirEvento(idParticipante);
+        is.inscreverParticipante(idParticipante, idParticipante);
+        is.verificarInscricao(idParticipante, idParticipante);
+        is.excluirInscricao(idParticipante, idParticipante);
+        pale.inserir(null, null, null);
+        pale.excluirPalestrante(null);
+        
+}
+
     }
 
   

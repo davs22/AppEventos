@@ -22,7 +22,7 @@ public class InscricaoService {
     }
 
     public List<Inscricao> listarInscricoesPorParticipante(int idParticipante) {
-        return dao.listarInscricoesPorParticipante(idParticipante);
+        return this.dao.listarInscricoesPorParticipante(idParticipante);
     }
 
     public boolean verificarInscricao(int idParticipante, int idEvento) {
@@ -31,5 +31,15 @@ public class InscricaoService {
 
     public String excluirInscricao(int idParticipante, int idEvento) {
         return dao.excluirInscricao(idParticipante, idEvento);
+    }
+
+    public String gerarCertificadoRepresentativo(String nomeParticipante, String nomeEvento) {
+        return "\n---------------------------\n" +
+               "        CERTIFICADO        \n" +
+               "---------------------------\n" +
+               "Certificamos que " + nomeParticipante +
+               " participou com êxito do evento:\n\"" + nomeEvento + "\"\n\n" +
+               "Data: " + java.time.LocalDate.now() + "\n" +
+               "Assinatura: ____________________\n";
     }
 }
