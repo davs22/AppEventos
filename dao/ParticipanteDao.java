@@ -168,7 +168,7 @@ public class ParticipanteDao {
     public String inserir(String nome, String sexo, String email, String celular) {
         try {
             Integer id = this.getNewId();
-            String sql = "INSERT INTO participante(id, nome, sexo, email, celular) VALUES(?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Participante(id, nome, sexo, email, celular) VALUES(?, ?, ?, ?, ?)";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setInt(1, id);
