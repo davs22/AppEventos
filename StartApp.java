@@ -3,6 +3,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import service.EventosService;
+import service.InscricaoService;
 import service.ParticipanteService;
 import table.Participante;
 
@@ -32,15 +33,15 @@ public class StartApp {
         
         //ps.inserir("Matheus", "M", "matheus@gmail.com", "(27) 99563224");
 
-        EventosService es = new EventosService();
+        //EventosService es = new EventosService();
 
-        es.criarEvento("GamesCon", "Encontro de jogadores", "22-05-2025", "Sao Paulo", 1, 50);
+        //es.criarEvento("GamesCon", "Encontro de jogadores", "22-05-2025", "Sao Paulo", 1, 50);
         //es.editarEvento(0, null, null, null, null, null);
         //es.associarPalestrante(0, 0);
         //es.excluirEvento(0);
         
-        //InscricaoService is = new InscricaoService();
-        //is.inscreverParticipante(0, 0);
+        InscricaoService is = new InscricaoService();
+        is.inscreverParticipante(3, 1);
         //is.excluirInscricao(0, 0);
         //is.solicitarCertificado(0, 0); 
 
