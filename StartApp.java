@@ -15,7 +15,6 @@ public class StartApp {
     public static void main(String[] args) {
         
         ParticipanteService ps1 = new ParticipanteService();
-        ps1.atualizarParticipante(1, "Victor", "M", "victor@gmail.com", "(27) 99982552");
         
         List<Participante> lista = ps1.listarTodos();
         for (Participante item : lista) {
@@ -60,17 +59,17 @@ public class StartApp {
             System.out.println("Id "+itemPale.getId() +"    Nome: "+ itemPale.getNome() + "   curriculo" + itemPale.getCurriculo() +
             "    areaAtuacao: " + itemPale.getAreaAtuacao());
 }
-        ps1.inserir(null, null, null, null);
-        ps1.atualizarParticipante(idParticipante, null, null, null, null);
-        es.criarEvento(null, null, null, null, idParticipante, idParticipante);
-        es.editarEvento(idParticipante, null, null, null, null, idParticipante, idParticipante);
-        es.associarPalestrante(idParticipante, idParticipante);
-        es.excluirEvento(idParticipante);
-        is.inscreverParticipante(idParticipante, idParticipante);
-        is.verificarInscricao(idParticipante, idParticipante);
-        is.excluirInscricao(idParticipante, idParticipante);
-        pale.inserir(null, null, null);
-        pale.excluirPalestrante(null);
+        //ps1.inserir("Matheus", "M", "matheus@gmail.com", "(27) 997820364");
+        //ps1.atualizarParticipante(2, "Maria", "F", "maria@gmail.com", "(27) 998723345");
+        //es.criarEvento("GamesCon", "Exibicao ao vivo do jogos mais famosos de 2024", "22-05-2025", "Vitoria", 1, 50);
+        //es.editarEvento(idParticipante, null, null, null, null, idParticipante, idParticipante);
+        //es.associarPalestrante(1, 1);
+        //es.excluirEvento(1);
+        //is.inscreverParticipante(4, 1);
+        //is.verificarInscricao(4, 1);
+        //is.excluirInscricao(1, 1);
+        //pale.inserir("Samuel", "Gestor de eventos geek, Dev e Vendedor", "Dev");
+        //pale.excluirPalestrante(1);
         
 }
 
