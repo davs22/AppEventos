@@ -192,12 +192,10 @@ public class ParticipanteDao {
         }
     }
 
-    // Método para atualizar os dados do participante
     public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail, String novoTelefone) {
         try {
             Connection conn = this.sqlConn.connect();
 
-            // Verifica se o participante existe
             String verificaSql = "SELECT COUNT(*) FROM Participante WHERE id = ?";
             PreparedStatement verificaStmt = conn.prepareStatement(verificaSql);
             verificaStmt.setInt(1, idParticipante);
@@ -209,7 +207,6 @@ public class ParticipanteDao {
                 return "Participante não encontrado!";
             }
 
-            // Atualiza os dados do participante
             String sqlUpdate = "UPDATE Participante SET nome = ?, sexo = ?, email = ?, celular = ? WHERE id = ?";
             PreparedStatement stmt = conn.prepareStatement(sqlUpdate);
             stmt.setString(1, novoNome);

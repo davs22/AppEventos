@@ -18,12 +18,10 @@ public class InscricaoDao {
         this.sqlConn = sqlConn;
     }
 
-    // Método para inscrever um participante no evento
     public String inscreverParticipante(int idParticipante, int idEventos) {
         try {
             Connection conn = this.sqlConn.connect();
 
-            // Verifica se o participante já está inscrito no evento
             String verificaSql = "SELECT COUNT(*) FROM Inscricao WHERE id_participante = ? AND id_eventos = ?";
             PreparedStatement verificaStmt = conn.prepareStatement(verificaSql);
             verificaStmt.setInt(1, idParticipante);
@@ -36,7 +34,6 @@ public class InscricaoDao {
                 return "Participante já inscrito neste evento!";
             }
 
-            // Inserir nova inscrição
             String sql = "INSERT INTO Inscricao (id_participante, id_eventos) VALUES (?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, idParticipante);
@@ -53,7 +50,7 @@ public class InscricaoDao {
         }
     }
 
-    // Método para listar todas as inscrições de um participante
+
     public List<Inscricao> listarInscricoesPorParticipante(int idParticipante) {
         List<Inscricao> inscricoes = new ArrayList<>();
         try {
@@ -78,7 +75,7 @@ public class InscricaoDao {
         return inscricoes;
     }
 
-    // Método para verificar se o participante está inscrito no evento
+ 
     public boolean verificarInscricao(int idParticipante, int idEvento) {
         try {
             Connection conn = this.sqlConn.connect();
@@ -99,7 +96,6 @@ public class InscricaoDao {
         }
     }
 
-    // Método para excluir uma inscrição (opcional)
     public String excluirInscricao(int idParticipante, int idEvento) {
         try {
             Connection conn = this.sqlConn.connect();
