@@ -11,7 +11,6 @@ import table.Eventos;
 import table.Inscricao;
 import table.Palestrante;
 import table.Participante;
-
 public class StartApp {
     public static void main(String[] args) {
         
@@ -260,7 +259,7 @@ public class StartApp {
                 System.out.println("\n===== SUB-MENU =====");
                 System.out.println("1 - Excluir Evento");
                 System.out.println("2 - Excluir Inscricao");
-                System.out.println("2 - Excluir Palestrante");
+                System.out.println("3 - Excluir Palestrante");
                 System.out.println("0 - Voltar");
                 System.out.print("Escolha uma opção: ");
                 subOpcao4 = scanner.nextInt();
@@ -309,28 +308,6 @@ public class StartApp {
     }
 }
 
-
-        
-    
-       
-        
-
-       
-        
-        
-
-        //ps1.inserir("Matheus", "M", "matheus@gmail.com", "(27) 997820364");
-        //ps1.atualizarParticipante(2, "Maria", "F", "maria@gmail.com", "(27) 998723345");
-        //es.criarEvento("GamesCon", "Exibicao ao vivo do jogos mais famosos de 2024", "22-05-2025", "Vitoria", 1, 50);
-        //es.editarEvento(idParticipante, null, null, null, null, idParticipante, idParticipante);
-        //es.associarPalestrante(1, 1);
-        //es.excluirEvento(1);
-        //is.inscreverParticipante(4, 1);
-        //is.verificarInscricao(4, 1);
-        //is.excluirInscricao(1, 1);
-        //pale.inserir("Samuel", "Gestor de eventos geek, Dev e Vendedor", "Dev");
-        //pale.excluirPalestrante(1);
-        
 
 
     
