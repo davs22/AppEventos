@@ -1,9 +1,8 @@
+package util;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import util.SQLiteConnection;
 
 public class TexteConnection {
     public static void main(String[] args) {
