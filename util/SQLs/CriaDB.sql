@@ -45,3 +45,11 @@ CREATE TABLE Inscricao (
     FOREIGN KEY (id_eventos) REFERENCES Eventos(id) ON DELETE CASCADE,
     FOREIGN KEY (id_participante) REFERENCES Participante(id) ON DELETE CASCADE
 );
+
+CREATE TABLE Usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(100) NOT NULL
+);
+

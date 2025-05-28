@@ -24,10 +24,11 @@ public class SQLiteTesterMaster {
             // Executar SQL
             try (Statement stm = conn.createStatement()) {
                 
-                stm.execute("CREATE TABLE Participante (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,sexo TEXT,email TEXT,celular TEXT);");
-                stm.execute("CREATE TABLE Palestrante (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,curriculo TEXT,areaAtuacao TEXT);");
-                stm.execute("CREATE TABLE Eventos (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,descricao TEXT,data DATE,local TEXT,palestranteId INTEGER,capacidade INTEGER,FOREIGN KEY (palestranteId) REFERENCES Palestrante(id));");
-                stm.execute("CREATE TABLE Inscricao (id INTEGER PRIMARY KEY,id_eventos INTEGER NOT NULL,id_participante INTEGER NOT NULL,FOREIGN KEY (id_eventos) REFERENCES Eventos(id) ON DELETE CASCADE,FOREIGN KEY (id_participante) REFERENCES Participante(id) ON DELETE CASCADE);");
+                //stm.execute("CREATE TABLE Participante (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,sexo TEXT,email TEXT,celular TEXT);");
+                //stm.execute("CREATE TABLE Palestrante (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,curriculo TEXT,areaAtuacao TEXT);");
+                //stm.execute("CREATE TABLE Eventos (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,descricao TEXT,data DATE,local TEXT,palestranteId INTEGER,capacidade INTEGER,FOREIGN KEY (palestranteId) REFERENCES Palestrante(id));");
+                //stm.execute("CREATE TABLE Inscricao (id INTEGER PRIMARY KEY,id_eventos INTEGER NOT NULL,id_participante INTEGER NOT NULL,FOREIGN KEY (id_eventos) REFERENCES Eventos(id) ON DELETE CASCADE,FOREIGN KEY (id_participante) REFERENCES Participante(id) ON DELETE CASCADE);");
+                stm.execute("CREATE TABLE Usuario (id INTEGER PRIMARY KEY,email TEXT NOT NULL,senha TEXT);");
                 System.out.println("DB criado com sucesso!");
 
             } catch (SQLException e) {
