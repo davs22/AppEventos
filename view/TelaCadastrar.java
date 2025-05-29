@@ -1,3 +1,4 @@
+package view;
 import javax.swing.*;
 import java.awt.*;
 import table.Usuario;
@@ -64,7 +65,8 @@ public class TelaCadastrar extends JFrame {
 
                 if (sucesso) {
                     JOptionPane.showMessageDialog(this, "Participante cadastrado com sucesso!");
-                    dispose();
+                    dispose(); // Fecha a tela de cadastro
+                    new TelaInicial().setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(this, "Erro: e-mail já cadastrado ou falha na inserção.");
                 }

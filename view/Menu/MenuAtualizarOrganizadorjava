@@ -1,0 +1,27 @@
+package view.Menu;
+
+import javax.swing.*;
+import view.Excluir.TelaExcluirEventos;
+import view.Excluir.TelaExcluirPalestrante;
+
+public class MenuAtualizarOrganizador extends JFrame {
+    public MenuAtualizarOrganizador() {
+        setTitle("Menu de Atualizar");
+        setSize(400, 300);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(null);
+
+        JButton btnAtualizarEvento = new JButton("Atualizar Evento");
+        JButton btnAtualizarPalestrante = new JButton("Atualizar Palestrante");
+
+        btnAtualizarEvento.setBounds(100, 30, 200, 30);
+        btnAtualizarPalestrante.setBounds(100, 80, 200, 30);
+
+        add(btnAtualizarEvento);
+        add(btnAtualizarPalestrante);
+
+        btnAtualizarEvento.addActionListener(e -> new TelaAtualizarEventos().setVisible(true));
+        btnAtualizarPalestrante.addActionListener(e -> new TelaExcluirPalestrante().setVisible(true));
+    }
+}

@@ -1,3 +1,4 @@
+package view;
 import javax.swing.*;
 import table.Usuario;
 import service.UsuarioService;
