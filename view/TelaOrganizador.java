@@ -16,12 +16,12 @@ public class TelaOrganizador extends JFrame {
 
         JButton btnCriar = new JButton("Inserir e Criar");
         EstiloBotao.aplicarEstilo(btnCriar);
-        JButton btnExcluir = new JButton("Criar Palestrante");
-        JButton btnExibir = new JButton("Criar Palestrante");
+        JButton btnExcluir = new JButton("Excluir");
+        JButton btnExibir = new JButton("Visualizar");
 
         btnCriar.setBounds(100, 30, 200, 30);
-        btnExcluir.setBounds(100, 180, 200, 30);
-        btnExibir.setBounds(100, 180, 200, 30);
+        btnExcluir.setBounds(100, 80, 200, 30);
+        btnExibir.setBounds(100, 130, 200, 30);
 
         add(btnCriar);
         add(btnExcluir);

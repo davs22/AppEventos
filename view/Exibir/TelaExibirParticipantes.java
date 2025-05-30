@@ -20,12 +20,12 @@ public class TelaExibirParticipantes extends JFrame {
         List<Participante> participante = ps.listarTodos();
                        for (Participante item : participante) {
                             System.out.println("Id "+item.getId() +"    Nome: "+ item.getNome() + "    E-mail: " + item.getEmail() +
-                            "    Sexo: " + item.getSexo() + "    Celular: " + item.getCelular());
+                            "    Sexo: " + item.getSexo() + "    Celular: " + item.getCelular() + "     Tipo: " + item.getTipo());
                         }
             
                     
        
-        String[] colunas = {"Id", "Nome", "Email", "Sexo", "Celular"};
+        String[] colunas = {"Id", "Nome", "Email", "Sexo", "Celular", "Tipo"};
         Object[][] dados = new Object[participante.size()][colunas.length];
 
         for (int i = 0; i < participante.size(); i++) {
@@ -35,6 +35,7 @@ public class TelaExibirParticipantes extends JFrame {
             dados[i][2] = p.getEmail();
             dados[i][3] = p.getSexo();
             dados[i][4] = p.getCelular();
+            dados[i][5] = p.getTipo();
         }
 
         JTable tabela = new JTable(dados, colunas);
