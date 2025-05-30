@@ -2,6 +2,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import table.Usuario;
+import service.ParticipanteService;
 import service.UsuarioService;
 
 public class TelaCadastrar extends JFrame {
@@ -60,16 +61,17 @@ public class TelaCadastrar extends JFrame {
                 usuario.setEmail(email);
                 usuario.setSenha(senha);
 
-                UsuarioService usuarioService = new UsuarioService();
-                boolean sucesso = usuarioService.cadastrarUsuario(usuario);
+                ParticipanteService ps = new ParticipanteService();
+                String erro = ps.inserir(nome, nome, email, senha);
 
-                if (sucesso) {
+                if (erro == null) {
                     JOptionPane.showMessageDialog(this, "Participante cadastrado com sucesso!");
-                    dispose(); // Fecha a tela de cadastro
+                    dispose(); 
                     new TelaInicial().setVisible(true);
                 } else {
-                    JOptionPane.showMessageDialog(this, "Erro: e-mail já cadastrado ou falha na inserção.");
+                    JOptionPane.showMessageDialog(this, "Erro: " + erro);
                 }
+
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Erro ao inserir participante: " + ex.getMessage());

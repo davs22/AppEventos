@@ -1,5 +1,6 @@
 package dao;
 
+import org.mindrot.jbcrypt.BCrypt;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,7 +32,9 @@ public class ParticipanteDao {
                         rs.getString("nome"),
                         rs.getString("sexo"), 
                         rs.getString("email"), 
-                        rs.getString("celular"));
+                        rs.getString("celular"),
+                        rs.getString("senha"),
+                        rs.getString("tipo"));
                 lista.add(participante);
             }
             rs.close();
@@ -79,7 +82,9 @@ public class ParticipanteDao {
                     rs.getString("nome"),
                     rs.getString("sexo"), 
                     rs.getString("email"), 
-                    rs.getString("celular"));
+                    rs.getString("celular"),
+                    rs.getString("senha"),
+                    rs.getString("tipo"));
                 lista.add(participante);
             }
             rs.close();
@@ -107,7 +112,9 @@ public class ParticipanteDao {
                 rs.getString("nome"),
                 rs.getString("sexo"), 
                 rs.getString("email"), 
-                rs.getString("celular"));
+                rs.getString("celular"),
+                rs.getString("senha"),
+                rs.getString("tipo"));
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
@@ -130,7 +137,8 @@ public class ParticipanteDao {
             ResultSet rs = pstm.executeQuery();
             if (rs.next())
                 participante = new Participante(rs.getInt("id"), rs.getString("nome"),
-                        rs.getString("sexo"), rs.getString("email"), rs.getString("celular"));
+                        rs.getString("sexo"), rs.getString("email"), rs.getString("celular"),
+                        rs.getString("senha"), rs.getString("tipo"));
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
@@ -154,7 +162,8 @@ public class ParticipanteDao {
             ResultSet rs = pstm.executeQuery();
             if (rs.next())
                 participante = new Participante(rs.getInt("id"), rs.getString("nome"),
-                        rs.getString("sexo"), rs.getString("email"), rs.getString("celular"));
+                        rs.getString("sexo"), rs.getString("email"), rs.getString("celular"),
+                        rs.getString("senha"), rs.getString("tipo"));
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
@@ -168,10 +177,10 @@ public class ParticipanteDao {
         }
     }
 
-    public String inserir(String nome, String sexo, String email, String celular) {
+    public String inserir(String nome, String sexo, String email, String celular, String senha, String tipo) {
         try {
             Integer id = this.getNewId();
-            String sql = "INSERT INTO Participante(id, nome, sexo, email, celular) VALUES(?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Participante(id, nome, sexo, email, celular, senha, tipo) VALUES(?, ?, ?, ?, ?, ?, ?)";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setInt(1, id);
@@ -179,20 +188,22 @@ public class ParticipanteDao {
             pstm.setString(3, sexo);
             pstm.setString(4, email);
             pstm.setString(5, celular);
+            pstm.setString(6, senha);
+            pstm.setString(7, tipo);
             System.out.println("Resposta: " + pstm.executeUpdate());
             pstm.close();
             this.sqlConn.close(conn);
             return "sucesso";
         } catch (Exception e) {
             System.err.println(
-                    "Erro no método inserir(String nome, String sexo, String email, String celular) da classe ParticipanteDao ao executar SELECT: "
+                    "Erro no método inserir(String nome, String sexo, String email, String celular, String senha, String tipo) da classe ParticipanteDao ao executar SELECT: "
                             + e.getMessage());
             e.printStackTrace();
             return "erro";
         }
     }
 
-    public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail, String novoTelefone) {
+    public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail, String novoTelefone, String novaSenha) {
         try {
             Connection conn = this.sqlConn.connect();
 
@@ -207,13 +218,14 @@ public class ParticipanteDao {
                 return "Participante não encontrado!";
             }
 
-            String sqlUpdate = "UPDATE Participante SET nome = ?, sexo = ?, email = ?, celular = ? WHERE id = ?";
+            String sqlUpdate = "UPDATE Participante SET nome = ?, sexo = ?, email = ?, celular = ?, senha = ? WHERE id = ?";
             PreparedStatement stmt = conn.prepareStatement(sqlUpdate);
             stmt.setString(1, novoNome);
             stmt.setString(2, novoSexo);
             stmt.setString(3, novoEmail);
             stmt.setString(4, novoTelefone);
-            stmt.setInt(5, idParticipante);
+            stmt.setString(5, novaSenha);
+            stmt.setInt(6, idParticipante);
 
             int resultado = stmt.executeUpdate();
             stmt.close();
@@ -246,5 +258,64 @@ public class ParticipanteDao {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    public boolean emailJaExiste(String email) {
+        try {
+            String sql = "SELECT COUNT(*) FROM Participante WHERE email = ?";
+            Connection conn = this.sqlConn.connect();
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setString(1, email);
+            ResultSet rs = pstm.executeQuery();
+                
+            boolean existe = false;
+            if (rs.next()) {
+                existe = rs.getInt(1) > 0;
+            }
+
+            rs.close();
+            pstm.close();
+            this.sqlConn.close(conn);
+            return existe;
+
+        } catch (Exception e) {
+             System.err.println("Erro no método emailJaExiste: " + e.getMessage());
+             e.printStackTrace();
+             return false; 
+
+    }
+        }
+
+    public Participante login(String email, String senhaDigitada) {
+    String sql = "SELECT * FROM Participante WHERE email = ?";
+
+    try (Connection conn = this.sqlConn.connect();
+         PreparedStatement pstm = conn.prepareStatement(sql)) {
+
+        pstm.setString(1, email);
+        ResultSet rs = pstm.executeQuery();
+
+        if (rs.next()) {
+            String senhaHashDoBanco = rs.getString("senha");
+
+            // Verifica se a senha digitada corresponde ao hash do banco
+            if (BCrypt.checkpw(senhaDigitada, senhaHashDoBanco)) {
+                // Senha válida, cria e retorna o objeto Participante
+                Participante log = new Participante();
+                log.setId(rs.getInt("id"));
+                log.setNome(rs.getString("nome"));
+                log.setEmail(rs.getString("email"));
+                log.setCelular(rs.getString("celular"));
+                log.setSenha(senhaHashDoBanco); // opcional
+                log.setTipo(rs.getString("tipo"));
+                return log;
+            }
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return null;
 }
-}
+    }

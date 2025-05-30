@@ -6,16 +6,20 @@ public class Participante {
     private String sexo;
     private String email;
     private String celular;
+    private String senha;
+    private String tipo;
 
     public Participante() {
     }
 
-    public Participante(Integer id, String nome, String sexo, String email, String celular) {
+    public Participante(Integer id, String nome, String sexo, String email, String celular, String senha, String tipo) {
         this.id = id;
         this.nome = nome;
         this.sexo = sexo;
         this.email = email;
         this.celular = celular;
+        this.senha = senha;
+        this.tipo = tipo;
     }
 
     public Integer getId() {
@@ -57,4 +61,22 @@ public class Participante {
     public void setCelular(String celular) {
         this.celular = celular;
     }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    
 }

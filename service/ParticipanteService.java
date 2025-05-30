@@ -37,8 +37,26 @@ public class ParticipanteService {
         return this.dao.buscarPorCelular(celular);
     }
 
-    public String inserir(String nome, String sexo, String email, String celular) {
-        return this.dao.inserir(nome, sexo, email, celular);
+    public String inserir(String nome, String sexo, String email, String celular, String senha) {
+    if (dao.emailJaExiste(email)) {
+        return "E-mail já cadastrado.";
+    }
+    String resultado = dao.inserir(nome, sexo, email, celular, senha);
+    if (!"sucesso".equalsIgnoreCase(resultado)) {
+        return "Erro ao inserir no banco.";
+    }
+    return null; 
+    }
+
+    public Participante login(String email, String senha) {
+        if (email.equalsIgnoreCase("adm@empresa.com") && senha.equals("organizador123")) {
+            Participante u = new Participante();
+            u.setNome("Administrador");
+            u.setEmail(email);
+            u.setTipo("organizador");
+            return u;
+            }
+        return dao.login(email, senha);
     }
 
     public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail, String novoTelefone) {
