@@ -99,7 +99,7 @@ public class TelaAtualizarParticipantes extends JFrame {
             String novoTelefone = txtnovoTelefone.getText(); 
 
             ParticipanteService ps = new ParticipanteService();
-            String resultado = ps.atualizarParticipante(idParticipante, novoNome, novoSexo, novoEmail, novoTelefone);
+            String resultado = ps.atualizarParticipante(idParticipante, novoNome, novoSexo, novoEmail, novoTelefone, novoTelefone);
 
             JOptionPane.showMessageDialog(this, resultado);
             dispose();

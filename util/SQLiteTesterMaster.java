@@ -24,11 +24,10 @@ public class SQLiteTesterMaster {
             // Executar SQL
             try (Statement stm = conn.createStatement()) {
                 
-                stm.execute("CREATE TABLE Participante (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,sexo TEXT,email TEXT,celular TEXT);");
+                stm.execute("CREATE TABLE Participante (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,sexo TEXT,email TEXT,celular TEXT,senha TEXT NOT NULL,tipo TEXT NOT NULL);");
                 stm.execute("CREATE TABLE Palestrante (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,curriculo TEXT,areaAtuacao TEXT);");
                 stm.execute("CREATE TABLE Eventos (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,descricao TEXT,data DATE,local TEXT,palestranteId INTEGER,capacidade INTEGER,FOREIGN KEY (palestranteId) REFERENCES Palestrante(id));");
                 stm.execute("CREATE TABLE Inscricao (id INTEGER PRIMARY KEY,id_eventos INTEGER NOT NULL,id_participante INTEGER NOT NULL,FOREIGN KEY (id_eventos) REFERENCES Eventos(id) ON DELETE CASCADE,FOREIGN KEY (id_participante) REFERENCES Participante(id) ON DELETE CASCADE);");
-                stm.execute("CREATE TABLE Usuario (id INTEGER PRIMARY KEY,nome TEXT NOT NULL, email TEXT NOT NULL,senha TEXT, tipo TEXT NOT NULL);");
                 System.out.println("DB criado com sucesso!");
 
             } catch (SQLException e) {
@@ -46,7 +45,6 @@ public class SQLiteTesterMaster {
                 stm.execute("DROP TABLE IF EXISTS Eventos;"); 
                 stm.execute("DROP TABLE IF EXISTS Palestrante;"); 
                 stm.execute("DROP TABLE IF EXISTS Participante;");  
-                stm.execute("DROP TABLE IF EXISTS Usuario;");
                 System.out.println("DB Deletado com sucesso!");
 
             } catch (SQLException e) {
@@ -64,15 +62,14 @@ public class SQLiteTesterMaster {
                 stm.execute("DROP TABLE IF EXISTS Inscricao;");
                 stm.execute("DROP TABLE IF EXISTS Eventos;"); 
                 stm.execute("DROP TABLE IF EXISTS Palestrante;"); 
-                stm.execute("DROP TABLE IF EXISTS Participante;");  
+                stm.execute("DROP TABLE IF EXISTS Participante;"); 
                 stm.execute("DROP TABLE IF EXISTS Usuario;"); 
                 System.out.println("DB Deletado com sucesso!");
 
-                stm.execute("CREATE TABLE Participante (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,sexo TEXT,email TEXT,celular TEXT);");
+                stm.execute("CREATE TABLE Participante (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,sexo TEXT,email TEXT,celular TEXT,senha TEXT NOT NULL,tipo TEXT NOT NULL);");
                 stm.execute("CREATE TABLE Palestrante (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,curriculo TEXT,areaAtuacao TEXT);");
                 stm.execute("CREATE TABLE Eventos (id INTEGER PRIMARY KEY,nome TEXT NOT NULL,descricao TEXT,data DATE,local TEXT,palestranteId INTEGER,capacidade INTEGER,FOREIGN KEY (palestranteId) REFERENCES Palestrante(id));");
                 stm.execute("CREATE TABLE Inscricao (id INTEGER PRIMARY KEY,id_eventos INTEGER NOT NULL,id_participante INTEGER NOT NULL,FOREIGN KEY (id_eventos) REFERENCES Eventos(id) ON DELETE CASCADE,FOREIGN KEY (id_participante) REFERENCES Participante(id) ON DELETE CASCADE);");
-                stm.execute("CREATE TABLE Usuario (id INTEGER PRIMARY KEY,nome TEXT NOT NULL, email TEXT NOT NULL,senha TEXT, tipo TEXT NOT NULL);");
                 System.out.println("DB criado com sucesso!");
                 
             } catch (SQLException e) {
@@ -101,7 +98,7 @@ public class SQLiteTesterMaster {
             // Executar SQL
             try (Statement stm = conn.createStatement()) {
                 
-                stm.execute("INSERT INTO Usuario (nome, email, senha, tipo) VALUES ('Administrador', 'adm@empresa.com', 'organizador123', 'organizador');");
+                stm.execute("INSERT INTO Participante (nome, sexo, email, celular, senha, tipo) VALUES ('Administrador', 'M', 'adm@empresa.com', '27995434564', 'organizador123', 'organizador');");
                 System.out.println("Inserido no DB com sucesso!");
 
             } catch (SQLException e) {

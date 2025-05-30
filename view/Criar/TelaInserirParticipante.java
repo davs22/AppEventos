@@ -71,7 +71,7 @@ public class TelaInserirParticipante extends JFrame {
                 int Celular = ((Number) txtCelular.getValue()).intValue();
 
                 ParticipanteService ps = new ParticipanteService();
-                ps.inserir(nome, sexo, email, celular);
+                ps.inserir(nome, sexo, email, celular, email, celular);
 
                 String msg = "Participante salvo:\n" +
                 "Nome: " + nome +

@@ -2,6 +2,8 @@ package service;
 
 import java.util.List;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import dao.ParticipanteDao;
 import table.Participante;
 
@@ -37,11 +39,12 @@ public class ParticipanteService {
         return this.dao.buscarPorCelular(celular);
     }
 
-    public String inserir(String nome, String sexo, String email, String celular, String senha) {
+    public String inserir(String nome, String sexo, String email, String celular, String senha, String tipo) {
     if (dao.emailJaExiste(email)) {
         return "E-mail já cadastrado.";
     }
-    String resultado = dao.inserir(nome, sexo, email, celular, senha);
+    String senhaCriptografada = BCrypt.hashpw(senha, BCrypt.gensalt());
+    String resultado = dao.inserir(nome, sexo, email, celular, senhaCriptografada, tipo);
     if (!"sucesso".equalsIgnoreCase(resultado)) {
         return "Erro ao inserir no banco.";
     }
@@ -59,7 +62,7 @@ public class ParticipanteService {
         return dao.login(email, senha);
     }
 
-    public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail, String novoTelefone) {
-        return this.dao.atualizarParticipante(idParticipante, novoNome, novoSexo, novoEmail, novoTelefone);
+    public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail, String novoTelefone, String novaSenha) {
+        return this.dao.atualizarParticipante(idParticipante, novoNome, novoSexo, novoEmail, novoTelefone, novaSenha);
     }
 }

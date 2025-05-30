@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS Eventos;
 DROP TABLE IF EXISTS Palestrante;
 DROP TABLE IF EXISTS Participante;
 
-
 -- Tabela de Participantes
 CREATE TABLE Participante (
     id INTEGER PRIMARY KEY,
@@ -14,6 +13,8 @@ CREATE TABLE Participante (
     sexo TEXT,
     email TEXT,
     celular TEXT
+    senha TEXT NOT NULL,
+    tipo TEXT NOT NULL
 );
 
 -- Tabela de Palestrantes
@@ -44,14 +45,6 @@ CREATE TABLE Inscricao (
     id_participante INTEGER NOT NULL,
     FOREIGN KEY (id_eventos) REFERENCES Eventos(id) ON DELETE CASCADE,
     FOREIGN KEY (id_participante) REFERENCES Participante(id) ON DELETE CASCADE
-);
-
-CREATE TABLE Usuarios (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
-    email TEXT NOT NULL UNIQUE,
-    senha TEXT NOT NULL,
-    tipo TEXT NOT NULL
 );
 
 

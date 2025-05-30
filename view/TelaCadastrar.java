@@ -22,10 +22,22 @@ public class TelaCadastrar extends JFrame {
         painelFormulario.add(txtNome, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
+        painelFormulario.add(new JLabel("Sexo:"), gbc);
+        gbc.gridx = 1;
+        JTextField txtSexo = new JTextField(20);
+        painelFormulario.add(txtSexo, gbc);
+
+        gbc.gridx = 0; gbc.gridy++;
         painelFormulario.add(new JLabel("Email:"), gbc);
         gbc.gridx = 1;
         JTextField txtEmail = new JTextField(20);
         painelFormulario.add(txtEmail, gbc);
+
+        gbc.gridx = 0; gbc.gridy++;
+        painelFormulario.add(new JLabel("Celular:"), gbc);
+        gbc.gridx = 1;
+        JTextField txtCelular = new JTextField(20);
+        painelFormulario.add(txtCelular, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
         painelFormulario.add(new JLabel("Senha:"), gbc);
@@ -64,7 +76,7 @@ public class TelaCadastrar extends JFrame {
                 participante.setSenha(senha);
 
                 ParticipanteService ps = new ParticipanteService();
-                String erro = ps.inserir(nome, sexo, email, celular);
+                String erro = ps.inserir(nome, sexo, email, celular, senha, senha);
 
                 if (erro == null) {
                     JOptionPane.showMessageDialog(this, "Participante cadastrado com sucesso!");

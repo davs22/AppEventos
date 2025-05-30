@@ -288,34 +288,31 @@ public class ParticipanteDao {
 
     public Participante login(String email, String senhaDigitada) {
     String sql = "SELECT * FROM Participante WHERE email = ?";
-
-    try (Connection conn = this.sqlConn.connect();
+    try (Connection conn = sqlConn.connect();
          PreparedStatement pstm = conn.prepareStatement(sql)) {
 
         pstm.setString(1, email);
         ResultSet rs = pstm.executeQuery();
 
         if (rs.next()) {
-            String senhaHashDoBanco = rs.getString("senha");
-
-            // Verifica se a senha digitada corresponde ao hash do banco
-            if (BCrypt.checkpw(senhaDigitada, senhaHashDoBanco)) {
-                // Senha válida, cria e retorna o objeto Participante
-                Participante log = new Participante();
-                log.setId(rs.getInt("id"));
-                log.setNome(rs.getString("nome"));
-                log.setEmail(rs.getString("email"));
-                log.setCelular(rs.getString("celular"));
-                log.setSenha(senhaHashDoBanco); // opcional
-                log.setTipo(rs.getString("tipo"));
-                return log;
+            String senhaSalva = rs.getString("senha");
+            if (BCrypt.checkpw(senhaDigitada, senhaSalva)) {
+                Participante p = new Participante();
+                p.setId(rs.getInt("id"));
+                p.setNome(rs.getString("nome"));
+                p.setEmail(email);
+                p.setTipo(rs.getString("tipo"));
+                return p;
             }
         }
-
-    } catch (SQLException e) {
+        return null; // Login falhou
+    } catch (Exception e) {
         e.printStackTrace();
+        return null;
     }
-
-    return null;
 }
-    }
+
+}
+
+
+    

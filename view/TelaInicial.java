@@ -1,13 +1,13 @@
 package view;
 import javax.swing.*;
-import table.Usuario;
-import service.UsuarioService;
 
+import table.Participante;
+import service.ParticipanteService;
 public class TelaInicial extends JFrame {
     private JTextField emailField;
     private JPasswordField senhaField;
     private JButton loginBtn, cadastroBtn;
-    private UsuarioService usuarioService;
+    private ParticipanteService participanteService;
 
     public TelaInicial() {
         setTitle("Sistema de Eventos");
@@ -16,7 +16,7 @@ public class TelaInicial extends JFrame {
         setLocationRelativeTo(null);
         setLayout(null);
 
-        usuarioService = new UsuarioService();
+        participanteService = new ParticipanteService();
 
         JLabel emailLabel = new JLabel("Email:");
         emailLabel.setBounds(30, 20, 80, 25);
@@ -49,12 +49,12 @@ public class TelaInicial extends JFrame {
         String email = emailField.getText();
         String senha = new String(senhaField.getPassword());
 
-        Usuario usuario = usuarioService.login(email, senha);
+        Participante participante = participanteService.login(email, senha);
 
-        if (usuario != null) {
-            JOptionPane.showMessageDialog(this, "Bem-vindo, " + usuario.getNome());
+        if (participante != null) {
+            JOptionPane.showMessageDialog(this, "Bem-vindo, " + participante.getNome());
 
-            if ("organizador".equalsIgnoreCase(usuario.getTipo())) {
+            if ("organizador".equalsIgnoreCase(participante.getTipo())) {
                 new TelaOrganizador().setVisible(true);
             } else {
                 new TelaUsuario().setVisible(true);
