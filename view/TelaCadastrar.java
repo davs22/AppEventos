@@ -1,10 +1,8 @@
 package view;
 import javax.swing.*;
 import java.awt.*;
-import table.Usuario;
 import service.ParticipanteService;
-import service.UsuarioService;
-
+import table.Participante;
 public class TelaCadastrar extends JFrame {
     public TelaCadastrar() {
         setTitle("Cadastrar Participante");
@@ -48,21 +46,25 @@ public class TelaCadastrar extends JFrame {
         btnSalvar.addActionListener(e -> {
             try {
                 String nome = txtNome.getText().trim();
+                String sexo = txtSexo.getText().trim();
                 String email = txtEmail.getText().trim();
+                String celular = txtCelular.getText().trim();
                 String senha = new String(txtSenha.getPassword()).trim();
 
-                if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
+                if (nome.isEmpty() ||sexo.isEmpty() || email.isEmpty() ||celular.isEmpty() || senha.isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Preencha todos os campos!");
                     return;
                 }
 
-                Usuario usuario = new Usuario();
-                usuario.setNome(nome);
-                usuario.setEmail(email);
-                usuario.setSenha(senha);
+                Participante participante = new Participante();
+                participante.setNome(nome);
+                participante.setSexo(sexo);
+                participante.setEmail(email);
+                participante.setCelular(celular);
+                participante.setSenha(senha);
 
                 ParticipanteService ps = new ParticipanteService();
-                String erro = ps.inserir(nome, nome, email, senha);
+                String erro = ps.inserir(nome, sexo, email, celular);
 
                 if (erro == null) {
                     JOptionPane.showMessageDialog(this, "Participante cadastrado com sucesso!");
@@ -71,7 +73,6 @@ public class TelaCadastrar extends JFrame {
                 } else {
                     JOptionPane.showMessageDialog(this, "Erro: " + erro);
                 }
-
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Erro ao inserir participante: " + ex.getMessage());
