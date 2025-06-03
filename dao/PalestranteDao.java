@@ -237,6 +237,39 @@ public class PalestranteDao {
         }
     }
     
+    public String atualizarPalestrante(int idPalestrante, String novoNome, String novoCurriculo, String novaAreaAtuacao) {
+        try {
+            Connection conn = this.sqlConn.connect();
+
+            String verificaSql = "SELECT COUNT(*) FROM Palestrante WHERE id = ?";
+            PreparedStatement verificaStmt = conn.prepareStatement(verificaSql);
+            verificaStmt.setInt(1, idPalestrante);
+            ResultSet rs = verificaStmt.executeQuery();
+
+            if (!rs.next() || rs.getInt(1) == 0) {
+                verificaStmt.close();
+                this.sqlConn.close(conn);
+                return "Palestrante não encontrado!";
+            }
+
+            String sqlUpdate = "UPDATE Palestrante SET nome = ?, curriculo = ?, areaAtuacao = ? WHERE id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sqlUpdate);
+            stmt.setString(1, novoNome);
+            stmt.setString(2, novoCurriculo);
+            stmt.setString(3, novaAreaAtuacao);
+            stmt.setInt(4, idPalestrante);
+
+            int resultado = stmt.executeUpdate();
+            stmt.close();
+            this.sqlConn.close(conn);
+
+            return resultado > 0 ? "Dados atualizados com sucesso!" : "Erro ao atualizar dados do palestrante.";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Erro ao atualizar dados.";
+        }
+    }
 }
 
 

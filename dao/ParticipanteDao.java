@@ -177,11 +177,9 @@ public class ParticipanteDao {
         }
     }
 
-   public String inserir(String nome, String sexo, String email, String celular, String senha, String tipo) {
+   public String inserir(String nome, String sexo, String email, String celular, String senhaCriptografada, String tipo) {
     try {
         Integer id = this.getNewId();
-        // Criptografa a senha
-        String senhaCriptografada = BCrypt.hashpw(senha, BCrypt.gensalt());
 
         String sql = "INSERT INTO Participante(id, nome, sexo, email, celular, senha, tipo) VALUES(?, ?, ?, ?, ?, ?, ?)";
         Connection conn = this.sqlConn.connect();
@@ -191,21 +189,21 @@ public class ParticipanteDao {
         pstm.setString(3, sexo);
         pstm.setString(4, email);
         pstm.setString(5, celular);
-        pstm.setString(6, senhaCriptografada); // Aqui usa a senha criptografada
-        pstm.setString(7, tipo);
-        
+        pstm.setString(6, senhaCriptografada); // Senha criptografada vai para a coluna 'senha'
+        pstm.setString(7, tipo); // Tipo vai corretamente para a coluna 'tipo'
+
         System.out.println("Resposta: " + pstm.executeUpdate());
         pstm.close();
         this.sqlConn.close(conn);
         return "sucesso";
     } catch (Exception e) {
         System.err.println(
-                "Erro no método inserir(String nome, String sexo, String email, String celular, String senha, String tipo) da classe ParticipanteDao ao executar INSERT: "
-                        + e.getMessage());
+            "Erro no método inserir(...) da classe ParticipanteDao ao executar INSERT: " + e.getMessage());
         e.printStackTrace();
         return "erro";
     }
 }
+
 
     public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail, String novoTelefone, String novaSenha) {
         try {

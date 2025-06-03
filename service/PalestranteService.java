@@ -43,4 +43,8 @@ public class PalestranteService {
     public String excluirPalestrante(Integer id) {
         return dao.excluir(id);
     }
+
+    public String atualizarPalestrante(int idPalestrante, String novoNome, String novoCurriculo, String novaAreaAtuacao) {
+        return this.dao.atualizarPalestrante(idPalestrante, novoNome, novoCurriculo, novaAreaAtuacao);
+    }
 }
