@@ -14,7 +14,7 @@ CREATE TABLE Participante (
     email TEXT,
     celular TEXT
     senha TEXT NOT NULL,
-    tipo TEXT NOT NULL
+    tipo TEXT NOT NULL DEFAULT 'participante'
 );
 
 -- Tabela de Palestrantes

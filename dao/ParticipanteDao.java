@@ -299,11 +299,13 @@ public class ParticipanteDao {
         if (rs.next()) {
             String senhaSalva = rs.getString("senha");
             if (BCrypt.checkpw(senhaDigitada, senhaSalva)) {
+
                 Participante p = new Participante();
                 p.setId(rs.getInt("id"));
                 p.setNome(rs.getString("nome"));
                 p.setEmail(email);
                 p.setTipo(rs.getString("tipo"));
+
                 return p;
             }
         }

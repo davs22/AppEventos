@@ -51,6 +51,10 @@ public class ParticipanteService {
     return null; 
     }
 
+    public String inserir(String nome, String sexo, String email, String celular, String senha){
+        return inserir(nome, sexo, email, celular, senha,"participante");
+    }
+
     public Participante login(String email, String senha) {
         if (email.equalsIgnoreCase("adm@empresa.com") && senha.equals("organizador123")) {
             Participante u = new Participante();

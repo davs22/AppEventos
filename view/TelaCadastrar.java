@@ -76,7 +76,7 @@ public class TelaCadastrar extends JFrame {
                 participante.setSenha(senha);
 
                 ParticipanteService ps = new ParticipanteService();
-                String erro = ps.inserir(nome, sexo, email, celular, senha, senha);
+                String erro = ps.inserir(nome, sexo, email, celular, senha);
 
                 if (erro == null) {
                     JOptionPane.showMessageDialog(this, "Participante cadastrado com sucesso!");
