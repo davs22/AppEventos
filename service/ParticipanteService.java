@@ -51,7 +51,7 @@ public class ParticipanteService {
     return null; 
     }
 
-    public String inserir(String nome, String sexo, String email, String celular, String senha){
+    public String inserir(String nome, String sexo, String email, String celular){
         return inserir(nome, sexo, email, celular, senha,"participante");
     }
 
@@ -68,5 +68,10 @@ public class ParticipanteService {
 
     public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail, String novoTelefone, String novaSenha) {
         return this.dao.atualizarParticipante(idParticipante, novoNome, novoSexo, novoEmail, novoTelefone, novaSenha);
+    }
+
+    public String atualizarParticipante(int i, String string, String string2, String string3, String string4) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'atualizarParticipante'");
     }
 }
