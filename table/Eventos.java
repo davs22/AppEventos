@@ -1,4 +1,5 @@
 package table;
+
 import java.util.Date;
 
 public class Eventos {
@@ -9,11 +10,12 @@ public class Eventos {
     private int palestranteId;
     private int capacidade;
     private Integer id;
-    
+
     public Eventos() {
     }
 
-    public Eventos(Integer id, String nome, String descricao, Date data, String local, int palestranteId, int capacidade) {
+    public Eventos(Integer id, String nome, String descricao, Date data, String local, int palestranteId,
+            int capacidade) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -22,33 +24,43 @@ public class Eventos {
         this.palestranteId = palestranteId;
         this.capacidade = capacidade;
     }
+
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
+
     public String getDescricao() {
         return descricao;
     }
+
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
     public Date getData() {
         return data;
     }
+
     public void setData(Date data) {
         this.data = data;
     }
+
     public String getLocal() {
         return local;
     }
+
     public void setLocal(String local) {
         this.local = local;
     }
+
     public int getPalestranteId() {
         return palestranteId;
     }
+
     public void setPalestranteId(int palestranteId) {
         this.palestranteId = palestranteId;
     }
@@ -68,6 +80,5 @@ public class Eventos {
     public void setId(Integer id) {
         this.id = id;
     }
- 
-    
+
 }

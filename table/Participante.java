@@ -78,5 +78,4 @@ public class Participante {
         this.tipo = tipo;
     }
 
-    
 }

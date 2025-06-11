@@ -8,7 +8,7 @@ import java.util.List;
 import table.Eventos;
 
 public class EventosService {
-   
+
     private EventosDao dao;
 
     public EventosService(EventosDao dao) {
@@ -16,21 +16,22 @@ public class EventosService {
     }
 
     public EventosService() {
-        this.dao = new EventosDao(); 
+        this.dao = new EventosDao();
     }
 
     public List<Eventos> listarEventos() throws SQLException {
         return this.dao.listarEventos();
     }
 
-    public List<Eventos> listarPorParametro(String nome, String data) {
-        return dao.listarPorParametro(nome, data);
-    }    
-    
-    public void criarEvento(String nome, String descricao, String dataString, String local, int palestranteId, int capacidade) {
+    public List<Eventos> listarPorParametro(String tipo, String coluna, String valor) {
+        return dao.listarPorParametro(tipo, coluna, valor);
+    }
+
+    public void criarEvento(String nome, String descricao, String dataString, String local, int palestranteId,
+            int capacidade) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         try {
-            
+
             Date dataEvento = sdf.parse(dataString);
 
             Eventos evento = new Eventos();
@@ -50,7 +51,8 @@ public class EventosService {
     }
 
     // Método para editar evento
-    public String editarEvento(int eventoId, String nome, String descricao, Date data, String local, int palestranteId,int capacidade) {
+    public String editarEvento(int eventoId, String nome, String descricao, Date data, String local, int palestranteId,
+            int capacidade) {
         Eventos evento = new Eventos();
         evento.setId(eventoId);
         evento.setNome(nome);
@@ -101,4 +103,13 @@ public class EventosService {
             return false; // ou lançar uma exceção customizada se preferir
         }
     }
+    public Boolean eventoExiste(int eventId) {
+        try {
+            return this.dao.eventoExiste(eventId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

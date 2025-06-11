@@ -28,10 +28,10 @@ public class ParticipanteDao {
             ResultSet rs = stm.executeQuery(sql);
             while (rs.next()) {
                 Participante participante = new Participante(
-                        rs.getInt("id"), 
+                        rs.getInt("id"),
                         rs.getString("nome"),
-                        rs.getString("sexo"), 
-                        rs.getString("email"), 
+                        rs.getString("sexo"),
+                        rs.getString("email"),
                         rs.getString("celular"),
                         rs.getString("senha"),
                         rs.getString("tipo"));
@@ -78,13 +78,13 @@ public class ParticipanteDao {
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
                 Participante participante = new Participante(
-                    rs.getInt("id"), 
-                    rs.getString("nome"),
-                    rs.getString("sexo"), 
-                    rs.getString("email"), 
-                    rs.getString("celular"),
-                    rs.getString("senha"),
-                    rs.getString("tipo"));
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("sexo"),
+                        rs.getString("email"),
+                        rs.getString("celular"),
+                        rs.getString("senha"),
+                        rs.getString("tipo"));
                 lista.add(participante);
             }
             rs.close();
@@ -108,13 +108,13 @@ public class ParticipanteDao {
             pstm.setInt(1, id);
             ResultSet rs = pstm.executeQuery();
             if (rs.next())
-                participante = new Participante(rs.getInt("id"), 
-                rs.getString("nome"),
-                rs.getString("sexo"), 
-                rs.getString("email"), 
-                rs.getString("celular"),
-                rs.getString("senha"),
-                rs.getString("tipo"));
+                participante = new Participante(rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("sexo"),
+                        rs.getString("email"),
+                        rs.getString("celular"),
+                        rs.getString("senha"),
+                        rs.getString("tipo"));
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
@@ -177,35 +177,36 @@ public class ParticipanteDao {
         }
     }
 
-   public String inserir(String nome, String sexo, String email, String celular, String senhaCriptografada, String tipo) {
-    try {
-        Integer id = this.getNewId();
+    public String inserir(String nome, String sexo, String email, String celular, String senhaCriptografada,
+            String tipo) {
+        try {
+            Integer id = this.getNewId();
 
-        String sql = "INSERT INTO Participante(id, nome, sexo, email, celular, senha, tipo) VALUES(?, ?, ?, ?, ?, ?, ?)";
-        Connection conn = this.sqlConn.connect();
-        PreparedStatement pstm = conn.prepareStatement(sql);
-        pstm.setInt(1, id);
-        pstm.setString(2, nome);
-        pstm.setString(3, sexo);
-        pstm.setString(4, email);
-        pstm.setString(5, celular);
-        pstm.setString(6, senhaCriptografada); // Senha criptografada vai para a coluna 'senha'
-        pstm.setString(7, tipo); // Tipo vai corretamente para a coluna 'tipo'
+            String sql = "INSERT INTO Participante(id, nome, sexo, email, celular, senha, tipo) VALUES(?, ?, ?, ?, ?, ?, ?)";
+            Connection conn = this.sqlConn.connect();
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, id);
+            pstm.setString(2, nome);
+            pstm.setString(3, sexo);
+            pstm.setString(4, email);
+            pstm.setString(5, celular);
+            pstm.setString(6, senhaCriptografada); // Senha criptografada vai para a coluna 'senha'
+            pstm.setString(7, tipo); // Tipo vai corretamente para a coluna 'tipo'
 
-        System.out.println("Resposta: " + pstm.executeUpdate());
-        pstm.close();
-        this.sqlConn.close(conn);
-        return "sucesso";
-    } catch (Exception e) {
-        System.err.println(
-            "Erro no método inserir(...) da classe ParticipanteDao ao executar INSERT: " + e.getMessage());
-        e.printStackTrace();
-        return "erro";
+            System.out.println("Resposta: " + pstm.executeUpdate());
+            pstm.close();
+            this.sqlConn.close(conn);
+            return "sucesso";
+        } catch (Exception e) {
+            System.err.println(
+                    "Erro no método inserir(...) da classe ParticipanteDao ao executar INSERT: " + e.getMessage());
+            e.printStackTrace();
+            return "erro";
+        }
     }
-}
 
-
-    public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail, String novoTelefone, String novaSenha) {
+    public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail,
+            String novoTelefone, String novaSenha) {
         try {
             Connection conn = this.sqlConn.connect();
 
@@ -256,7 +257,8 @@ public class ParticipanteDao {
             this.sqlConn.close(conn);
             return id;
         } catch (Exception e) {
-            System.err.println("Erro no método getNewId() da classe ParticipanteDao ao executar SELECT: " + e.getMessage());
+            System.err.println(
+                    "Erro no método getNewId() da classe ParticipanteDao ao executar SELECT: " + e.getMessage());
             e.printStackTrace();
             return -1;
         }
@@ -269,7 +271,7 @@ public class ParticipanteDao {
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, email);
             ResultSet rs = pstm.executeQuery();
-                
+
             boolean existe = false;
             if (rs.next()) {
                 existe = rs.getInt(1) > 0;
@@ -281,42 +283,39 @@ public class ParticipanteDao {
             return existe;
 
         } catch (Exception e) {
-             System.err.println("Erro no método emailJaExiste: " + e.getMessage());
-             e.printStackTrace();
-             return false; 
+            System.err.println("Erro no método emailJaExiste: " + e.getMessage());
+            e.printStackTrace();
+            return false;
 
-    }
         }
+    }
 
     public Participante login(String email, String senhaDigitada) {
-    String sql = "SELECT * FROM Participante WHERE email = ?";
-    try (Connection conn = sqlConn.connect();
-         PreparedStatement pstm = conn.prepareStatement(sql)) {
+        String sql = "SELECT * FROM Participante WHERE email = ?";
+        try (Connection conn = sqlConn.connect();
+                PreparedStatement pstm = conn.prepareStatement(sql)) {
 
-        pstm.setString(1, email);
-        ResultSet rs = pstm.executeQuery();
+            pstm.setString(1, email);
+            ResultSet rs = pstm.executeQuery();
 
-        if (rs.next()) {
-            String senhaSalva = rs.getString("senha");
-            if (BCrypt.checkpw(senhaDigitada, senhaSalva)) {
+            if (rs.next()) {
+                String senhaSalva = rs.getString("senha");
+                if (BCrypt.checkpw(senhaDigitada, senhaSalva)) {
 
-                Participante p = new Participante();
-                p.setId(rs.getInt("id"));
-                p.setNome(rs.getString("nome"));
-                p.setEmail(email);
-                p.setTipo(rs.getString("tipo"));
+                    Participante p = new Participante();
+                    p.setId(rs.getInt("id"));
+                    p.setNome(rs.getString("nome"));
+                    p.setEmail(email);
+                    p.setTipo(rs.getString("tipo"));
 
-                return p;
+                    return p;
+                }
             }
+            return null; // Login falhou
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        return null; // Login falhou
-    } catch (Exception e) {
-        e.printStackTrace();
-        return null;
     }
-}
 
 }
-
-
-    

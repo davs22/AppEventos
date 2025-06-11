@@ -1,6 +1,5 @@
 package dao;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +13,7 @@ import util.SQLiteConnection;
 
 public class EventosDao {
     private SQLiteConnection sqlConn;
-    
+
     public EventosDao() {
         this.sqlConn = new SQLiteConnection();
     }
@@ -24,12 +23,12 @@ public class EventosDao {
         String sql = "SELECT * FROM Eventos";
 
         try (Connection conn = this.sqlConn.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Eventos evento = new Eventos();
-                evento.setId( rs.getInt("id"));
+                evento.setId(rs.getInt("id"));
                 evento.setNome(rs.getString("nome"));
                 evento.setDescricao(rs.getString("descricao"));
                 evento.setData(rs.getDate("data"));
@@ -47,65 +46,60 @@ public class EventosDao {
         return eventosList;
     }
 
-    public List<Eventos> listarPorParametro(String nome, String data) {
+    public List<Eventos> listarPorParametro(String tipo, String coluna, String valor) {
+        List<Eventos> lista = new ArrayList<>();
+
         try {
-            List<Eventos> lista = new ArrayList<Eventos>();
-            String sql = "SELECT * FROM Eventos";
-            String sqlWhere = "";
-            boolean temNome = (nome != null && !nome.isEmpty());
-            boolean temData = (data != null && !data.isEmpty());
-    
-            if (temNome || temData) {
-                sqlWhere = " WHERE";
-                if (temNome) sqlWhere += " nome LIKE ?";
-                if (temData) {
-                    if (temNome) sqlWhere += " AND data = ?";
-                    else sqlWhere += " data = ?";
-                }
-            }
-    
-            sql += sqlWhere;
+            String sql = "SELECT * FROM Eventos WHERE " + coluna + " = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
-    
-            int paramIndex = 1;
-            if (temNome) pstm.setString(paramIndex++, "%" + nome + "%");
-            if (temData) pstm.setString(paramIndex++, data);
-    
+
+            // Definindo o valor corretamente baseado no tipo
+            if (tipo.equalsIgnoreCase("int")) {
+                pstm.setInt(1, Integer.parseInt(valor));
+            } else if (tipo.equalsIgnoreCase("string")) {
+                pstm.setString(1, valor);
+            } else {
+                throw new IllegalArgumentException("Tipo não suportado: " + tipo);
+            }
+
             ResultSet rs = pstm.executeQuery();
+
             while (rs.next()) {
                 Eventos eventos = new Eventos(
-                    rs.getInt("id"),
-                    rs.getString("nome"),
-                    rs.getString("descricao"),
-                    rs.getDate("data"),
-                    rs.getString("local"),
-                    rs.getInt("palestranteId"),
-                    rs.getInt("capacidade")
-                   
-                );
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("descricao"),
+                        rs.getDate("data"),
+                        rs.getString("local"),
+                        rs.getInt("palestranteId"),
+                        rs.getInt("capacidade"));
                 lista.add(eventos);
             }
-    
+
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
-            return lista;
+
         } catch (SQLException e) {
-            System.err.println(
-                "Erro no método listarPorParametro(String nome, String data) da classe EventosDao ao executar SELECT: "
-                    + e.getMessage());
-            return new ArrayList<Eventos>();
+            System.err.println("Erro ao listar eventos por parâmetro: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.err.println("Erro de conversão para inteiro: " + e.getMessage());
         }
+
+        return lista;
     }
-    
-    
+
     public void criarEvento(Eventos evento) throws SQLException {
-        
+        // Verifica se o palestrante existe
+        if (!palestranteExiste(evento.getPalestranteId())) {
+            throw new SQLException("Erro: O palestrante com ID " + evento.getPalestranteId() + " não existe.");
+        }
+
         String sql = "INSERT INTO Eventos (nome, descricao, data, local, palestranteId, capacidade) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = this.sqlConn.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, evento.getNome());
             stmt.setString(2, evento.getDescricao());
@@ -115,10 +109,11 @@ public class EventosDao {
             stmt.setInt(6, evento.getCapacidade());
 
             int affectedRows = stmt.executeUpdate();
+
             if (affectedRows > 0) {
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        evento.setPalestranteId(generatedKeys.getInt(1)); 
+                        evento.setId(generatedKeys.getInt(1)); // Armazena o ID gerado do evento
                     }
                 }
             }
@@ -129,7 +124,7 @@ public class EventosDao {
         String sql = "UPDATE Eventos SET nome = ?, descricao = ?, data = ?, local = ?, palestranteId = ? ,capacidade = ? WHERE id = ?";
 
         try (Connection conn = this.sqlConn.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, evento.getNome());
             stmt.setString(2, evento.getDescricao());
@@ -137,7 +132,7 @@ public class EventosDao {
             stmt.setString(4, evento.getLocal());
             stmt.setInt(5, evento.getPalestranteId());
             stmt.setInt(6, evento.getCapacidade());
-            stmt.setInt(7, evento.getId());     
+            stmt.setInt(7, evento.getId());
 
             stmt.executeUpdate();
         }
@@ -147,7 +142,7 @@ public class EventosDao {
         String sql = "DELETE FROM Eventos WHERE id = ?";
 
         try (Connection conn = this.sqlConn.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, eventoId);
             stmt.executeUpdate();
@@ -158,7 +153,7 @@ public class EventosDao {
         String sql = "UPDATE Eventos SET palestranteId = ? WHERE id = ?";
 
         try (Connection conn = this.sqlConn.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, evento.getPalestranteId());
             stmt.setInt(2, evento.getPalestranteId());
@@ -170,21 +165,29 @@ public class EventosDao {
     public boolean palestranteExiste(int palestranteId) throws SQLException {
         String sql = "SELECT COUNT(*) FROM Palestrantes WHERE id = ?";
 
-        try (Connection conn = this.sqlConn.connect(); 
-     PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = this.sqlConn.connect();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-    stmt.setInt(1, palestranteId); 
-    ResultSet rs = stmt.executeQuery(); 
+            stmt.setInt(1, palestranteId);
+            ResultSet rs = stmt.executeQuery();
 
-    if (rs.next()) { 
-        return rs.getInt(1) > 0; 
-    } else {
-        return false; 
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            } else {
+                return false;
+            }  }  } 
+        
+    public boolean eventoExiste(int eventoId) throws SQLException {
+    String sql = "SELECT COUNT(*) FROM Eventos WHERE id = ?";
+
+    try (Connection conn = this.sqlConn.connect();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, eventoId);
+        ResultSet rs = stmt.executeQuery();
+
+        return rs.next() && rs.getInt(1) > 0;
     }
 }
-
-    }
-}
-
-
-
+        
+        }

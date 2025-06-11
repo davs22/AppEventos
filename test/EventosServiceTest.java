@@ -40,9 +40,9 @@ public class EventosServiceTest {
     Eventos evento = new Eventos();
     List<Eventos> eventos = Arrays.asList(evento);
 
-    when(daoMock.listarPorParametro("Tech", "2024-05-10")).thenReturn(eventos);
+    when(daoMock.listarPorParametro("Tech", "2024-05-10", null)).thenReturn(eventos);
 
-    List<Eventos> result = service.listarPorParametro("Tech", "2024-05-10");
+    List<Eventos> result = service.listarPorParametro("Tech", "2024-05-10", null);
 
     assertNotNull(result);
     assertEquals(1, result.size());

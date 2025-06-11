@@ -5,7 +5,8 @@ public class Inscricao {
     private int idParticipante;
     private int idEvento;
 
-    public Inscricao() {}
+    public Inscricao() {
+    }
 
     public Inscricao(int id, int idParticipante, int idEvento) {
         this.id = id;
