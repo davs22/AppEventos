@@ -12,7 +12,7 @@ import table.Palestrante;
 import util.SQLiteConnection;
 
 public class PalestranteDao {
-    
+
     private SQLiteConnection sqlConn;
 
     public PalestranteDao() {
@@ -27,12 +27,12 @@ public class PalestranteDao {
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(sql);
             while (rs.next()) {
-                
+
                 Palestrante palestrante = new Palestrante(
-                    rs.getInt("id"), 
-                    rs.getString("nome"),
-                    rs.getString("curriculo"), 
-                    rs.getString("areaAtuacao"));
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("curriculo"),
+                        rs.getString("areaAtuacao"));
                 lista.add(palestrante);
             }
             rs.close();
@@ -56,11 +56,11 @@ public class PalestranteDao {
                 sqlWhere = " WHERE";
                 if ((nome != null) && (!nome.isEmpty()))
                     sqlWhere += " nome LIKE ?";
-                    if ((areaAtuacao != null) && (!areaAtuacao.isEmpty())) {
-                        if (sqlWhere.equals(""))
-                            sqlWhere += " areaAtuacao = ?";
-                        else
-                            sqlWhere += " areaAtuacao = ?";
+                if ((areaAtuacao != null) && (!areaAtuacao.isEmpty())) {
+                    if (sqlWhere.equals(""))
+                        sqlWhere += " areaAtuacao = ?";
+                    else
+                        sqlWhere += " areaAtuacao = ?";
                 }
             }
             sql += sqlWhere;
@@ -76,10 +76,10 @@ public class PalestranteDao {
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
                 Palestrante palestrante = new Palestrante(
-                    rs.getInt("id"), 
-                    rs.getString("nome"),
-                    rs.getString("curriculo"), 
-                    rs.getString("areaAtuacao"));
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("curriculo"),
+                        rs.getString("areaAtuacao"));
                 lista.add(palestrante);
             }
             rs.close();
@@ -104,10 +104,10 @@ public class PalestranteDao {
             ResultSet rs = pstm.executeQuery();
             if (rs.next())
                 palestrante = new Palestrante(
-                    rs.getInt("id"), 
-                    rs.getString("nome"),
-                    rs.getString("curriculo"), 
-                    rs.getString("areaAtuacao"));
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("curriculo"),
+                        rs.getString("areaAtuacao"));
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
@@ -130,10 +130,10 @@ public class PalestranteDao {
             ResultSet rs = pstm.executeQuery();
             if (rs.next())
                 palestrante = new Palestrante(
-                    rs.getInt("id"), 
-                    rs.getString("nome"),
-                    rs.getString("curriculo"), 
-                    rs.getString("areaAtuacao"));
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("curriculo"),
+                        rs.getString("areaAtuacao"));
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
@@ -156,11 +156,11 @@ public class PalestranteDao {
             pstm.setString(1, areaAtuacao);
             ResultSet rs = pstm.executeQuery();
             if (rs.next())
-             palestrante = new Palestrante(
-                    rs.getInt("id"), 
-                    rs.getString("nome"),
-                    rs.getString("curriculo"), 
-                    rs.getString("areaAtuacao"));
+                palestrante = new Palestrante(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("curriculo"),
+                        rs.getString("areaAtuacao"));
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
@@ -236,8 +236,9 @@ public class PalestranteDao {
             return "erro";
         }
     }
-    
-    public String atualizarPalestrante(int idPalestrante, String novoNome, String novoCurriculo, String novaAreaAtuacao) {
+
+    public String atualizarPalestrante(int idPalestrante, String novoNome, String novoCurriculo,
+            String novaAreaAtuacao) {
         try {
             Connection conn = this.sqlConn.connect();
 
@@ -271,5 +272,3 @@ public class PalestranteDao {
         }
     }
 }
-
-
