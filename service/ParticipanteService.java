@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -23,8 +24,8 @@ public class ParticipanteService {
         return this.dao.listarTodos();
     }
 
-    public List<Participante> listarPorParamentro(String nome, String sexo) {
-        return this.dao.listarPorParametro(nome, sexo);
+    public List<Participante> listarPorParamentro(String tipo, String valor) {
+        return this.dao.listarPorParametro(tipo, valor);
     }
 
     public Participante buscarPorId(Integer id) {
@@ -76,4 +77,13 @@ public class ParticipanteService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'atualizarParticipante'");
     }
+
+   public boolean participanteExiste(int participanteId) {
+    try {
+        return this.dao.participanteExiste(participanteId);
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 }

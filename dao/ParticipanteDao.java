@@ -169,33 +169,38 @@ public class ParticipanteDao {
         }
     }
 
-    public String inserir(String nome, String sexo, String email, String celular, String senhaCriptografada,
-            String tipo) {
-        try {
-            Integer id = this.getNewId();
-
-            String sql = "INSERT INTO Participante(id, nome, sexo, email, celular, senha, tipo) VALUES(?, ?, ?, ?, ?, ?, ?)";
-            Connection conn = this.sqlConn.connect();
-            PreparedStatement pstm = conn.prepareStatement(sql);
-            pstm.setInt(1, id);
-            pstm.setString(2, nome);
-            pstm.setString(3, sexo);
-            pstm.setString(4, email);
-            pstm.setString(5, celular);
-            pstm.setString(6, senhaCriptografada); // Senha criptografada vai para a coluna 'senha'
-            pstm.setString(7, tipo); // Tipo vai corretamente para a coluna 'tipo'
-
-            System.out.println("Resposta: " + pstm.executeUpdate());
-            pstm.close();
-            this.sqlConn.close(conn);
-            return "sucesso";
-        } catch (Exception e) {
-            System.err.println(
-                    "Erro no método inserir(...) da classe ParticipanteDao ao executar INSERT: " + e.getMessage());
-            e.printStackTrace();
-            return "erro";
+    public String inserir(String nome, String sexo, String email, String celular, String senhaCriptografada, String tipo) {
+    try {
+        // Verifica se o e-mail já está em uso
+        if (emailJaExiste(email)) {
+            return "Erro: já existe um participante com este e-mail.";
         }
+
+        Integer id = this.getNewId();
+
+        String sql = "INSERT INTO Participante(id, nome, sexo, email, celular, senha, tipo) VALUES(?, ?, ?, ?, ?, ?, ?)";
+        Connection conn = this.sqlConn.connect();
+        PreparedStatement pstm = conn.prepareStatement(sql);
+
+        pstm.setInt(1, id);
+        pstm.setString(2, nome);
+        pstm.setString(3, sexo);
+        pstm.setString(4, email);
+        pstm.setString(5, celular);
+        pstm.setString(6, senhaCriptografada);
+        pstm.setString(7, tipo);
+
+        int resultado = pstm.executeUpdate();
+        pstm.close();
+        this.sqlConn.close(conn);
+
+        return resultado > 0 ? "Participante inserido com sucesso!" : "Erro ao inserir participante.";
+    } catch (Exception e) {
+        System.err.println("Erro no método inserir(...) da classe ParticipanteDao: " + e.getMessage());
+        e.printStackTrace();
+        return "Erro ao inserir participante.";
     }
+}
 
     public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail,
             String novoTelefone, String novaSenha) {
@@ -233,55 +238,7 @@ public class ParticipanteDao {
             return "Erro ao atualizar dados.";
         }
     }
-
     // Método para gerar um novo ID
-    private Integer getNewId() {
-        try {
-            Integer id = 1;
-            String sql = "SELECT MAX(id) AS max_id FROM Participante";
-            Connection conn = this.sqlConn.connect();
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery(sql);
-            if (rs.next())
-                id = rs.getInt("max_id") + 1;
-            rs.close();
-            stm.close();
-            this.sqlConn.close(conn);
-            return id;
-        } catch (Exception e) {
-            System.err.println(
-                    "Erro no método getNewId() da classe ParticipanteDao ao executar SELECT: " + e.getMessage());
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
-    public boolean emailJaExiste(String email) {
-        try {
-            String sql = "SELECT COUNT(*) FROM Participante WHERE email = ?";
-            Connection conn = this.sqlConn.connect();
-            PreparedStatement pstm = conn.prepareStatement(sql);
-            pstm.setString(1, email);
-            ResultSet rs = pstm.executeQuery();
-
-            boolean existe = false;
-            if (rs.next()) {
-                existe = rs.getInt(1) > 0;
-            }
-
-            rs.close();
-            pstm.close();
-            this.sqlConn.close(conn);
-            return existe;
-
-        } catch (Exception e) {
-            System.err.println("Erro no método emailJaExiste: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-
-        }
-    }
-
     public Participante login(String email, String senhaDigitada) {
         String sql = "SELECT * FROM Participante WHERE email = ?";
         try (Connection conn = sqlConn.connect();
@@ -309,5 +266,69 @@ public class ParticipanteDao {
             return null;
         }
     }
+
+    public boolean participanteExiste(int participanteId) throws SQLException {
+    String sql = "SELECT COUNT(*) FROM Participante WHERE id = ?";
+
+    try (Connection conn = this.sqlConn.connect();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, participanteId);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            return rs.getInt(1) > 0; // se COUNT > 0, o participante existe
+        } else {
+            return false;
+        }
+    }
+}
+    
+    public boolean emailJaExiste(String email) {
+            try {
+                String sql = "SELECT COUNT(*) FROM Participante WHERE email = ?";
+                Connection conn = this.sqlConn.connect();
+                PreparedStatement pstm = conn.prepareStatement(sql);
+                pstm.setString(1, email);
+                ResultSet rs = pstm.executeQuery();
+
+                boolean existe = false;
+                if (rs.next()) {
+                    existe = rs.getInt(1) > 0;
+                }
+
+                rs.close();
+                pstm.close();
+                this.sqlConn.close(conn);
+                return existe;
+
+            } catch (Exception e) {
+                System.err.println("Erro no método emailJaExiste: " + e.getMessage());
+                e.printStackTrace();
+                return false;
+
+            }
+        }
+    
+        private Integer getNewId() {
+            try {
+                Integer id = 1;
+                String sql = "SELECT MAX(id) AS max_id FROM Participante";
+                Connection conn = this.sqlConn.connect();
+                Statement stm = conn.createStatement();
+                ResultSet rs = stm.executeQuery(sql);
+                if (rs.next())
+                    id = rs.getInt("max_id") + 1;
+                rs.close();
+                stm.close();
+                this.sqlConn.close(conn);
+                return id;
+            } catch (Exception e) {
+                System.err.println(
+                        "Erro no método getNewId() da classe ParticipanteDao ao executar SELECT: " + e.getMessage());
+                e.printStackTrace();
+                return -1;
+            }
+        }
 
 }

@@ -10,6 +10,7 @@ import table.Inscricao;
 import util.SQLiteConnection;
 
 import service.EventosService;
+import service.ParticipanteService;
 
 public class InscricaoDao {
 
@@ -105,24 +106,39 @@ public class InscricaoDao {
         }
     }
 
-    public String excluirInscricao(int idParticipante, int idEvento) {
-        try {
-            Connection conn = this.sqlConn.connect();
-            String sql = "DELETE FROM Inscricao WHERE id_participante = ? AND id_eventos = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, idParticipante);
-            stmt.setInt(2, idEvento);
-            int resultado = stmt.executeUpdate();
+   public String excluirInscricao(int idParticipante, int idEvento) {
+    try {
+        EventosService es = new EventosService();
+        ParticipanteService ps = new ParticipanteService();
 
-            stmt.close();
-            this.sqlConn.close(conn);
-
-            return resultado > 0 ? "Inscrição excluída com sucesso!" : "Erro ao excluir inscrição.";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Erro ao excluir inscrição.";
+        // Verifica se o participante existe
+        if (!ps.participanteExiste(idParticipante)) {
+            return "Participante não encontrado.";
         }
+
+        // Verifica se o evento existe
+        if (!es.eventoExiste(idEvento)) {
+            return "Evento não encontrado.";
+        }
+
+        // Conexão e exclusão
+        Connection conn = this.sqlConn.connect();
+        String sql = "DELETE FROM Inscricao WHERE id_participante = ? AND id_eventos = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, idParticipante);
+        stmt.setInt(2, idEvento);
+        int resultado = stmt.executeUpdate();
+
+        stmt.close();
+        this.sqlConn.close(conn);
+
+        return resultado > 0 ? "Inscrição excluída com sucesso!" : "Inscrição não encontrada.";
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "Erro ao excluir inscrição.";
     }
+}
+
 
     public String solicitarCertificado(int idParticipante, int idEvento) {
         try {

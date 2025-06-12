@@ -20,8 +20,8 @@ public class PalestranteService {
         return this.dao.listarTodos();
     }
 
-    public List<Palestrante> listarPorParamentro(String nome, String sexo) {
-        return this.dao.listarPorParametro(nome, sexo);
+    public List<Palestrante> listarPorParamentro(String tipo, String valor) {
+        return this.dao.listarPorParametro(tipo, valor);
     }
 
     public Palestrante buscarPorId(Integer id) {

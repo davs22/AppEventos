@@ -47,32 +47,22 @@ public class PalestranteDao {
         }
     }
 
-    public List<Palestrante> listarPorParametro(String nome, String areaAtuacao) {
+    public List<Palestrante> listarPorParametro(String tipo, String valor) {
+        List<Palestrante> lista = new ArrayList<>();
+
         try {
-            List<Palestrante> lista = new ArrayList<Palestrante>();
-            String sql = "SELECT * FROM Palestrante";
-            String sqlWhere = "";
-            if (((nome != null) && (!nome.isEmpty())) || ((areaAtuacao != null) && (!areaAtuacao.isEmpty()))) {
-                sqlWhere = " WHERE";
-                if ((nome != null) && (!nome.isEmpty()))
-                    sqlWhere += " nome LIKE ?";
-                if ((areaAtuacao != null) && (!areaAtuacao.isEmpty())) {
-                    if (sqlWhere.equals(""))
-                        sqlWhere += " areaAtuacao = ?";
-                    else
-                        sqlWhere += " areaAtuacao = ?";
-                }
-            }
-            sql += sqlWhere;
+            SqlService sqlsService = new SqlService();
+            String sql = sqlsService.PalestranteSQL(tipo);
+
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
-            if ((nome != null) && (!nome.isEmpty()) && (areaAtuacao != null) && (!areaAtuacao.isEmpty())) {
-                pstm.setString(1, nome);
-                pstm.setString(2, areaAtuacao);
-            } else if ((nome != null) && (!nome.isEmpty()))
-                pstm.setString(1, nome);
-            else if ((nome != null) && (!nome.isEmpty()))
-                pstm.setString(1, areaAtuacao);
+
+            if (tipo.equalsIgnoreCase("id")) {
+                pstm.setInt(1, Integer.parseInt(valor));
+            } else {
+                pstm.setString(1, valor);
+            }
+
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
                 Palestrante palestrante = new Palestrante(
@@ -82,16 +72,18 @@ public class PalestranteDao {
                         rs.getString("areaAtuacao"));
                 lista.add(palestrante);
             }
+
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
-            return lista;
+
         } catch (SQLException e) {
-            System.err.println(
-                    "Erro no método listarPorParametro: "
-                            + e.getMessage());
-            return new ArrayList<Palestrante>();
+            System.err.println("Erro ao listar palestrantes: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.err.println("ID inválido (esperado um número): " + valor);
         }
+
+        return lista;
     }
 
     public Palestrante buscarPorId(Integer id) {
@@ -197,28 +189,6 @@ public class PalestranteDao {
         }
     }
 
-    private Integer getNewId() {
-        try {
-            Integer id = 1;
-            String sql = "SELECT MAX(id) AS max_id FROM Palestrante";
-            Connection conn = this.sqlConn.connect();
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery(sql);
-            if (rs.next())
-                id = rs.getInt("max_id") + 1;
-            rs.close();
-            stm.close();
-            this.sqlConn.close(conn);
-            return id;
-        } catch (Exception e) {
-            System.err.println(
-                    "Erro no método getNewId() da classe PalestranteDao ao executar SELECT: "
-                            + e.getMessage());
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
     public String excluir(int id) {
         try {
             String sql = "DELETE FROM Palestrante WHERE id = ?";
@@ -269,6 +239,28 @@ public class PalestranteDao {
         } catch (Exception e) {
             e.printStackTrace();
             return "Erro ao atualizar dados.";
+        }
+    }
+
+private Integer getNewId() {
+        try {
+            Integer id = 1;
+            String sql = "SELECT MAX(id) AS max_id FROM Palestrante";
+            Connection conn = this.sqlConn.connect();
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(sql);
+            if (rs.next())
+                id = rs.getInt("max_id") + 1;
+            rs.close();
+            stm.close();
+            this.sqlConn.close(conn);
+            return id;
+        } catch (Exception e) {
+            System.err.println(
+                    "Erro no método getNewId() da classe PalestranteDao ao executar SELECT: "
+                            + e.getMessage());
+            e.printStackTrace();
+            return -1;
         }
     }
 }

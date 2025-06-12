@@ -45,6 +45,25 @@ public class SqlService {
         default:
             throw new IllegalArgumentException("Tipo de parâmetro não suportado: " + tipo);
         }
+    }
+
+    public String PalestranteSQL(String tipo){
+        if (tipo == null) {
+            throw new IllegalArgumentException("Tipo de parâmetro não informado.");
+        }
+    switch (tipo.toLowerCase()) {
+        case "id":
+            return "SELECT * FROM Palestrante WHERE id = ?";
+        case "nome":
+            return "SELECT * FROM Palestrante WHERE nome = ?";
+        case "curriculo":
+            return "SELECT * FROM Palestrante WHERE curriculo = ?";
+        case "areaAtuacao":
+            return "SELECT * FROM Palestrante WHERE areaAtuacao = ?";
+        default:
+            throw new IllegalArgumentException("Tipo de parâmetro não suportado: " + tipo);
+        }
 
     }
+
 }
