@@ -23,12 +23,11 @@ public class EventosService {
         return this.dao.listarEventos();
     }
 
-    public List<Eventos> listarPorParametro(String tipo, String coluna, String valor) {
-        return dao.listarPorParametro(tipo, coluna, valor);
+    public List<Eventos> listarPorParametro(String tipo, String valor) {
+        return dao.listarPorParametro(tipo, valor);
     }
 
-    public void criarEvento(String nome, String descricao, String dataString, String local, int palestranteId,
-            int capacidade) {
+    public void criarEvento(String nome, String descricao, String dataString, String local, int palestranteId, int capacidade) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         try {
 

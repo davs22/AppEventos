@@ -21,45 +21,45 @@ public class InscricaoDao {
     }
 
     public String inscreverParticipante(int idParticipante, int idEventos) {
-    try {
-        // Verifica se o evento existe antes de tudo
-        if (!eventoExiste(idEventos)) {
-            return "Erro: Evento com ID " + idEventos + " não existe.";
-        }
+        try {
+            EventosService es = new EventosService();
+            // Verifica se o evento existe antes de tudo
+            if (!es.eventoExiste(idEventos)) {
+                return "Erro: Evento com ID " + idEventos + " não existe.";
+            }
 
-        Connection conn = this.sqlConn.connect();
+            Connection conn = this.sqlConn.connect();
 
-        // Verifica se o participante já está inscrito
-        String verificaSql = "SELECT COUNT(*) FROM Inscricao WHERE id_participante = ? AND id_eventos = ?";
-        PreparedStatement verificaStmt = conn.prepareStatement(verificaSql);
-        verificaStmt.setInt(1, idParticipante);
-        verificaStmt.setInt(2, idEventos);
-        ResultSet rs = verificaStmt.executeQuery();
+            // Verifica se o participante já está inscrito
+            String verificaSql = "SELECT COUNT(*) FROM Inscricao WHERE id_participante = ? AND id_eventos = ?";
+            PreparedStatement verificaStmt = conn.prepareStatement(verificaSql);
+            verificaStmt.setInt(1, idParticipante);
+            verificaStmt.setInt(2, idEventos);
+            ResultSet rs = verificaStmt.executeQuery();
 
-        if (rs.next() && rs.getInt(1) > 0) {
-            rs.close();
-            verificaStmt.close();
+            if (rs.next() && rs.getInt(1) > 0) {
+                rs.close();
+                verificaStmt.close();
+                this.sqlConn.close(conn);
+                return "Participante já inscrito neste evento!";
+            }
+
+            // Realiza a inscrição
+            String sql = "INSERT INTO Inscricao (id_participante, id_eventos) VALUES (?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, idParticipante);
+            stmt.setInt(2, idEventos);
+            int resultado = stmt.executeUpdate();
+
+            stmt.close();
             this.sqlConn.close(conn);
-            return "Participante já inscrito neste evento!";
+
+            return resultado > 0 ? "Inscrição realizada com sucesso!" : "Erro ao realizar inscrição.";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Erro ao realizar inscrição.";
         }
-
-        // Realiza a inscrição
-        String sql = "INSERT INTO Inscricao (id_participante, id_eventos) VALUES (?, ?)";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, idParticipante);
-        stmt.setInt(2, idEventos);
-        int resultado = stmt.executeUpdate();
-
-        stmt.close();
-        this.sqlConn.close(conn);
-
-        return resultado > 0 ? "Inscrição realizada com sucesso!" : "Erro ao realizar inscrição.";
-    } catch (Exception e) {
-        e.printStackTrace();
-        return "Erro ao realizar inscrição.";
     }
-}
-
 
     public List<Inscricao> listarInscricoesPorParticipante(int idParticipante) {
         List<Inscricao> inscricoes = new ArrayList<>();

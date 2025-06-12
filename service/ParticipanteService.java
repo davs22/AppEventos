@@ -51,13 +51,9 @@ public class ParticipanteService {
         return null;
     }
 
-<<<<<<< HEAD
-    public String inserir(String nome, String sexo, String email, String celular){
-        return inserir(nome, sexo, email, celular, senha,"participante");
-=======
     public String inserir(String nome, String sexo, String email, String celular, String senha) {
         return inserir(nome, sexo, email, celular, senha, "participante");
->>>>>>> 4775caef788fb4474f2e525b4025b747670a3af9
+
     }
 
     public Participante login(String email, String senha) {

@@ -49,32 +49,22 @@ public class ParticipanteDao {
         }
     }
 
-    public List<Participante> listarPorParametro(String nome, String sexo) {
+    public List<Participante> listarPorParametro(String tipo, String valor) {
+        List<Participante> lista = new ArrayList<>();
+
         try {
-            List<Participante> lista = new ArrayList<Participante>();
-            String sql = "SELECT * FROM participante";
-            String sqlWhere = "";
-            if (((nome != null) && (!nome.isEmpty())) || ((sexo != null) && (!sexo.isEmpty()))) {
-                sqlWhere = " WHERE";
-                if ((nome != null) && (!nome.isEmpty()))
-                    sqlWhere += " nome LIKE ?";
-                if ((sexo != null) && (!sexo.isEmpty())) {
-                    if (sqlWhere.equals(""))
-                        sqlWhere += " email = ?";
-                    else
-                        sqlWhere += " AND email = ?";
-                }
-            }
-            sql += sqlWhere;
+            SqlService sqlsService = new SqlService();
+            String sql = sqlsService.ParticipanteSQL(tipo); // retorna: SELECT * FROM Participante WHERE <campo> = ?
+
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
-            if ((nome != null) && (!nome.isEmpty()) && (sexo != null) && (!sexo.isEmpty())) {
-                pstm.setString(1, nome);
-                pstm.setString(2, sexo);
-            } else if ((nome != null) && (!nome.isEmpty()))
-                pstm.setString(1, nome);
-            else if ((nome != null) && (!nome.isEmpty()))
-                pstm.setString(1, sexo);
+
+            if (tipo.equalsIgnoreCase("id")) {
+                pstm.setInt(1, Integer.parseInt(valor));
+            } else {
+                pstm.setString(1, valor);
+            }
+
             ResultSet rs = pstm.executeQuery();
             while (rs.next()) {
                 Participante participante = new Participante(
@@ -87,16 +77,18 @@ public class ParticipanteDao {
                         rs.getString("tipo"));
                 lista.add(participante);
             }
+
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
-            return lista;
+
         } catch (SQLException e) {
-            System.err.println(
-                    "Erro no método listarPorParametro(String nome, String sexo) da classe ParticipanteDao ao executar SELECT: "
-                            + e.getMessage());
-            return new ArrayList<Participante>();
+            System.err.println("Erro ao listar participantes: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.err.println("ID inválido (esperado um número): " + valor);
         }
+
+        return lista;
     }
 
     public Participante buscarPorId(Integer id) {

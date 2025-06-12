@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.text.SimpleDateFormat;
+
 import table.Eventos;
 import util.SQLiteConnection;
 
@@ -46,21 +48,32 @@ public class EventosDao {
         return eventosList;
     }
 
-    public List<Eventos> listarPorParametro(String tipo, String coluna, String valor) {
+    public List<Eventos> listarPorParametro(String tipo, String valor) {
         List<Eventos> lista = new ArrayList<>();
 
         try {
-            String sql = "SELECT * FROM Eventos WHERE " + coluna + " = ?";
+            SqlService sqlsService = new SqlService();
+            String sql = sqlsService.EventoSQL(tipo); // recebe SELECT ... WHERE <campo> = ?
+
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
 
             // Definindo o valor corretamente baseado no tipo
-            if (tipo.equalsIgnoreCase("int")) {
+            if (tipo.equalsIgnoreCase("id") ||
+                    tipo.equalsIgnoreCase("palestranteId") ||
+                    tipo.equalsIgnoreCase("capacidade")) {
+
                 pstm.setInt(1, Integer.parseInt(valor));
-            } else if (tipo.equalsIgnoreCase("string")) {
-                pstm.setString(1, valor);
+
+            } else if (tipo.equalsIgnoreCase("data")) {
+                // Convertendo data no formato dd-MM-yyyy
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                java.util.Date utilDate = sdf.parse(valor); // pode lançar ParseException
+                java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+                pstm.setDate(1, sqlDate);
+
             } else {
-                throw new IllegalArgumentException("Tipo não suportado: " + tipo);
+                pstm.setString(1, valor);
             }
 
             ResultSet rs = pstm.executeQuery();
@@ -85,6 +98,8 @@ public class EventosDao {
             System.err.println("Erro ao listar eventos por parâmetro: " + e.getMessage());
         } catch (NumberFormatException e) {
             System.err.println("Erro de conversão para inteiro: " + e.getMessage());
+        } catch (java.text.ParseException e) {
+            System.err.println("Erro ao converter data. Use o formato dd-MM-yyyy: " + valor);
         }
 
         return lista;
@@ -150,17 +165,31 @@ public class EventosDao {
     }
 
     public void associarPalestrante(Eventos evento) throws SQLException {
-        String sql = "UPDATE Eventos SET palestranteId = ? WHERE id = ?";
+    int eventoId = evento.getId();
+    int palestranteId = evento.getPalestranteId();
 
-        try (Connection conn = this.sqlConn.connect();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
+    if (!eventoExiste(eventoId)) {
+        throw new SQLException("Evento com ID " + eventoId + " não existe.");
+    }
 
-            stmt.setInt(1, evento.getPalestranteId());
-            stmt.setInt(2, evento.getPalestranteId());
+    if (!palestranteExiste(palestranteId)) {
+        throw new SQLException("Palestrante com ID " + palestranteId + " não existe.");
+    }
 
-            stmt.executeUpdate();
+    String sql = "UPDATE Eventos SET palestranteId = ? WHERE id = ?";
+
+    try (Connection conn = this.sqlConn.connect();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, palestranteId);
+        stmt.setInt(2, eventoId);
+
+        int rowsAffected = stmt.executeUpdate();
+        if (rowsAffected == 0) {
+            throw new SQLException("A associação falhou. Nenhum evento foi atualizado.");
         }
     }
+}
 
     public boolean palestranteExiste(int palestranteId) throws SQLException {
         String sql = "SELECT COUNT(*) FROM Palestrantes WHERE id = ?";
@@ -175,19 +204,21 @@ public class EventosDao {
                 return rs.getInt(1) > 0;
             } else {
                 return false;
-            }  }  } 
-        
-    public boolean eventoExiste(int eventoId) throws SQLException {
-    String sql = "SELECT COUNT(*) FROM Eventos WHERE id = ?";
-
-    try (Connection conn = this.sqlConn.connect();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-        stmt.setInt(1, eventoId);
-        ResultSet rs = stmt.executeQuery();
-
-        return rs.next() && rs.getInt(1) > 0;
-    }
-}
-        
+            }
         }
+    }
+
+    public boolean eventoExiste(int eventoId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Eventos WHERE id = ?";
+
+        try (Connection conn = this.sqlConn.connect();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, eventoId);
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.next() && rs.getInt(1) > 0;
+        }
+    }
+
+}
