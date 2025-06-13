@@ -21,13 +21,12 @@ public class PalestranteDao {
 
     public List<Palestrante> listarTodos() {
         try {
-            List<Palestrante> lista = new ArrayList<Palestrante>();
+            List<Palestrante> lista = new ArrayList<>();
             String sql = "SELECT * FROM Palestrante";
             Connection conn = this.sqlConn.connect();
             Statement stm = conn.createStatement();
             ResultSet rs = stm.executeQuery(sql);
             while (rs.next()) {
-
                 Palestrante palestrante = new Palestrante(
                         rs.getInt("id"),
                         rs.getString("nome"),
@@ -40,16 +39,14 @@ public class PalestranteDao {
             this.sqlConn.close(conn);
             return lista;
         } catch (SQLException e) {
-            System.err.println(
-                    "Erro ao listarTodos() de Palestrantes " + e.getMessage());
+            System.err.println("Erro ao listar palestrantes: " + e.getMessage());
             e.printStackTrace();
-            return new ArrayList<Palestrante>();
+            return new ArrayList<>();
         }
     }
 
     public List<Palestrante> listarPorParametro(String tipo, String valor) {
         List<Palestrante> lista = new ArrayList<>();
-
         try {
             SqlService sqlsService = new SqlService();
             String sql = sqlsService.PalestranteSQL(tipo);
@@ -77,10 +74,8 @@ public class PalestranteDao {
             pstm.close();
             this.sqlConn.close(conn);
 
-        } catch (SQLException e) {
-            System.err.println("Erro ao listar palestrantes: " + e.getMessage());
-        } catch (NumberFormatException e) {
-            System.err.println("ID inválido (esperado um número): " + valor);
+        } catch (SQLException | NumberFormatException e) {
+            System.err.println("Erro ao listar por parâmetro: " + e.getMessage());
         }
 
         return lista;
@@ -88,81 +83,79 @@ public class PalestranteDao {
 
     public Palestrante buscarPorId(Integer id) {
         try {
-            Palestrante palestrante = new Palestrante();
-            String sql = "SELECT * FROM Palestrante where id = ?";
+            String sql = "SELECT * FROM Palestrante WHERE id = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setInt(1, id);
             ResultSet rs = pstm.executeQuery();
-            if (rs.next())
+            Palestrante palestrante = null;
+            if (rs.next()) {
                 palestrante = new Palestrante(
                         rs.getInt("id"),
                         rs.getString("nome"),
                         rs.getString("curriculo"),
                         rs.getString("areaAtuacao"));
+            }
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
             return palestrante;
         } catch (SQLException e) {
-            System.err.println("Erro no método buscarPorId(Integer id) da classe PalestranteDao ao executar SELECT: "
-                    + e.getMessage());
+            System.err.println("Erro ao buscar por ID: " + e.getMessage());
             e.printStackTrace();
-            return new Palestrante();
+            return null;
         }
     }
 
     public Palestrante buscarPorCurriculo(String curriculo) {
         try {
-            Palestrante palestrante = new Palestrante();
-            String sql = "SELECT * FROM Palestrante where curriculo = ?";
+            String sql = "SELECT * FROM Palestrante WHERE curriculo = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, curriculo);
             ResultSet rs = pstm.executeQuery();
-            if (rs.next())
+            Palestrante palestrante = null;
+            if (rs.next()) {
                 palestrante = new Palestrante(
                         rs.getInt("id"),
                         rs.getString("nome"),
                         rs.getString("curriculo"),
                         rs.getString("areaAtuacao"));
+            }
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
             return palestrante;
         } catch (SQLException e) {
-            System.err.println(
-                    "Erro no método buscarPorCurriculo(String curriculo) da classe PalestranteDao ao executar SELECT: "
-                            + e.getMessage());
+            System.err.println("Erro ao buscar por curriculo: " + e.getMessage());
             e.printStackTrace();
-            return new Palestrante();
+            return null;
         }
     }
 
     public Palestrante buscarPorAreaAtuacao(String areaAtuacao) {
         try {
-            Palestrante palestrante = new Palestrante();
-            String sql = "SELECT * FROM Palestrante where areaAtuacao = ?";
+            String sql = "SELECT * FROM Palestrante WHERE areaAtuacao = ?";
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, areaAtuacao);
             ResultSet rs = pstm.executeQuery();
-            if (rs.next())
+            Palestrante palestrante = null;
+            if (rs.next()) {
                 palestrante = new Palestrante(
                         rs.getInt("id"),
                         rs.getString("nome"),
                         rs.getString("curriculo"),
                         rs.getString("areaAtuacao"));
+            }
             rs.close();
             pstm.close();
             this.sqlConn.close(conn);
             return palestrante;
         } catch (SQLException e) {
-            System.err.println(
-                    "Erro no método buscarPorAreaAtuacao(String areaAtuacao) da classe PalestranteDao ao executar SELECT: "
-                            + e.getMessage());
+            System.err.println("Erro ao buscar por área de atuação: " + e.getMessage());
             e.printStackTrace();
-            return new Palestrante();
+            return null;
         }
     }
 
@@ -176,14 +169,12 @@ public class PalestranteDao {
             pstm.setString(2, nome);
             pstm.setString(3, curriculo);
             pstm.setString(4, areaAtuacao);
-            System.out.println("Resposta: " + pstm.executeUpdate());
+            pstm.executeUpdate();
             pstm.close();
             this.sqlConn.close(conn);
             return "sucesso";
         } catch (Exception e) {
-            System.err.println(
-                    "Erro no método inserir(String nome, String curriculo, String areadeatuacao) da classe PalestranteDao ao executar SELECT: "
-                            + e.getMessage());
+            System.err.println("Erro ao inserir palestrante: " + e.getMessage());
             e.printStackTrace();
             return "erro";
         }
@@ -195,71 +186,47 @@ public class PalestranteDao {
             Connection conn = this.sqlConn.connect();
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setInt(1, id);
-            int linhasAfetadas = pstm.executeUpdate();
-            System.out.println("Linhas afetadas: " + linhasAfetadas);
+            pstm.executeUpdate();
             pstm.close();
             this.sqlConn.close(conn);
-            return linhasAfetadas > 0 ? "sucesso" : "nenhum registro encontrado";
+            return "sucesso";
         } catch (Exception e) {
-            System.err.println("Erro no método excluir(int id) da classe PalestranteDao: " + e.getMessage());
+            System.err.println("Erro ao excluir palestrante: " + e.getMessage());
             e.printStackTrace();
             return "erro";
         }
     }
 
-    public String atualizarPalestrante(int idPalestrante, String novoNome, String novoCurriculo,
-            String novaAreaAtuacao) {
+    public String atualizarPalestrante(int idPalestrante, String novoNome, String novoCurriculo, String novaAreaAtuacao) {
         try {
-            Connection conn = this.sqlConn.connect();
-
-            String verificaSql = "SELECT COUNT(*) FROM Palestrante WHERE id = ?";
-            PreparedStatement verificaStmt = conn.prepareStatement(verificaSql);
-            verificaStmt.setInt(1, idPalestrante);
-            ResultSet rs = verificaStmt.executeQuery();
-
-            if (!rs.next() || rs.getInt(1) == 0) {
-                verificaStmt.close();
-                this.sqlConn.close(conn);
-                return "Palestrante não encontrado!";
-            }
-
             String sqlUpdate = "UPDATE Palestrante SET nome = ?, curriculo = ?, areaAtuacao = ? WHERE id = ?";
+            Connection conn = this.sqlConn.connect();
             PreparedStatement stmt = conn.prepareStatement(sqlUpdate);
             stmt.setString(1, novoNome);
             stmt.setString(2, novoCurriculo);
             stmt.setString(3, novaAreaAtuacao);
             stmt.setInt(4, idPalestrante);
-
-            int resultado = stmt.executeUpdate();
+            stmt.executeUpdate();
             stmt.close();
             this.sqlConn.close(conn);
-
-            return resultado > 0 ? "Dados atualizados com sucesso!" : "Erro ao atualizar dados do palestrante.";
-
+            return "sucesso";
         } catch (Exception e) {
             e.printStackTrace();
-            return "Erro ao atualizar dados.";
+            return "erro";
         }
     }
 
-public boolean palestranteExiste(int palestranteId) throws SQLException {
+    public boolean palestranteExiste(int palestranteId) throws SQLException {
         String sql = "SELECT COUNT(*) FROM Palestrante WHERE id = ?";
-
         try (Connection conn = this.sqlConn.connect();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, palestranteId);
             ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            } else {
-                return false;
-            }
+            return rs.next() && rs.getInt(1) > 0;
         }
     }
 
-private Integer getNewId() {
+    private Integer getNewId() {
         try {
             Integer id = 1;
             String sql = "SELECT MAX(id) AS max_id FROM Palestrante";
@@ -273,9 +240,7 @@ private Integer getNewId() {
             this.sqlConn.close(conn);
             return id;
         } catch (Exception e) {
-            System.err.println(
-                    "Erro no método getNewId() da classe PalestranteDao ao executar SELECT: "
-                            + e.getMessage());
+            System.err.println("Erro ao obter novo ID: " + e.getMessage());
             e.printStackTrace();
             return -1;
         }

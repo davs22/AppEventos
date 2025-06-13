@@ -9,29 +9,18 @@ import java.util.List;
 import table.Inscricao;
 import util.SQLiteConnection;
 
-import service.EventosService;
-import service.ParticipanteService;
-
 public class InscricaoDao {
 
     private SQLiteConnection sqlConn;
 
-    // Construtor da classe, passando a conexão com o banco de dados
     public InscricaoDao(SQLiteConnection sqlConn) {
         this.sqlConn = sqlConn;
     }
 
     public String inscreverParticipante(int idParticipante, int idEventos) {
         try {
-            EventosService es = new EventosService();
-            // Verifica se o evento existe antes de tudo
-            if (!es.eventoExiste(idEventos)) {
-                return "Erro: Evento com ID " + idEventos + " não existe.";
-            }
-
             Connection conn = this.sqlConn.connect();
 
-            // Verifica se o participante já está inscrito
             String verificaSql = "SELECT COUNT(*) FROM Inscricao WHERE id_participante = ? AND id_eventos = ?";
             PreparedStatement verificaStmt = conn.prepareStatement(verificaSql);
             verificaStmt.setInt(1, idParticipante);
@@ -45,7 +34,6 @@ public class InscricaoDao {
                 return "Participante já inscrito neste evento!";
             }
 
-            // Realiza a inscrição
             String sql = "INSERT INTO Inscricao (id_participante, id_eventos) VALUES (?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, idParticipante);
@@ -79,7 +67,6 @@ public class InscricaoDao {
 
             stmt.close();
             this.sqlConn.close(conn);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -99,46 +86,30 @@ public class InscricaoDao {
             stmt.close();
             this.sqlConn.close(conn);
             return isInscrito;
-
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-   public String excluirInscricao(int idParticipante, int idEvento) {
-    try {
-        EventosService es = new EventosService();
-        ParticipanteService ps = new ParticipanteService();
+    public String excluirInscricao(int idParticipante, int idEvento) {
+        try {
+            Connection conn = this.sqlConn.connect();
+            String sql = "DELETE FROM Inscricao WHERE id_participante = ? AND id_eventos = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, idParticipante);
+            stmt.setInt(2, idEvento);
+            int resultado = stmt.executeUpdate();
 
-        // Verifica se o participante existe
-        if (!ps.participanteExiste(idParticipante)) {
-            return "Participante não encontrado.";
+            stmt.close();
+            this.sqlConn.close(conn);
+
+            return resultado > 0 ? "Inscrição excluída com sucesso!" : "Inscrição não encontrada.";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Erro ao excluir inscrição.";
         }
-
-        // Verifica se o evento existe
-        if (!es.eventoExiste(idEvento)) {
-            return "Evento não encontrado.";
-        }
-
-        // Conexão e exclusão
-        Connection conn = this.sqlConn.connect();
-        String sql = "DELETE FROM Inscricao WHERE id_participante = ? AND id_eventos = ?";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, idParticipante);
-        stmt.setInt(2, idEvento);
-        int resultado = stmt.executeUpdate();
-
-        stmt.close();
-        this.sqlConn.close(conn);
-
-        return resultado > 0 ? "Inscrição excluída com sucesso!" : "Inscrição não encontrada.";
-    } catch (Exception e) {
-        e.printStackTrace();
-        return "Erro ao excluir inscrição.";
     }
-}
-
 
     public String solicitarCertificado(int idParticipante, int idEvento) {
         try {
@@ -152,7 +123,6 @@ public class InscricaoDao {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, idParticipante);
             stmt.setInt(2, idEvento);
-
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -168,7 +138,6 @@ public class InscricaoDao {
                 this.sqlConn.close(conn);
                 return "Participante não inscrito neste evento. Não é possível gerar certificado.";
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             return "Erro ao gerar certificado.";
@@ -185,7 +154,6 @@ public class InscricaoDao {
                 "Assinatura: ____________________\n";
     }
 
-    // Exemplo de método para gerar ID único (se não usar auto_increment no banco)
     private int getNewId() {
         try {
             Connection conn = this.sqlConn.connect();

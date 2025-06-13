@@ -238,7 +238,7 @@ public class ParticipanteDao {
             return "Erro ao atualizar dados.";
         }
     }
-    // Método para gerar um novo ID
+   
     public Participante login(String email, String senhaDigitada) {
         String sql = "SELECT * FROM Participante WHERE email = ?";
         try (Connection conn = sqlConn.connect();

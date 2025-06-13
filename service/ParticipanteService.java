@@ -73,11 +73,6 @@ public class ParticipanteService {
         return this.dao.atualizarParticipante(idParticipante, novoNome, novoSexo, novoEmail, novoTelefone, novaSenha);
     }
 
-    public String atualizarParticipante(int i, String string, String string2, String string3, String string4) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'atualizarParticipante'");
-    }
-
    public boolean participanteExiste(int participanteId) {
     try {
         return this.dao.participanteExiste(participanteId);
