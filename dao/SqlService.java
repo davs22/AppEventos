@@ -58,7 +58,7 @@ public class SqlService {
             return "SELECT * FROM Palestrante WHERE nome = ?";
         case "curriculo":
             return "SELECT * FROM Palestrante WHERE curriculo = ?";
-        case "areaAtuacao":
+        case "areaatuacao":
             return "SELECT * FROM Palestrante WHERE areaAtuacao = ?";
         default:
             throw new IllegalArgumentException("Tipo de parâmetro não suportado: " + tipo);

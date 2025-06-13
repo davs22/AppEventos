@@ -1,0 +1,70 @@
+//se não for util voltal ao que era e apagar esse arquivo
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import service.EventosService;
+import table.Eventos;
+
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
+
+public class EventosServiceTest {
+
+    private EventosService eventosService;
+
+    @BeforeEach
+    public void setup() {
+        // Cria o service com DAO padrão (que conecta ao banco)
+        this.eventosService = new EventosService();
+        
+        // Limpar a base, popular com dados de teste ou configurar banco em memória aqui,
+        // caso tenha essa lógica (não detalhada aqui)
+    }
+
+    @Test
+    public void testCriarEventoEExiste() throws SQLException {
+        Eventos evento = new Eventos();
+        evento.setNome("Teste Evento");
+        evento.setDescricao("Descrição Teste");
+        evento.setData(LocalDate.now());
+        evento.setLocal("Local Teste");
+        evento.setPalestranteId(1); // Id de palestrante válido para o seu teste
+        evento.setCapacidade(100);
+
+        eventosService.criarEvento(evento);
+        
+        assertTrue(eventosService.eventoExiste(evento.getId()), "Evento criado deveria existir");
+    }
+
+    @Test
+    public void testListarEventos() throws SQLException {
+        List<Eventos> lista = eventosService.listarEventos();
+        assertNotNull(lista);
+        // Pode adicionar mais asserts dependendo do que espera na lista
+    }
+
+    @Test
+    public void testEditarEvento() throws SQLException {
+        Eventos evento = eventosService.listarEventos().get(0);
+        String novoNome = "Nome Atualizado";
+        evento.setNome(novoNome);
+        
+        eventosService.editarEvento(evento);
+        
+        Eventos eventoAtualizado = eventosService.buscarEventoPorId(evento.getId());
+        assertEquals(novoNome, eventoAtualizado.getNome());
+    }
+
+    @Test
+    public void testExcluirEvento() throws SQLException {
+        Eventos evento = eventosService.listarEventos().get(0);
+        boolean excluiu = eventosService.excluirEvento(evento.getId());
+        assertTrue(excluiu);
+        
+        assertFalse(eventosService.eventoExiste(evento.getId()));
+    }
+
+}

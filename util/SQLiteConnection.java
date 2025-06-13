@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class SQLiteConnection {
     private static final String URL = "jdbc:sqlite:database/eventos.db";
     private Connection conn = null;
-
+    private boolean consoleON = false;
     public Connection connect() {
         try {
             
@@ -15,7 +15,8 @@ public class SQLiteConnection {
 
             
             this.conn = DriverManager.getConnection(URL);
-            System.out.println("Conexão com SQLite estabelecida.");
+            if(consoleON){
+            System.out.println("Conexão com SQLite estabelecida.");}
         } catch (ClassNotFoundException e) {
             System.err.println("Driver do SQLite não encontrado: " + e.getMessage());
         } catch (SQLException e) {
@@ -28,7 +29,8 @@ public class SQLiteConnection {
         try {
             if (this.conn != null) {
                 this.conn.close();
-                System.out.println("Conexão fechada.");
+                if(consoleON){
+                System.out.println("Conexão fechada.");}
             }
         } catch (SQLException e) {
             System.err.println("Erro ao fechar a conexão: " + e.getMessage());
