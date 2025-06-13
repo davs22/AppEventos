@@ -10,14 +10,18 @@ import java.util.List;
 
 import java.text.SimpleDateFormat;
 
+import service.PalestranteService;
+
 import table.Eventos;
 import util.SQLiteConnection;
 
 public class EventosDao {
     private SQLiteConnection sqlConn;
+    private PalestranteService ps;
 
     public EventosDao() {
         this.sqlConn = new SQLiteConnection();
+        this.ps = new PalestranteService();
     }
 
     public List<Eventos> listarEventos() throws SQLException {
@@ -106,12 +110,13 @@ public class EventosDao {
     }
 
     public void criarEvento(Eventos evento) throws SQLException {
+
         // Verifica se o palestrante existe
-        if (!palestranteExiste(evento.getPalestranteId())) {
+        if (!ps.palestranteExiste(evento.getPalestranteId())) {
             throw new SQLException("Erro: O palestrante com ID " + evento.getPalestranteId() + " não existe.");
         }
 
-        String sql = "INSERT INTO Eventos (nome, descricao, data, local, palestranteId, capacidade) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Eventos (nome, descricao, data, local, capacidade, palestranteId ) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = this.sqlConn.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -120,8 +125,8 @@ public class EventosDao {
             stmt.setString(2, evento.getDescricao());
             stmt.setDate(3, new java.sql.Date(evento.getData().getTime()));
             stmt.setString(4, evento.getLocal());
-            stmt.setInt(5, evento.getPalestranteId());
-            stmt.setInt(6, evento.getCapacidade());
+            stmt.setInt(5, evento.getCapacidade());
+            stmt.setInt(6, evento.getPalestranteId());
 
             int affectedRows = stmt.executeUpdate();
 
@@ -165,45 +170,28 @@ public class EventosDao {
     }
 
     public void associarPalestrante(Eventos evento) throws SQLException {
-    int eventoId = evento.getId();
-    int palestranteId = evento.getPalestranteId();
+        int eventoId = evento.getId();
+        int palestranteId = evento.getPalestranteId();
 
-    if (!eventoExiste(eventoId)) {
-        throw new SQLException("Evento com ID " + eventoId + " não existe.");
-    }
-
-    if (!palestranteExiste(palestranteId)) {
-        throw new SQLException("Palestrante com ID " + palestranteId + " não existe.");
-    }
-
-    String sql = "UPDATE Eventos SET palestranteId = ? WHERE id = ?";
-
-    try (Connection conn = this.sqlConn.connect();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-        stmt.setInt(1, palestranteId);
-        stmt.setInt(2, eventoId);
-
-        int rowsAffected = stmt.executeUpdate();
-        if (rowsAffected == 0) {
-            throw new SQLException("A associação falhou. Nenhum evento foi atualizado.");
+        if (!eventoExiste(eventoId)) {
+            throw new SQLException("Evento com ID " + eventoId + " não existe.");
         }
-    }
-}
 
-    public boolean palestranteExiste(int palestranteId) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM Palestrantes WHERE id = ?";
+        if (!ps.palestranteExiste(palestranteId)) {
+            throw new SQLException("Palestrante com ID " + palestranteId + " não existe.");
+        }
+
+        String sql = "UPDATE Eventos SET palestranteId = ? WHERE id = ?";
 
         try (Connection conn = this.sqlConn.connect();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, palestranteId);
-            ResultSet rs = stmt.executeQuery();
+            stmt.setInt(2, eventoId);
 
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            } else {
-                return false;
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException("A associação falhou. Nenhum evento foi atualizado.");
             }
         }
     }

@@ -242,6 +242,23 @@ public class PalestranteDao {
         }
     }
 
+public boolean palestranteExiste(int palestranteId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Palestrante WHERE id = ?";
+
+        try (Connection conn = this.sqlConn.connect();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, palestranteId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            } else {
+                return false;
+            }
+        }
+    }
+
 private Integer getNewId() {
         try {
             Integer id = 1;

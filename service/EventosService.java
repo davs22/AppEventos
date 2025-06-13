@@ -94,14 +94,6 @@ public class EventosService {
         }
     }
 
-    public boolean palestranteExiste(int palestranteId) {
-        try {
-            return this.dao.palestranteExiste(palestranteId);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false; // ou lançar uma exceção customizada se preferir
-        }
-    }
     public Boolean eventoExiste(int eventId) {
         try {
             return this.dao.eventoExiste(eventId);

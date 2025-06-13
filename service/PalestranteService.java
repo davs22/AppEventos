@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import dao.PalestranteDao;
@@ -47,5 +48,14 @@ public class PalestranteService {
     public String atualizarPalestrante(int idPalestrante, String novoNome, String novoCurriculo,
             String novaAreaAtuacao) {
         return this.dao.atualizarPalestrante(idPalestrante, novoNome, novoCurriculo, novaAreaAtuacao);
+    }
+
+    public boolean palestranteExiste(int palestranteId) {
+        try {
+            return this.dao.palestranteExiste(palestranteId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // ou lançar uma exceção customizada se preferir
+        }
     }
 }
