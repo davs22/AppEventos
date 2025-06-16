@@ -41,15 +41,24 @@ public class ParticipanteService {
     }
 
     public String inserir(String nome, String sexo, String email, String celular, String senha, String tipo) {
-        if (dao.emailJaExiste(email)) {
-            return "E-mail já cadastrado.";
+        try {
+            if (dao.emailJaExiste(email)) {
+                return "email_existe";
+            }
+
+            String senhaCriptografada = BCrypt.hashpw(senha, BCrypt.gensalt());
+
+            String resultado = dao.inserir(nome, sexo, email, celular, senhaCriptografada, tipo);
+            if (!"sucesso".equalsIgnoreCase(resultado)) {
+                return "erro_insercao";
+            }
+
+            return "sucesso";
+
+        } catch (Exception e) {
+            e.printStackTrace(); // ou logar em um sistema de log
+            return "erro_excecao";
         }
-        String senhaCriptografada = BCrypt.hashpw(senha, BCrypt.gensalt());
-        String resultado = dao.inserir(nome, sexo, email, celular, senhaCriptografada, tipo);
-        if (!"sucesso".equalsIgnoreCase(resultado)) {
-            return "Erro ao inserir no banco.";
-        }
-        return null;
     }
 
     public String inserir(String nome, String sexo, String email, String celular, String senha) {
@@ -73,12 +82,12 @@ public class ParticipanteService {
         return this.dao.atualizarParticipante(idParticipante, novoNome, novoSexo, novoEmail, novoTelefone, novaSenha);
     }
 
-   public boolean participanteExiste(int participanteId) {
-    try {
-        return this.dao.participanteExiste(participanteId);
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
+    public boolean participanteExiste(int participanteId) {
+        try {
+            return this.dao.participanteExiste(participanteId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-}
 }
