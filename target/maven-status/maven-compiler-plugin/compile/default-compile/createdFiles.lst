@@ -3,10 +3,9 @@ view\Atualizar\TelaAtualizarEventos.class
 dao\ParticipanteDao.class
 view\Criar\TelaCriarInscricao.class
 util\SQLiteTesterMaster.class
-view\Menu\MenuExcluirOrganizador.class
+view\TelaOrganizador$2.class
 view\Atualizar\TelaAtualizarParticipantes.class
 util\SQLiteConnection.class
-view\Menu\MenuCriarUsuario.class
 view\Criar\TelaInserirPalestrante.class
 dao\SqlService.class
 table\Eventos.class
@@ -20,16 +19,14 @@ table\Participante.class
 view\Criar\TelaInserirParticipante.class
 view\Exibir\TelaExibirPalestrantes.class
 view\TelaOrganizador.class
-view\TelaUsuario.class
 view\Atualizar\TelaAtualizarParticipantes$1.class
 view\Atualizar\TelaAtualizarPalestrante.class
 view\Excluir\TelaExcluirPalestrante.class
+view\TelaOrganizador$1.class
 service\PalestranteService.class
-view\TelaInicial.class
 dao\PalestranteDao.class
 StartApp.class
 view\Criar\TelaCriarEvento.class
-view\Menu\MenuExibirOrganizador.class
 view\Button\EstiloBotao.class
 service\InscricaoService.class
 table\Inscricao.class
@@ -37,5 +34,4 @@ table\Palestrante.class
 util\test.class
 view\Excluir\TelaExcluirInscricao.class
 view\Exibir\TelaExibirEventos.class
-view\Menu\MenuCriarOrganizador.class
-view\TelaCadastrar.class
+view\TelaOrganizador$3.class
