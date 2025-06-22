@@ -4,8 +4,9 @@
   <summary>📦 Projeto</summary>
 
   <details>
-    <summary>🧰 Service - <code>metodos usando os DAO indiretamente</code></summary>
+    <summary>🧰 Service</summary>
     <ul>
+      <p><code>metodos usando os DAO indiretamente</code></p>
       <li>EventosService</li>
       <li>ParticipanteService</li>
       <li>PalestranteService</li>
@@ -14,8 +15,9 @@
   </details>
   
   <details> 
-    <summary>💾 DAO - <code>faz alteração no banco de dados</code></summary>
+    <summary>💾 DAO</summary>
     <ul>
+      <p><code>faz alteração no banco de dados</code></p>
       <li>EventosDao - <code>metodos CRUD para Eventos</code> </li>
       <li>ParticipanteDao - <code>metodos CRUD para Participante</code></li>
       <li>PalestranteDao - <code>metodos CRUD para Palestrante</code></li>
@@ -23,11 +25,12 @@
     </ul>
   </details>
   <details>
- <summary>🖥️ View - <code>Telas para vizualição de dados</code></summary>
+ <summary>🖥️ View </summary>
     <details>
+      <p></p>
       <summary>🔧 CRUD</summary>
       <ul>
-        <p>usando os services permite as telas gerenciarem tudo de forma mais intuitiva</p>
+        <p><code>Telas para vizualição de dados</code><br>usando os services permite as telas gerenciarem tudo de forma mais intuitiva</p>
         <li>criar - <code>pasta telas -> para cada tabela</code></li>
         <li>atualizar - <code>pasta telas -> cada tabela</code></li>
         <li>deletar - <code>pasta telas -> para cada tabela</code></li>
