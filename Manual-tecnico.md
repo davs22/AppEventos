@@ -16,29 +16,29 @@
   <details> 
     <summary>💾 DAO - <code>faz alteração no banco de dados</code></summary>
     <ul>
-      <li>EventosDao</li>
-      <li>ParticipanteDao</li>
-      <li>PalestranteDao</li>
-      <li>InscricaoDao</li>
+      <li>EventosDao - <code>metodos CRUD para Eventos</code> </li>
+      <li>ParticipanteDao - <code>metodos CRUD para Participante</code></li>
+      <li>PalestranteDao - <code>metodos CRUD para Palestrante</code></li>
+      <li>InscricaoDao <code>metodos CRUD para Inscricao</code></li>
     </ul>
-    
   </details>
-
  <summary>🖥️ View</summary>
     <details>
       <summary>🔧 CRUD</summary>
       <ul>
-        <li>criar</li>
-        <li>atualizar</li>
-        <li>deletar</li>
+        <p>usando os services permite as telas gerenciarem tudo de forma mais intuitiva</p>
+        <li>criar - <code>pasta telas -> para cada tabela</code></li>
+        <li>atualizar - <code>pasta telas -> cada tabela</code></li>
+        <li>deletar - <code>pasta telas -> para cada tabela</code></li>
+        <li>exibir - <code>pasta telas -> cada tabela</code></li>
       </ul>
     </details>
     <details>
       <summary>🏁 Início</summary>
       <ul>
-        <li>TelaCadastrar - permite o usuario se cadastrar</li>
-        <li>TelaOrganizador - permite fazer alterações livremente</li>
-        <li>TelaUsuario - nesta tela vc podera ver suas inscrições e eventos disponiveis</li>
+        <li>TelaCadastrar - <code>permite o usuario se cadastrar</code></li>
+        <li>TelaOrganizador - <code>permite fazer alterações livremente</code></li>
+        <li>TelaUsuario - <code>nesta tela vc podera ver suas inscrições e eventos disponiveis</code></li>
       </ul>
     </details>
     <ul>
