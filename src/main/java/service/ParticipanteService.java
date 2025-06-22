@@ -79,9 +79,25 @@ public class ParticipanteService {
     }
 
     public String atualizarParticipante(int idParticipante, String novoNome, String novoSexo, String novoEmail,
-            String novoTelefone, String novaSenha) {
-        return this.dao.atualizarParticipante(idParticipante, novoNome, novoSexo, novoEmail, novoTelefone, novaSenha);
+                                    String novoTelefone, String novaSenha) {
+
+    try {
+        Participante participanteAtual = this.dao.buscarPorId(idParticipante);
+
+        String senhaParaSalvar;
+        if (novaSenha == null || novaSenha.trim().isEmpty()) {
+            senhaParaSalvar = participanteAtual.getSenha(); // mantém a senha atual (já criptografada)
+        } else {
+            senhaParaSalvar = BCrypt.hashpw(novaSenha, BCrypt.gensalt()); // criptografa nova senha
+        }
+
+        return this.dao.atualizarParticipante(idParticipante, novoNome, novoSexo, novoEmail, novoTelefone, senhaParaSalvar);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "Erro ao atualizar dados.";
     }
+}
+
 
     public boolean participanteExiste(int participanteId) {
         try {
@@ -103,6 +119,10 @@ public class ParticipanteService {
 
     public boolean excluirParticipante(int id) {
     return this.dao.excluirParticipantePorId(id);
+}
+
+public String criptografarSenha(String senhaPura) {
+    return BCrypt.hashpw(senhaPura, BCrypt.gensalt());
 }
 
 }

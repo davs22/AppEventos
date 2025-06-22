@@ -25,45 +25,36 @@ public class SqlService {
         }
     }
 
-    public String ParticipanteSQL(String tipo){
-        if (tipo == null) {
-            throw new IllegalArgumentException("Tipo de parâmetro não informado.");
-        }
-    switch (tipo.toLowerCase()) {
-        case "id":
-            return "SELECT * FROM Participante WHERE id = ?";
-        case "nome":
-            return "SELECT * FROM Participante WHERE nome = ?";
-        case "sexo":
-            return "SELECT * FROM Participante WHERE sexo = ?";
-        case "email":
-            return "SELECT * FROM Participante WHERE email = ?";
-        case "celular":
-            return "SELECT * FROM Participante WHERE celular = ?";
-        case "tipo":
-            return "SELECT * FROM Participante WHERE tipo = ? AND tipo <> 'organizador';";
-        default:
-            throw new IllegalArgumentException("Tipo de parâmetro não suportado: " + tipo);
+    public String ParticipanteSQL(String tipo) {
+        switch (tipo.toLowerCase()) {
+            case "id":
+                return "SELECT * FROM Participante WHERE id = ?";
+            case "nome":
+                return "SELECT * FROM Participante WHERE nome LIKE ?";
+            case "email":
+                return "SELECT * FROM Participante WHERE email LIKE ?";
+            case "celular":
+                return "SELECT * FROM Participante WHERE celular LIKE ?";
+            default:
+                return "SELECT * FROM Participante";
         }
     }
 
-    public String PalestranteSQL(String tipo){
-        if (tipo == null) {
-            throw new IllegalArgumentException("Tipo de parâmetro não informado.");
+    public String PalestranteSQL(String tipo) {
+        switch (tipo.toLowerCase()) {
+            case "id":
+                return "SELECT * FROM Palestrante WHERE id = ?";
+            case "nome":
+                return "SELECT * FROM Palestrante WHERE nome LIKE ?";
+            case "curriculo":
+                return "SELECT * FROM Palestrante WHERE curriculo LIKE ?";
+            case "areaatuacao":
+                return "SELECT * FROM Palestrante WHERE areaAtuacao LIKE ?";
+            default:
+                return "SELECT * FROM Palestrante";
         }
-    switch (tipo.toLowerCase()) {
-        case "id":
-            return "SELECT * FROM Palestrante WHERE id = ?";
-        case "nome":
-            return "SELECT * FROM Palestrante WHERE nome = ?";
-        case "curriculo":
-            return "SELECT * FROM Palestrante WHERE curriculo = ?";
-        case "areaatuacao":
-            return "SELECT * FROM Palestrante WHERE areaAtuacao = ?";
-        default:
-            throw new IllegalArgumentException("Tipo de parâmetro não suportado: " + tipo);
-        }
-
     }
-
 }
+
+
+

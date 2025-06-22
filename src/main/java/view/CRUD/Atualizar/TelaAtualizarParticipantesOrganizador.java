@@ -139,7 +139,7 @@ public class TelaAtualizarParticipantesOrganizador extends JFrame {
                 txtSexo.setText(participante.getSexo());
                 txtEmail.setText(participante.getEmail());
                 txtCelular.setText(participante.getCelular());
-                txtSenha.setText(participante.getSenha());
+                txtSenha.setText("");
                
             } else {
                 JOptionPane.showMessageDialog(this, "Participante não encontrado com o ID: " + participanteIdParaEditar, "Erro", JOptionPane.ERROR_MESSAGE);

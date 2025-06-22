@@ -50,46 +50,48 @@ public class ParticipanteDao {
     }
 
     public List<Participante> listarPorParametro(String tipo, String valor) {
-        List<Participante> lista = new ArrayList<>();
+    List<Participante> lista = new ArrayList<>();
 
-        try {
-            SqlService sqlsService = new SqlService();
-            String sql = sqlsService.ParticipanteSQL(tipo); // retorna: SELECT * FROM Participante WHERE <campo> = ?
+    try {
+        SqlService sqlsService = new SqlService();
+        String sql = sqlsService.ParticipanteSQL(tipo); // retorna SQL com LIKE ou =
 
-            Connection conn = this.sqlConn.connect();
-            PreparedStatement pstm = conn.prepareStatement(sql);
+        Connection conn = this.sqlConn.connect();
+        PreparedStatement pstm = conn.prepareStatement(sql);
 
-            if (tipo.equalsIgnoreCase("id")) {
-                pstm.setInt(1, Integer.parseInt(valor));
-            } else {
-                pstm.setString(1, valor);
-            }
-
-            ResultSet rs = pstm.executeQuery();
-            while (rs.next()) {
-                Participante participante = new Participante(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("sexo"),
-                        rs.getString("email"),
-                        rs.getString("celular"),
-                        rs.getString("senha"),
-                        rs.getString("tipo"));
-                lista.add(participante);
-            }
-
-            rs.close();
-            pstm.close();
-            this.sqlConn.close(conn);
-
-        } catch (SQLException e) {
-            System.err.println("Erro ao listar participantes: " + e.getMessage());
-        } catch (NumberFormatException e) {
-            System.err.println("ID inválido (esperado um número): " + valor);
+        if (tipo.equalsIgnoreCase("id")) {
+            pstm.setInt(1, Integer.parseInt(valor));
+        } else {
+            pstm.setString(1, "%" + valor + "%");  // busca parcial com LIKE
         }
 
-        return lista;
+        ResultSet rs = pstm.executeQuery();
+        while (rs.next()) {
+            Participante participante = new Participante(
+                rs.getInt("id"),
+                rs.getString("nome"),
+                rs.getString("sexo"),
+                rs.getString("email"),
+                rs.getString("celular"),
+                rs.getString("senha"),
+                rs.getString("tipo")
+            );
+            lista.add(participante);
+        }
+
+        rs.close();
+        pstm.close();
+        this.sqlConn.close(conn);
+
+    } catch (SQLException e) {
+        System.err.println("Erro ao listar participantes: " + e.getMessage());
+    } catch (NumberFormatException e) {
+        System.err.println("ID inválido (esperado um número): " + valor);
     }
+
+    return lista;
+}
+
 
     public Participante buscarPorId(Integer id) {
         try {

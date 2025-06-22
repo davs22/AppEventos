@@ -31,6 +31,12 @@ public class TelaOrganizador extends JFrame {
     private JTable tabelaInscricoes;
     private DefaultTableModel modeloTabelaInscricoes;
 
+    private JTextField txtBuscaEventos;
+    private JButton btnBuscaEventos;
+
+    private JTextField txtBuscaParticipantes;
+    private JButton btnBuscaParticipantes;
+
     private EventosService es = new EventosService();
     private ParticipanteService ps = new ParticipanteService();
     private PalestranteService ps1 = new PalestranteService();
@@ -58,22 +64,26 @@ public class TelaOrganizador extends JFrame {
     private JPanel criarPainelEventos() {
         JPanel painel = new JPanel(new BorderLayout(10, 10));
 
-        // Define colunas da tabela
+        JPanel painelBusca = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        txtBuscaEventos = new JTextField(20);
+        btnBuscaEventos = new JButton("Buscar");
+        painelBusca.add(new JLabel("Buscar evento: "));
+        painelBusca.add(txtBuscaEventos);
+        painelBusca.add(btnBuscaEventos);
+        painel.add(painelBusca, BorderLayout.NORTH);
+
         String[] colunas = {"ID", "Nome", "Descrição", "Data", "Local", "Capacidade", "Palestrante ID"};
         modeloTabelaEventos = new DefaultTableModel(colunas, 0) {
-            @Override // Sobrescrita para garantir que células não sejam editáveis diretamente na tabela
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
 
         tabelaEventos = new JTable(modeloTabelaEventos);
-        // Permite selecionar apenas uma linha por vez, crucial para edição/exclusão
         tabelaEventos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scroll = new JScrollPane(tabelaEventos);
         painel.add(scroll, BorderLayout.CENTER);
 
-        // Botões de Ação
         JPanel botoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         JButton btnCriar = new JButton("Criar");
         JButton btnEditar = new JButton("Editar");
@@ -83,93 +93,56 @@ public class TelaOrganizador extends JFrame {
         botoes.add(btnEditar);
         botoes.add(btnExcluir);
         painel.add(botoes, BorderLayout.SOUTH);
-
-        // --- ActionListeners para os botões da aba de Eventos ---
-
-        // Ação para o botão CRIAR Evento
+        
         btnCriar.addActionListener(e -> {
-            TelaCriarEvento telaCriar = new TelaCriarEvento(this); // Passa referência da TelaOrganizador
+            TelaCriarEvento telaCriar = new TelaCriarEvento(this);
             telaCriar.setVisible(true);
-            this.setVisible(false); // Esconde a tela principal enquanto a de criação está aberta
+            this.setVisible(false);
         });
 
-        // Ação para o botão EDITAR Evento
         btnEditar.addActionListener(e -> {
             int selectedRow = tabelaEventos.getSelectedRow();
-            if (selectedRow >= 0) { // Verifica se alguma linha foi selecionada
-                // Obtém o ID do evento da primeira coluna (índice 0) da linha selecionada
+            if (selectedRow >= 0) {
                 int eventoId = (int) modeloTabelaEventos.getValueAt(selectedRow, 0);
-
-                // Instancia a TelaAtualizarEventos (sua tela de edição) passando o ID e a referência da tela principal
                 TelaAtualizarEventos telaAtualizar = new TelaAtualizarEventos(this, eventoId);
                 telaAtualizar.setVisible(true);
-                this.setVisible(false); // Esconde a tela principal
+                this.setVisible(false);
             } else {
-                JOptionPane.showMessageDialog(this, "Por favor, selecione um evento para editar.",
-                                              "Nenhum Evento Selecionado", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Selecione um evento para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
             }
         });
 
-        // Ação para o botão EXCLUIR Evento
         btnExcluir.addActionListener(e -> {
             int selectedRow = tabelaEventos.getSelectedRow();
             if (selectedRow >= 0) {
                 int eventoId = (int) modeloTabelaEventos.getValueAt(selectedRow, 0);
                 int confirm = JOptionPane.showConfirmDialog(this,
-                                                            "Tem certeza que deseja excluir o evento ID: " + eventoId + "?",
-                                                            "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        "Tem certeza que deseja excluir o evento ID: " + eventoId + "?",
+                        "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+
                 if (confirm == JOptionPane.YES_OPTION) {
                     try {
-                        es.excluirEvento(eventoId); // Chama o serviço para excluir o evento
+                        es.excluirEvento(eventoId);
                         JOptionPane.showMessageDialog(this, "Evento excluído com sucesso!");
-                        atualizarTabelaEventos(); // Atualiza a tabela após a exclusão
+                        atualizarTabelaEventos();
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this, "Erro ao excluir evento: " + ex.getMessage(),
-                                                      "Erro", JOptionPane.ERROR_MESSAGE);
-                        ex.printStackTrace(); // Para depuração
+                        JOptionPane.showMessageDialog(this, "Erro ao excluir evento: " + ex.getMessage());
+                        ex.printStackTrace();
                     }
                 }
-            } else {
-                JOptionPane.showMessageDialog(this, "Por favor, selecione um evento para excluir.",
-                                              "Nenhum Evento Selecionado", JOptionPane.WARNING_MESSAGE);
             }
         });
 
-        // Carrega os eventos ao iniciar a tela pela primeira vez
         carregarEventos();
 
         return painel;
     }
-
-    // --- Métodos de Atualização das Tabelas ---
-
-    // Este método será chamado pelas telas de CRUD (Criar/Atualizar) para Eventos
-    public void atualizarTabelaEventos() {
-        carregarEventos(); // Recarrega todos os eventos na tabela
-    }
-
-    // Método para atualizar a tabela de Participantes
-    public void atualizarTabelaParticipantes() {
-        carregarParticipantes();
-    }
-
-    // Método para atualizar a tabela de Palestrantes
-    public void atualizarTabelaPalestrantes() {
-        carregarPalestrantes();
-    }
-
-    public void atualizarTabelaInscricoes() {
-        carregarInscricoes();
-    }
-
-    // --- Métodos para Criar Paineis de Outras Abas ---
 
     private JPanel criarPainelParticipantes() {
         JPanel painel = new JPanel(new BorderLayout(10, 10));
 
         String[] colunas = {"ID", "Nome", "Sexo", "Email", "Celular", "Senha", "Tipo"};
         modeloTabelaParticipantes = new DefaultTableModel(colunas, 0) {
-            @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
@@ -190,57 +163,42 @@ public class TelaOrganizador extends JFrame {
         botoes.add(btnExcluir);
         painel.add(botoes, BorderLayout.SOUTH);
 
-        // Ação para o botão CRIAR Evento
         btnCriar.addActionListener(e -> {
-            TelaInserirParticipante telaCriar = new TelaInserirParticipante(this); // Passa referência da TelaOrganizador
-            telaCriar.setVisible(true);
-            this.setVisible(false); // Esconde a tela principal enquanto a de criação está aberta
+            TelaInserirParticipante tela = new TelaInserirParticipante(this);
+            tela.setVisible(true);
+            this.setVisible(false);
         });
 
-        // Ação para o botão EDITAR Evento
         btnEditar.addActionListener(e -> {
-            int selectedRow = tabelaParticipantes.getSelectedRow();
-            if (selectedRow >= 0) { // Verifica se alguma linha foi selecionada
-                // Obtém o ID do evento da primeira coluna (índice 0) da linha selecionada
-                int participanteId = (int) modeloTabelaParticipantes.getValueAt(selectedRow, 0);
-
-                // Instancia a TelaAtualizarEventos (sua tela de edição) passando o ID e a referência da tela principal
-                TelaAtualizarParticipantesOrganizador telaAtualizar = new TelaAtualizarParticipantesOrganizador(this, participanteId);
-                telaAtualizar.setVisible(true);
-                this.setVisible(false); // Esconde a tela principal
+            int row = tabelaParticipantes.getSelectedRow();
+            if (row >= 0) {
+                int id = (int) modeloTabelaParticipantes.getValueAt(row, 0);
+                TelaAtualizarParticipantesOrganizador tela = new TelaAtualizarParticipantesOrganizador(this, id);
+                tela.setVisible(true);
+                this.setVisible(false);
             } else {
-                JOptionPane.showMessageDialog(this, "Por favor, selecione um participante para editar.",
-                                              "Nenhum Participante Selecionado", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Selecione um participante para editar.");
             }
         });
 
-        // Ação para o botão EXCLUIR Evento
         btnExcluir.addActionListener(e -> {
-            int selectedRow = tabelaParticipantes.getSelectedRow();
-            if (selectedRow >= 0) {
-                int participanteId = (int) modeloTabelaParticipantes.getValueAt(selectedRow, 0);
-                int confirm = JOptionPane.showConfirmDialog(this,
-                                                            "Tem certeza que deseja excluir o participante ID: " + participanteId + "?",
-                                                            "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int row = tabelaParticipantes.getSelectedRow();
+            if (row >= 0) {
+                int id = (int) modeloTabelaParticipantes.getValueAt(row, 0);
+                int confirm = JOptionPane.showConfirmDialog(this, "Deseja excluir participante ID: " + id + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
                     try {
-                        ps.excluirParticipante(participanteId); // Chama o serviço para excluir o evento
-                        JOptionPane.showMessageDialog(this, "Participante excluído com sucesso!");
-                        atualizarTabelaParticipantes();// Atualiza a tabela após a exclusão
+                        ps.excluirParticipante(id);
+                        JOptionPane.showMessageDialog(this, "Participante excluído.");
+                        atualizarTabelaParticipantes();
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this, "Erro ao excluir participante: " + ex.getMessage(),
-                                                      "Erro", JOptionPane.ERROR_MESSAGE);
-                        ex.printStackTrace(); // Para depuração
+                        JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
                     }
                 }
-            } else {
-                JOptionPane.showMessageDialog(this, "Por favor, selecione um participante para excluir.",
-                                              "Nenhum Participante Selecionado", JOptionPane.WARNING_MESSAGE);
             }
         });
 
         carregarParticipantes();
-
         return painel;
     }
 
@@ -249,7 +207,6 @@ public class TelaOrganizador extends JFrame {
 
         String[] colunas = {"ID", "Nome", "Curriculo", "Área de Atuação"};
         modeloTabelaPalestrantes = new DefaultTableModel(colunas, 0) {
-            @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
@@ -270,175 +227,144 @@ public class TelaOrganizador extends JFrame {
         botoes.add(btnExcluir);
         painel.add(botoes, BorderLayout.SOUTH);
 
-        // Ação para o botão CRIAR Evento
         btnCriar.addActionListener(e -> {
-            TelaInserirPalestrante telaCriar = new TelaInserirPalestrante(this); // Passa referência da TelaOrganizador
-            telaCriar.setVisible(true);
-            this.setVisible(false); // Esconde a tela principal enquanto a de criação está aberta
+            TelaInserirPalestrante tela = new TelaInserirPalestrante(this);
+            tela.setVisible(true);
+            this.setVisible(false);
         });
 
-        // Ação para o botão EDITAR Evento
         btnEditar.addActionListener(e -> {
-            int selectedRow = tabelaPalestrantes.getSelectedRow();
-            if (selectedRow >= 0) { // Verifica se alguma linha foi selecionada
-                // Obtém o ID do evento da primeira coluna (índice 0) da linha selecionada
-                int palestranteId = (int) modeloTabelaPalestrantes.getValueAt(selectedRow, 0);
-
-                // Instancia a TelaAtualizarEventos (sua tela de edição) passando o ID e a referência da tela principal
-                TelaAtualizarPalestrantes telaAtualizar = new TelaAtualizarPalestrantes(this, palestranteId);
-                telaAtualizar.setVisible(true);
-                this.setVisible(false); // Esconde a tela principal
+            int row = tabelaPalestrantes.getSelectedRow();
+            if (row >= 0) {
+                int id = (int) modeloTabelaPalestrantes.getValueAt(row, 0);
+                TelaAtualizarPalestrantes tela = new TelaAtualizarPalestrantes(this, id);
+                tela.setVisible(true);
+                this.setVisible(false);
             } else {
-                JOptionPane.showMessageDialog(this, "Por favor, selecione um palestrante para editar.",
-                                              "Nenhum Palestrante Selecionado", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Selecione um palestrante para editar.");
             }
         });
 
-        // Ação para o botão EXCLUIR Evento
         btnExcluir.addActionListener(e -> {
-            int selectedRow = tabelaPalestrantes.getSelectedRow();
-            if (selectedRow >= 0) {
-                int palestranteId = (int) modeloTabelaPalestrantes.getValueAt(selectedRow, 0);
-                int confirm = JOptionPane.showConfirmDialog(this,
-                                                            "Tem certeza que deseja excluir o palestrante ID: " + palestranteId + "?",
-                                                            "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int row = tabelaPalestrantes.getSelectedRow();
+            if (row >= 0) {
+                int id = (int) modeloTabelaPalestrantes.getValueAt(row, 0);
+                int confirm = JOptionPane.showConfirmDialog(this, "Excluir palestrante ID: " + id + "?", "Confirmar", JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
                     try {
-                        ps1.excluirPalestrante(palestranteId); // Chama o serviço para excluir o evento
-                        JOptionPane.showMessageDialog(this, "Palestrante excluído com sucesso!");
-                        atualizarTabelaPalestrantes(); // Atualiza a tabela após a exclusão
+                        ps1.excluirPalestrante(id);
+                        JOptionPane.showMessageDialog(this, "Palestrante excluído.");
+                        atualizarTabelaPalestrantes();
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(this, "Erro ao excluir palestrante: " + ex.getMessage(),
-                                                      "Erro", JOptionPane.ERROR_MESSAGE);
-                        ex.printStackTrace(); // Para depuração
+                        JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
                     }
                 }
-            } else {
-                JOptionPane.showMessageDialog(this, "Por favor, selecione um palestrante para excluir.",
-                                              "Nenhum Palestrante Selecionado", JOptionPane.WARNING_MESSAGE);
             }
         });
 
         carregarPalestrantes();
-
         return painel;
     }
 
     private JPanel criarPainelInscricoes() {
         JPanel painel = new JPanel(new BorderLayout(10, 10));
-
-        // Define colunas da tabela
         String[] colunas = {"ID", "ID Participante", "Nome", "ID Evento", "Nome"};
         modeloTabelaInscricoes = new DefaultTableModel(colunas, 0) {
-            @Override // Sobrescrita para garantir que células não sejam editáveis diretamente na tabela
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
 
         tabelaInscricoes = new JTable(modeloTabelaInscricoes);
-        // Permite selecionar apenas uma linha por vez, crucial para edição/exclusão
         tabelaInscricoes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scroll = new JScrollPane(tabelaInscricoes);
         painel.add(scroll, BorderLayout.CENTER);
 
-         carregarInscricoes();
-
+        carregarInscricoes();
         return painel;
     }
 
-    // --- Métodos de Carregamento de Dados para as Tabelas ---
+    public void atualizarTabelaEventos() {
+        carregarEventos();
+    }
+
+    public void atualizarTabelaParticipantes() {
+        carregarParticipantes();
+    }
+
+    public void atualizarTabelaPalestrantes() {
+        carregarPalestrantes();
+    }
+
+    public void atualizarTabelaInscricoes() {
+        carregarInscricoes();
+    }
+
     private void carregarEventos() {
-        modeloTabelaEventos.setRowCount(0); // Limpa a tabela antes de recarregar
+        modeloTabelaEventos.setRowCount(0);
         try {
             List<Eventos> eventos = es.listarEventos();
             for (Eventos e : eventos) {
                 modeloTabelaEventos.addRow(new Object[]{
-                        e.getId(),
-                        e.getNome(),
-                        e.getDescricao(),
-                        e.getData(), // Sua data já deve ser formatada ou ser um tipo compatível para exibição
-                        e.getLocal(),
-                        e.getCapacidade(),
-                        e.getPalestranteId()
+                        e.getId(), e.getNome(), e.getDescricao(), e.getData(),
+                        e.getLocal(), e.getCapacidade(), e.getPalestranteId()
                 });
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao listar eventos: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace(); // Para depuração, imprima a stack trace
+            JOptionPane.showMessageDialog(this, "Erro ao listar eventos: " + e.getMessage());
         }
     }
 
     private void carregarParticipantes() {
-        modeloTabelaParticipantes.setRowCount(0); // Limpa a tabela
+        modeloTabelaParticipantes.setRowCount(0);
         try {
             List<Participante> participantes = ps.listarTodos();
             for (Participante p : participantes) {
                 modeloTabelaParticipantes.addRow(new Object[]{
-                        p.getId(),
-                        p.getNome(),
-                        p.getSexo(),
-                        p.getEmail(),
-                        p.getCelular(),
-                        p.getSenha(),
-                        p.getTipo()
+                        p.getId(), p.getNome(), p.getSexo(), p.getEmail(),
+                        p.getCelular(), p.getSenha(), p.getTipo()
                 });
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao listar participantes: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao listar participantes: " + e.getMessage());
         }
     }
 
     private void carregarPalestrantes() {
-        modeloTabelaPalestrantes.setRowCount(0); // Limpa a tabela
+        modeloTabelaPalestrantes.setRowCount(0);
         try {
             List<Palestrante> palestrantes = ps1.listarTodos();
-            for (Palestrante p1 : palestrantes) {
+            for (Palestrante p : palestrantes) {
                 modeloTabelaPalestrantes.addRow(new Object[]{
-                        p1.getId(),
-                        p1.getNome(),
-                        p1.getCurriculo(),
-                        p1.getAreaAtuacao(),
+                        p.getId(), p.getNome(), p.getCurriculo(), p.getAreaAtuacao()
                 });
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao listar palestrantes: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao listar palestrantes: " + e.getMessage());
         }
     }
 
     private void carregarInscricoes() {
-        modeloTabelaInscricoes.setRowCount(0); // Limpa a tabela antes de recarregar
+        modeloTabelaInscricoes.setRowCount(0);
         try {
-            List<Inscricao> inscricao = is.listarInscricoesComDetalhes();
-            for (Inscricao i : inscricao) {
+            List<Inscricao> inscricoes = is.listarInscricoesComDetalhes();
+            for (Inscricao i : inscricoes) {
                 modeloTabelaInscricoes.addRow(new Object[]{
-                        i.getId(),
-                        i.getIdParticipante(),
-                        i.getNomeParticipante(),
-                        i.getIdEvento(), // Sua data já deve ser formatada ou ser um tipo compatível para exibição
-                        i.getNomeEvento(),
+                        i.getId(), i.getIdParticipante(), i.getNomeParticipante(),
+                        i.getIdEvento(), i.getNomeEvento()
                 });
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao listar inscrições: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace(); // Para depuração, imprima a stack trace
+            JOptionPane.showMessageDialog(this, "Erro ao listar inscrições: " + e.getMessage());
         }
     }
 
-    // --- Método Main para Iniciar a Aplicação ---
-
     public static void main(String[] args) {
-        // Garante que a GUI seja executada na Event Dispatch Thread (EDT)
         SwingUtilities.invokeLater(() -> {
             try {
-                // Tenta aplicar o Look and Feel nativo do sistema operacional
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception ignored) {
-                // Ignora exceções, caso não consiga aplicar o Look and Feel
-            }
-            new TelaOrganizador().setVisible(true); // Cria e mostra a janela principal
+            } catch (Exception ignored) {}
+            new TelaOrganizador().setVisible(true);
         });
     }
 }

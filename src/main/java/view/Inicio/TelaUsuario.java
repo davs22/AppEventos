@@ -50,43 +50,57 @@ public class TelaUsuario extends JFrame {
     }
 
     private JPanel criarPainelEventos() {
-        JPanel painel = new JPanel(new BorderLayout(10, 10));
-        String[] colunas = {"ID", "Nome", "Descrição", "Data", "Local", "Capacidade", "Palestrante ID"};
-        modeloTabelaEventos = new DefaultTableModel(colunas, 0) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
+    JPanel painel = new JPanel(new BorderLayout(10, 10));
+
+    // 🔍 Painel de busca
+    JPanel painelBusca = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JTextField txtBuscaEvento = new JTextField(20);
+    JButton btnBuscarEvento = new JButton("Pesquisar");
+    painelBusca.add(new JLabel("Buscar Evento:"));
+    painelBusca.add(txtBuscaEvento);
+    painelBusca.add(btnBuscarEvento);
+    painel.add(painelBusca, BorderLayout.NORTH); // Adiciona a barra de busca no topo
+
+    // 📋 Tabela de eventos
+    String[] colunas = {"ID", "Nome", "Descrição", "Data", "Local", "Capacidade", "Palestrante ID"};
+    modeloTabelaEventos = new DefaultTableModel(colunas, 0) {
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+    tabelaEventos = new JTable(modeloTabelaEventos);
+    tabelaEventos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    JScrollPane scroll = new JScrollPane(tabelaEventos);
+    painel.add(scroll, BorderLayout.CENTER);
+
+    // ✅ Botão de inscrição
+    JPanel botoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+    JButton btnInscrever = new JButton("Inscrever");
+    botoes.add(btnInscrever);
+    painel.add(botoes, BorderLayout.SOUTH);
+
+    // 📌 Ação do botão de inscrição
+    btnInscrever.addActionListener(e -> {
+        int selectedRow = tabelaEventos.getSelectedRow();
+        if (selectedRow >= 0) {
+            int eventoId = (int) modeloTabelaEventos.getValueAt(selectedRow, 0);
+            try {
+                String resposta = is.inscreverParticipante(SessaoUsuario.idParticipanteLogado, eventoId);
+                JOptionPane.showMessageDialog(this, resposta);
+                atualizarEventosInscritos();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao se inscrever: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
             }
-        };
-        tabelaEventos = new JTable(modeloTabelaEventos);
-        tabelaEventos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane scroll = new JScrollPane(tabelaEventos);
-        painel.add(scroll, BorderLayout.CENTER);
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione um evento para se inscrever.", "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
+    });
 
-        JPanel botoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
-        JButton btnInscrever = new JButton("Inscrever");
-        botoes.add(btnInscrever);
-        painel.add(botoes, BorderLayout.SOUTH);
+    carregarEventos();
+    return painel;
+}
 
-        btnInscrever.addActionListener(e -> {
-            int selectedRow = tabelaEventos.getSelectedRow();
-            if (selectedRow >= 0) {
-                int eventoId = (int) modeloTabelaEventos.getValueAt(selectedRow, 0);
-                try {
-                    String resposta = is.inscreverParticipante(SessaoUsuario.idParticipanteLogado, eventoId);
-                    JOptionPane.showMessageDialog(this, resposta);
-                    atualizarEventosInscritos();
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Erro ao se inscrever: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                    ex.printStackTrace();
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Selecione um evento para se inscrever.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            }
-        });
-
-        carregarEventos();
-        return painel;
-    }
 
     private JPanel criarPainelPerfil() {
         JPanel painel = new JPanel(new BorderLayout(10, 10));
@@ -214,20 +228,28 @@ public class TelaUsuario extends JFrame {
     }
 
     private void carregarParticipantes() {
-        modeloTabelaParticipantes.setRowCount(0);
-        try {
-            List<Participante> participantes = ps.listarTodos();
-            for (Participante p : participantes) {
-                modeloTabelaParticipantes.addRow(new Object[]{
-                        p.getId(), p.getNome(), p.getSexo(), p.getEmail(),
-                        p.getCelular(), p.getSenha(), p.getTipo()
-                });
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao listar participantes: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+    modeloTabelaParticipantes.setRowCount(0); // Limpa a tabela
+
+    try {
+        Participante participante = ps.buscarParticipantePorId(SessaoUsuario.idParticipanteLogado);
+        if (participante != null) {
+            modeloTabelaParticipantes.addRow(new Object[]{
+                participante.getId(),
+                participante.getNome(),
+                participante.getSexo(),
+                participante.getEmail(),
+                participante.getCelular(),
+                "******", // Opcional: não mostrar a senha
+                participante.getTipo()
+            });
+        } else {
+            JOptionPane.showMessageDialog(this, "Participante não encontrado.");
         }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro ao carregar participante: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
     }
+}
 
     private void carregarEventosInscritosPorId() {
         modeloTabelaEventosInscritos.setRowCount(0);

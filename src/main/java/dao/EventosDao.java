@@ -184,4 +184,32 @@ public class EventosDao {
             return rs.next() && rs.getInt(1) > 0;
         }
     }
+
+    public List<Eventos> buscarEventosPorNome(String nome) throws Exception {
+        List<Eventos> lista = new ArrayList<>();
+        String sql = "SELECT * FROM eventos WHERE nome LIKE ?";
+        
+        try (Connection conn = this.sqlConn.connect();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + nome + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Eventos evento = new Eventos();
+                evento.setId(rs.getInt("id"));
+                evento.setNome(rs.getString("nome"));
+                evento.setDescricao(rs.getString("descricao"));
+                evento.setData(rs.getDate("data"));
+                evento.setLocal(rs.getString("local"));
+                evento.setCapacidade(rs.getInt("capacidade"));
+                evento.setPalestranteId(rs.getInt("palestrante_id"));
+                lista.add(evento);
+            }
+
+        } catch (SQLException e) {
+            throw new Exception("Erro ao buscar eventos: " + e.getMessage(), e);
+        }
+
+        return lista;
+    }
 }

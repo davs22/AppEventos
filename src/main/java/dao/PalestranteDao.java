@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import table.Palestrante;
+import table.Participante;
 import util.SQLiteConnection;
 
 public class PalestranteDao {
@@ -46,40 +47,45 @@ public class PalestranteDao {
     }
 
     public List<Palestrante> listarPorParametro(String tipo, String valor) {
-        List<Palestrante> lista = new ArrayList<>();
-        try {
-            SqlService sqlsService = new SqlService();
-            String sql = sqlsService.PalestranteSQL(tipo);
+    List<Palestrante> lista = new ArrayList<>();
 
-            Connection conn = this.sqlConn.connect();
-            PreparedStatement pstm = conn.prepareStatement(sql);
+    try {
+        SqlService sqlsService = new SqlService();
+        String sql = sqlsService.ParticipanteSQL(tipo); // retorna SQL com LIKE ou =
 
-            if (tipo.equalsIgnoreCase("id")) {
-                pstm.setInt(1, Integer.parseInt(valor));
-            } else {
-                pstm.setString(1, valor);
-            }
+        Connection conn = this.sqlConn.connect();
+        PreparedStatement pstm = conn.prepareStatement(sql);
 
-            ResultSet rs = pstm.executeQuery();
-            while (rs.next()) {
-                Palestrante palestrante = new Palestrante(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("curriculo"),
-                        rs.getString("areaAtuacao"));
-                lista.add(palestrante);
-            }
-
-            rs.close();
-            pstm.close();
-            this.sqlConn.close(conn);
-
-        } catch (SQLException | NumberFormatException e) {
-            System.err.println("Erro ao listar por parâmetro: " + e.getMessage());
+        if (tipo.equalsIgnoreCase("id")) {
+            pstm.setInt(1, Integer.parseInt(valor));
+        } else {
+            pstm.setString(1, "%" + valor + "%");  // busca parcial com LIKE
         }
 
-        return lista;
+        ResultSet rs = pstm.executeQuery();
+        while (rs.next()) {
+            Palestrante palestrante = new Palestrante(
+                rs.getInt("id"),
+                rs.getString("nome"),
+                rs.getString("curriculo"),
+                rs.getString("areaAtuacao")
+            );
+            lista.add(palestrante);
+        }
+
+        rs.close();
+        pstm.close();
+        this.sqlConn.close(conn);
+
+    } catch (SQLException e) {
+        System.err.println("Erro ao listar palestrante: " + e.getMessage());
+    } catch (NumberFormatException e) {
+        System.err.println("ID inválido (esperado um número): " + valor);
     }
+
+    return lista;
+}
+
 
     public Palestrante buscarPorId(Integer id) {
         try {
