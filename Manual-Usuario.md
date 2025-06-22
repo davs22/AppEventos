@@ -10,6 +10,7 @@ Ao abrir o aplicativo, você será direcionado à tela inicial, onde poderá:
 - Visualizar os eventos disponíveis.
 - Navegar pelas categorias.
 - Fazer login ou cadastro (caso ainda não tenha uma conta).
+  <img src="img/teladecadastrologin.png" alt="Tela de Cadastro" width="600"/>
 
 ---
 
@@ -43,3 +44,4 @@ Desenvolvido por:
 
 - [Victor Caetano](https://github.com/victorcaetano2025)  
 - [Davi Silva](https://github.com/davs22)
+- [Jaime Júnior](https://github.com/okanjota)
