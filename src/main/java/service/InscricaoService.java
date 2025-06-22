@@ -2,6 +2,8 @@ package service;
 
 import dao.InscricaoDao;
 import java.util.List;
+
+import table.Eventos;
 import table.Inscricao;
 import util.SQLiteConnection;
 
@@ -85,4 +87,13 @@ public class InscricaoService {
                 "Data: " + java.time.LocalDate.now() + "\n" +
                 "Assinatura: ____________________\n";
     }
+
+    public List<Eventos> listarEventosPorParticipante(int idParticipante) {
+    return dao.listarEventosPorParticipante(idParticipante);
+    }
+
+    public List<Inscricao> listarInscricoesComDetalhesPorParticipante(int idParticipante) {
+    return dao.listarInscricoesComDetalhesPorParticipante(idParticipante);
+    }
+
 }

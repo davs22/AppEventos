@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 
 import table.Participante;
+import utils.SessaoUsuario;
+import view.Inicio.TelaCadastrar;
+import view.Inicio.TelaOrganizador;
+import view.Inicio.TelaUsuario;
 import service.ParticipanteService;
 
 public class TelaInicial extends JFrame {
@@ -62,25 +66,30 @@ public class TelaInicial extends JFrame {
     }
 
     private void login() {
-        String email = emailField.getText();
-        String senha = new String(senhaField.getPassword());
+    String email = emailField.getText();
+    String senha = new String(senhaField.getPassword());
 
-        Participante participante = participanteService.login(email, senha);
+    Participante participante = participanteService.login(email, senha);
 
-        if (participante != null) {
-            JOptionPane.showMessageDialog(this, "Bem-vindo, " + participante.getNome());
+    if (participante != null) {
+        // <<< AQUI >>>
+        SessaoUsuario.idParticipanteLogado = participante.getId();
 
-            if ("organizador".equalsIgnoreCase(participante.getTipo())) {
-                new TelaOrganizador().setVisible(true);
-            } else {
-                new TelaUsuario().setVisible(true);
-            }
+        JOptionPane.showMessageDialog(this, "Bem-vindo, " + participante.getNome());
 
-            dispose();
+        if ("organizador".equalsIgnoreCase(participante.getTipo())) {
+            new TelaOrganizador().setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(this, "Login falhou!");
+            new TelaUsuario().setVisible(true);
         }
+
+        dispose();
+    } else {
+        JOptionPane.showMessageDialog(this, "Login falhou!");
     }
+}
+
+
 
     private void abrirCadastro() {
         new TelaCadastrar().setVisible(true);
