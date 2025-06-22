@@ -22,7 +22,8 @@
       <li>InscricaoDao <code>metodos CRUD para Inscricao</code></li>
     </ul>
   </details>
- <summary>🖥️ View</summary>
+  <details>
+ <summary>🖥️ View - <code>Telas para vizualição de dados</code></summary>
     <details>
       <summary>🔧 CRUD</summary>
       <ul>
@@ -44,6 +45,12 @@
     <ul>
       <li>TelaInicial - inicia o projeto --> Tela de login</li>
     </ul>
+    <details>
+      <summary>resources</summary>
+      <ul>
+        <li>na pasta database voce pode encontrar o eventos.db</li>
+      </ul>
+    </details>
 </details>
 
 # hoje
