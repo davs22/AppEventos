@@ -6,6 +6,7 @@ import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 
 import dao.ParticipanteDao;
+import table.Eventos;
 import table.Participante;
 
 public class ParticipanteService {
@@ -90,4 +91,18 @@ public class ParticipanteService {
             return false;
         }
     }
+
+    public Participante buscarParticipantePorId(int id) throws SQLException {
+        // Usa o método listarPorParametro do seu DAO para buscar por "id"
+        List<Participante> participanteEncontrados = dao.listarPorParametro("id", String.valueOf(id));
+        if (participanteEncontrados != null && !participanteEncontrados.isEmpty()) {
+            return participanteEncontrados.get(0); // Retorna o primeiro evento encontrado (espera-se apenas um para ID)
+        }
+        return null; // Retorna null se não encontrar o evento
+    }
+
+    public boolean excluirParticipante(int id) {
+    return this.dao.excluirParticipantePorId(id);
+}
+
 }

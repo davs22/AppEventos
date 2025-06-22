@@ -50,28 +50,36 @@ public class InscricaoDao {
         }
     }
 
-    public List<Inscricao> listarInscricoesPorParticipante(int idParticipante) {
-        List<Inscricao> inscricoes = new ArrayList<>();
-        try {
-            Connection conn = this.sqlConn.connect();
-            String sql = "SELECT id, id_participante, id_eventos FROM Inscricao WHERE id_participante = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, idParticipante);
-            ResultSet rs = stmt.executeQuery();
+    public List<Inscricao> listarInscricoesComDetalhes() {
+    List<Inscricao> lista = new ArrayList<>();
+    String sql = """
+        SELECT i.id, i.id_participante, i.id_eventos,
+               p.nome AS nome_participante,
+               e.nome AS nome_evento
+        FROM Inscricao i
+        JOIN Participante p ON i.id_participante = p.id
+        JOIN Eventos e ON i.id_eventos = e.id
+    """;
 
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                int idEvento = rs.getInt("id_eventos");
-                inscricoes.add(new Inscricao(id, idParticipante, idEvento));
-            }
+    try (Connection conn = this.sqlConn.connect();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
 
-            stmt.close();
-            this.sqlConn.close(conn);
-        } catch (Exception e) {
-            e.printStackTrace();
+        while (rs.next()) {
+            Inscricao insc = new Inscricao();
+            insc.setId(rs.getInt("id"));
+            insc.setIdParticipante(rs.getInt("id_participante"));
+            insc.setIdEvento(rs.getInt("id_eventos"));
+            insc.setNomeParticipante(rs.getString("nome_participante"));
+            insc.setNomeEvento(rs.getString("nome_evento"));
+            lista.add(insc);
         }
-        return inscricoes;
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+    return lista;
+}
 
     public boolean verificarInscricao(int idParticipante, int idEvento) {
         try {

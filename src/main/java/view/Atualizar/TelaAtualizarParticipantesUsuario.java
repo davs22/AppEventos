@@ -9,12 +9,12 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 
-public class TelaAtualizarParticipantes extends JFrame {
+public class TelaAtualizarParticipantesUsuario extends JFrame {
 
     private JTextField txtnovoNome, txtnovoSexo, txtnovoEmail, txtnovoTelefone;
     private JFormattedTextField txtidParticipante;
 
-    public TelaAtualizarParticipantes() {
+    public TelaAtualizarParticipantesUsuario() {
         setTitle("Atualizar Participante");
         setSize(400, 500);
         setLocationRelativeTo(null);

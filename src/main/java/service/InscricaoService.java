@@ -41,9 +41,10 @@ public class InscricaoService {
         return dao.inscreverParticipante(idParticipante, idEventos);
     }
 
-    public List<Inscricao> listarInscricoesPorParticipante(int idParticipante) {
-        return this.dao.listarInscricoesPorParticipante(idParticipante);
+    public List<Inscricao> listarInscricoesComDetalhes() {
+    return dao.listarInscricoesComDetalhes();
     }
+
 
     public boolean verificarInscricao(int idParticipante, int idEvento) {
         return dao.verificarInscricao(idParticipante, idEvento);

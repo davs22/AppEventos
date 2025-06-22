@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import dao.PalestranteDao;
 import table.Palestrante;
+import table.Participante;
 
 public class PalestranteService {
     private PalestranteDao dao;
@@ -61,15 +62,8 @@ public class PalestranteService {
         return this.dao.inserir(nome, curriculo, areaAtuacao);
     }
 
-    public String excluirPalestrante(Integer id) {
-        if (id == null || id <= 0) {
-            return "Erro: ID inválido para exclusão.";
-        }
-        if (!palestranteExiste(id)) {
-            return "Erro: palestrante com ID " + id + " não encontrado.";
-        }
-        return dao.excluir(id);
-    }
+    public boolean excluirPalestrante(int id) {
+    return this.dao.excluirPalestrantePorId(id);}
 
     public String atualizarPalestrante(int idPalestrante, String novoNome, String novoCurriculo, String novaAreaAtuacao) {
         if (idPalestrante <= 0 ||
@@ -95,5 +89,14 @@ public class PalestranteService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public Palestrante buscarPalestrantePorId(int id) throws SQLException {
+        // Usa o método listarPorParametro do seu DAO para buscar por "id"
+        List<Palestrante> palestranteEncontrados = dao.listarPorParametro("id", String.valueOf(id));
+        if (palestranteEncontrados != null && !palestranteEncontrados.isEmpty()) {
+            return palestranteEncontrados.get(0); // Retorna o primeiro evento encontrado (espera-se apenas um para ID)
+        }
+        return null; // Retorna null se não encontrar o evento
     }
 }

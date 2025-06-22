@@ -1,8 +1,11 @@
 package view;
+
 import javax.swing.*;
+import java.awt.*;
 
 import table.Participante;
 import service.ParticipanteService;
+
 public class TelaInicial extends JFrame {
     private JTextField emailField;
     private JPasswordField senhaField;
@@ -11,38 +14,51 @@ public class TelaInicial extends JFrame {
 
     public TelaInicial() {
         setTitle("Sistema de Eventos");
-        setSize(300, 200);
+        setSize(350, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(null);
+        setLayout(new GridBagLayout());
+        setLocationRelativeTo(null); // centraliza a janela
 
         participanteService = new ParticipanteService();
 
-        JLabel emailLabel = new JLabel("Email:");
-        emailLabel.setBounds(30, 20, 80, 25);
-        add(emailLabel);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 10, 5, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        emailField = new JTextField();
-        emailField.setBounds(100, 20, 150, 25);
-        add(emailField);
+        // Label Email
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        add(new JLabel("Email:"), gbc);
 
-        JLabel senhaLabel = new JLabel("Senha:");
-        senhaLabel.setBounds(30, 60, 80, 25);
-        add(senhaLabel);
+        // Campo Email
+        emailField = new JTextField(20);
+        gbc.gridx = 1;
+        add(emailField, gbc);
 
-        senhaField = new JPasswordField();
-        senhaField.setBounds(100, 60, 150, 25);
-        add(senhaField);
+        // Label Senha
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        add(new JLabel("Senha:"), gbc);
 
+        // Campo Senha
+        senhaField = new JPasswordField(20);
+        gbc.gridx = 1;
+        add(senhaField, gbc);
+
+        // Botão Login
         loginBtn = new JButton("Login");
-        loginBtn.setBounds(30, 100, 100, 30);
-        loginBtn.addActionListener(e -> login());
-        add(loginBtn);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        add(loginBtn, gbc);
 
+        // Botão Cadastro
         cadastroBtn = new JButton("Cadastro");
-        cadastroBtn.setBounds(150, 100, 100, 30);
+        gbc.gridx = 1;
+        add(cadastroBtn, gbc);
+
+        // Ações dos botões
+        loginBtn.addActionListener(e -> login());
         cadastroBtn.addActionListener(e -> abrirCadastro());
-        add(cadastroBtn);
     }
 
     private void login() {
@@ -60,7 +76,7 @@ public class TelaInicial extends JFrame {
                 new TelaUsuario().setVisible(true);
             }
 
-            dispose(); 
+            dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Login falhou!");
         }
@@ -68,10 +84,12 @@ public class TelaInicial extends JFrame {
 
     private void abrirCadastro() {
         new TelaCadastrar().setVisible(true);
-        dispose(); 
+        dispose();
     }
 
     public static void main(String[] args) {
-        new TelaInicial().setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            new TelaInicial().setVisible(true);
+        });
     }
 }

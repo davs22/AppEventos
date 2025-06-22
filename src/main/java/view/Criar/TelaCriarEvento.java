@@ -6,6 +6,7 @@ import java.awt.*;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date; // Certifique-se de que este import está presente
 
 import service.EventosService;// Importa sua tela principal
 import view.TelaOrganizador;
@@ -63,18 +64,18 @@ public class TelaCriarEvento extends JFrame {
         numberFormatter.setMinimum(0);
 
         gbc.gridx = 0; gbc.gridy++;
-        painelFormulario.add(new JLabel("ID Palestrante:"), gbc);
-        gbc.gridx = 1;
-        JFormattedTextField txtIdPalestrante = new JFormattedTextField(numberFormatter);
-        txtIdPalestrante.setColumns(20);
-        painelFormulario.add(txtIdPalestrante, gbc);
-
-        gbc.gridx = 0; gbc.gridy++;
         painelFormulario.add(new JLabel("Capacidade:"), gbc);
         gbc.gridx = 1;
         JFormattedTextField txtCapacidade = new JFormattedTextField(numberFormatter);
         txtCapacidade.setColumns(20);
         painelFormulario.add(txtCapacidade, gbc);
+
+        gbc.gridx = 0; gbc.gridy++;
+        painelFormulario.add(new JLabel("ID Palestrante:"), gbc);
+        gbc.gridx = 1;
+        JFormattedTextField txtIdPalestrante = new JFormattedTextField(numberFormatter);
+        txtIdPalestrante.setColumns(20);
+        painelFormulario.add(txtIdPalestrante, gbc);
 
         // Painel para os botões "Salvar" e "Voltar"
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0)); // Alinha à direita
@@ -107,25 +108,25 @@ public class TelaCriarEvento extends JFrame {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                 // Validação básica da data antes de tentar o parse
                 sdf.setLenient(false); // Torna o parse rigoroso
-                java.util.Date data = sdf.parse(dataString);
-                // java.sql.Date sqlDate = new java.sql.Date(data.getTime()); // Não é estritamente necessário para o serviço
+                java.util.Date data = sdf.parse(dataString); // <-- Aqui você já tem o objeto Date
 
                 // Certifique-se de que o valor não é nulo antes de chamar intValue()
-                int idPalestrante = 0;
-                if (txtIdPalestrante.getValue() != null) {
-                    idPalestrante = ((Number) txtIdPalestrante.getValue()).intValue();
-                }
-
                 int capacidade = 0;
                 if (txtCapacidade.getValue() != null) {
                     capacidade = ((Number) txtCapacidade.getValue()).intValue();
                 }
 
+                int idPalestrante = 0;
+                if (txtIdPalestrante.getValue() != null) {
+                    idPalestrante = ((Number) txtIdPalestrante.getValue()).intValue();
+                }
+
                 EventosService es = new EventosService();
+                // CORREÇÃO: Passe a variável 'data' (do tipo java.util.Date) em vez de 'dataString'
                 es.criarEvento(nome, descricao, dataString, local, idPalestrante, capacidade);
 
                 JOptionPane.showMessageDialog(this, "Evento criado com sucesso!");
-                
+
                 // Após salvar o evento, voltamos para a tela principal e atualizamos
                 voltarParaTelaPrincipal();
 

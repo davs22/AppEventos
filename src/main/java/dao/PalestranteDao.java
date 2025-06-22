@@ -180,22 +180,21 @@ public class PalestranteDao {
         }
     }
 
-    public String excluir(int id) {
-        try {
-            String sql = "DELETE FROM Palestrante WHERE id = ?";
-            Connection conn = this.sqlConn.connect();
-            PreparedStatement pstm = conn.prepareStatement(sql);
-            pstm.setInt(1, id);
-            pstm.executeUpdate();
-            pstm.close();
-            this.sqlConn.close(conn);
-            return "sucesso";
-        } catch (Exception e) {
-            System.err.println("Erro ao excluir palestrante: " + e.getMessage());
-            e.printStackTrace();
-            return "erro";
-        }
+    public boolean excluirPalestrantePorId(int id) {
+    String sql = "DELETE FROM Palestrante WHERE id = ?";
+    try (Connection conn = this.sqlConn.connect();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, id);
+        int linhasAfetadas = stmt.executeUpdate();
+        return linhasAfetadas > 0; // retorna true se algo foi deletado
+
+    } catch (SQLException e) {
+        System.err.println("Erro ao excluir palestrante com ID " + id + ": " + e.getMessage());
+        e.printStackTrace();
+        return false;
     }
+}
 
     public String atualizarPalestrante(int idPalestrante, String novoNome, String novoCurriculo, String novaAreaAtuacao) {
         try {

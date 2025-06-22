@@ -131,4 +131,15 @@ public class EventosService {
             return false;
         }
     }
+
+    // Este método é essencial para a TelaAtualizarEventos
+    // ADAPTADO para usar listarPorParametro do seu DAO
+    public Eventos buscarEventoPorId(int id) throws SQLException {
+        // Usa o método listarPorParametro do seu DAO para buscar por "id"
+        List<Eventos> eventosEncontrados = dao.listarPorParametro("id", String.valueOf(id));
+        if (eventosEncontrados != null && !eventosEncontrados.isEmpty()) {
+            return eventosEncontrados.get(0); // Retorna o primeiro evento encontrado (espera-se apenas um para ID)
+        }
+        return null; // Retorna null se não encontrar o evento
+    }
 }

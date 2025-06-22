@@ -330,4 +330,21 @@ public class ParticipanteDao {
         }
     }
 
+    public boolean excluirParticipantePorId(int id) {
+    String sql = "DELETE FROM Participante WHERE id = ?";
+    try (Connection conn = this.sqlConn.connect();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, id);
+        int linhasAfetadas = stmt.executeUpdate();
+        return linhasAfetadas > 0; // retorna true se algo foi deletado
+
+    } catch (SQLException e) {
+        System.err.println("Erro ao excluir participante com ID " + id + ": " + e.getMessage());
+        e.printStackTrace();
+        return false;
+    }
+}
+
+
 }

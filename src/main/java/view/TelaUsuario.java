@@ -3,7 +3,9 @@ package view;
 import javax.swing.*;
 import view.Excluir.TelaExcluirInscricao;
 import view.Menu.MenuCriarUsuario;
-import view.Atualizar.TelaAtualizarParticipantes;
+import view.Atualizar.TelaAtualizarEventos;
+import view.Atualizar.TelaAtualizarParticipantesOrganizador;
+import view.Atualizar.TelaAtualizarParticipantesUsuario;
 import view.Button.EstiloBotao;
 import view.Exibir.TelaExibirEventos;
 public class TelaUsuario extends JFrame {
@@ -32,7 +34,7 @@ public class TelaUsuario extends JFrame {
 
         btnCriar.addActionListener(e -> new MenuCriarUsuario().setVisible(true));
         btnExcluirInscricao.addActionListener(e -> new TelaExcluirInscricao().setVisible(true));
-        btnAtualizarPartticipante.addActionListener(e -> new TelaAtualizarParticipantes().setVisible(true));
+        btnAtualizarPartticipante.addActionListener(e -> new TelaAtualizarParticipantesUsuario().setVisible(true));
         btnExibirEventos.addActionListener(e -> new TelaExibirEventos().setVisible(true));
     }
 }
