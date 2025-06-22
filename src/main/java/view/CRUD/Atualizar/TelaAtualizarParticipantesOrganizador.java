@@ -67,6 +67,12 @@ public class TelaAtualizarParticipantesOrganizador extends JFrame {
         painelFormulario.add(txtEmail, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
+        painelFormulario.add(new JLabel("Celular:"), gbc);
+        gbc.gridx = 1;
+        txtCelular = new JTextField(20);
+        painelFormulario.add(txtCelular, gbc);
+
+        gbc.gridx = 0; gbc.gridy++;
         painelFormulario.add(new JLabel("Senha:"), gbc);
         gbc.gridx = 1;
         txtSenha = new JTextField(20);

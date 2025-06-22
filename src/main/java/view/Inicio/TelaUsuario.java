@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
+
 import service.EventosService;
 import service.InscricaoService;
 import service.PalestranteService;
@@ -13,15 +14,8 @@ import table.Eventos;
 import table.Inscricao;
 import table.Participante;
 import utils.SessaoUsuario;
-import table.Palestrante;
-import view.CRUD.Atualizar.TelaAtualizarEventos;
-import view.CRUD.Atualizar.TelaAtualizarPalestrantes;
+import view.TelaInicial;
 import view.CRUD.Atualizar.TelaAtualizarParticipantesUsuario;
-import view.CRUD.Criar.TelaCriarEvento;
-import view.CRUD.Criar.TelaCriarInscricao;
-import view.CRUD.Criar.TelaInserirPalestrante;
-import view.CRUD.Criar.TelaInserirParticipante;
-import view.CRUD.Excluir.TelaExcluirInscricao;
 
 public class TelaUsuario extends JFrame {
 
@@ -31,6 +25,7 @@ public class TelaUsuario extends JFrame {
     private DefaultTableModel modeloTabelaEventosInscritos;
     private JTable tabelaParticipantes;
     private DefaultTableModel modeloTabelaParticipantes;
+
     private EventosService es = new EventosService();
     private ParticipanteService ps = new ParticipanteService();
     private PalestranteService ps1 = new PalestranteService();
@@ -69,37 +64,27 @@ public class TelaUsuario extends JFrame {
 
         JPanel botoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         JButton btnInscrever = new JButton("Inscrever");
-        JButton btnCancelarInscricao = new JButton("Cancelar Inscrição");
         botoes.add(btnInscrever);
-        botoes.add(btnCancelarInscricao);
         painel.add(botoes, BorderLayout.SOUTH);
 
         btnInscrever.addActionListener(e -> {
-        int selectedRow = tabelaEventos.getSelectedRow();
-        if (selectedRow >= 0) {
-            int eventoId = (int) modeloTabelaEventos.getValueAt(selectedRow, 0);
-            try {
-                String resposta = is.inscreverParticipante(SessaoUsuario.idParticipanteLogado, eventoId);
-                JOptionPane.showMessageDialog(this, resposta);
-                atualizarEventosInscritos();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao se inscrever: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                ex.printStackTrace();
+            int selectedRow = tabelaEventos.getSelectedRow();
+            if (selectedRow >= 0) {
+                int eventoId = (int) modeloTabelaEventos.getValueAt(selectedRow, 0);
+                try {
+                    String resposta = is.inscreverParticipante(SessaoUsuario.idParticipanteLogado, eventoId);
+                    JOptionPane.showMessageDialog(this, resposta);
+                    atualizarEventosInscritos();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Erro ao se inscrever: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecione um evento para se inscrever.", "Aviso", JOptionPane.WARNING_MESSAGE);
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Selecione um evento para se inscrever.", "Aviso", JOptionPane.WARNING_MESSAGE);
-        }
-    });
-
-
-        btnCancelarInscricao.addActionListener(e -> {
-            TelaExcluirInscricao telaExcluir = new TelaExcluirInscricao();
-            telaExcluir.setVisible(true);
-            this.setVisible(false);
         });
 
         carregarEventos();
-
         return painel;
     }
 
@@ -122,9 +107,19 @@ public class TelaUsuario extends JFrame {
         painel.add(botoes, BorderLayout.SOUTH);
 
         btnEditar.addActionListener(e -> {
-            TelaAtualizarParticipantesUsuario telaAtualizar = new TelaAtualizarParticipantesUsuario();
-            telaAtualizar.setVisible(true);
-            this.setVisible(false);
+            int selectedRow = tabelaParticipantes.getSelectedRow();
+            if (selectedRow >= 0) { // Verifica se alguma linha foi selecionada
+                // Obtém o ID do evento da primeira coluna (índice 0) da linha selecionada
+                int participanteId = (int) modeloTabelaParticipantes.getValueAt(selectedRow, 0);
+
+                // Instancia a TelaAtualizarEventos (sua tela de edição) passando o ID e a referência da tela principal
+                TelaAtualizarParticipantesUsuario telaAtualizar = new TelaAtualizarParticipantesUsuario(this, participanteId);
+                telaAtualizar.setVisible(true);
+                this.setVisible(false); // Esconde a tela principal
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, selecione um participante para editar.",
+                                              "Nenhum Participante Selecionado", JOptionPane.WARNING_MESSAGE);
+            }
         });
 
         carregarParticipantes();
@@ -146,14 +141,48 @@ public class TelaUsuario extends JFrame {
         JScrollPane scroll = new JScrollPane(tabelaEventosInscritos);
         painel.add(scroll, BorderLayout.CENTER);
 
+        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         JButton btnBuscar = new JButton("Buscar Eventos Inscritos");
-        btnBuscar.addActionListener(e -> carregarEventosInscritosPorId());
+        JButton btnCancelarInscricao = new JButton("Cancelar Inscrição");
 
-        JPanel painelBusca = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        painelBusca.add(btnBuscar);
-        painel.add(painelBusca, BorderLayout.SOUTH);
+        btnBuscar.addActionListener(e -> carregarEventosInscritosPorId());
+        btnCancelarInscricao.addActionListener(e -> cancelarInscricaoSelecionada());
+
+        painelBotoes.add(btnBuscar);
+        painelBotoes.add(btnCancelarInscricao);
+        painel.add(painelBotoes, BorderLayout.SOUTH);
 
         return painel;
+    }
+
+    private void cancelarInscricaoSelecionada() {
+        int selectedRow = tabelaEventosInscritos.getSelectedRow();
+
+        if (selectedRow >= 0) {
+            int idParticipante = SessaoUsuario.idParticipanteLogado;
+            int idEvento = (int) modeloTabelaEventosInscritos.getValueAt(selectedRow, 3); // coluna ID Evento
+
+            int opcao = JOptionPane.showConfirmDialog(
+                this,
+                "Tem certeza que deseja cancelar sua inscrição no evento ID " + idEvento + "?",
+                "Confirmação",
+                JOptionPane.YES_NO_OPTION
+            );
+
+            if (opcao == JOptionPane.YES_OPTION) {
+                try {
+                    InscricaoService is = new InscricaoService();
+                    String resultado = is.excluirInscricao(idParticipante, idEvento);
+                    JOptionPane.showMessageDialog(this, resultado);
+                    atualizarEventosInscritos();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Erro ao cancelar inscrição: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione uma inscrição para cancelar.");
+        }
     }
 
     public void atualizarTabelaEventos() {
@@ -203,8 +232,7 @@ public class TelaUsuario extends JFrame {
     private void carregarEventosInscritosPorId() {
         modeloTabelaEventosInscritos.setRowCount(0);
         try {
-            List<Inscricao> inscricoes = is.listarInscricoesComDetalhesPorParticipante(SessaoUsuario.idParticipanteLogado = 1
-);
+            List<Inscricao> inscricoes = is.listarInscricoesComDetalhesPorParticipante(SessaoUsuario.idParticipanteLogado);
             for (Inscricao i : inscricoes) {
                 modeloTabelaEventosInscritos.addRow(new Object[]{
                         i.getId(), i.getIdParticipante(), i.getNomeParticipante(),
@@ -222,10 +250,7 @@ public class TelaUsuario extends JFrame {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception ignored) {}
-
-            TelaUsuario tela = new TelaUsuario();
-            SessaoUsuario.idParticipanteLogado = 3;
-            tela.setVisible(true);
+            new TelaInicial().setVisible(true); // Começa pela tela de login
         });
     }
 }

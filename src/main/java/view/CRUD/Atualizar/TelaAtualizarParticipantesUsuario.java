@@ -1,24 +1,33 @@
-package view.CRUD.Atualizar;
+package view.CRUD.Atualizar; // Mantenha este pacote se preferir, ou renomeie para 'view.Editar' para consistência
 
 import service.ParticipanteService;
+import table.Participante;
+import view.Inicio.TelaUsuario;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
-
 public class TelaAtualizarParticipantesUsuario extends JFrame {
 
-    private JTextField txtnovoNome, txtnovoSexo, txtnovoEmail, txtnovoTelefone;
-    private JFormattedTextField txtidParticipante;
+    private TelaUsuario telaPrincipal; // Referência à sua tela principal
+    private int participanteIdParaEditar; // Armazena o ID do evento que será editado
 
-    public TelaAtualizarParticipantesUsuario() {
-        setTitle("Atualizar Participante");
+    // Os campos agora podem ser preenchidos por um método
+    private JLabel lblIdValor; // Para exibir o ID sem que seja editável
+    private JTextField txtNome, txtSexo, txtEmail, txtCelular, txtSenha;
+
+    private ParticipanteService ps = new ParticipanteService(); // Instância do serviço
+
+    // NOVO CONSTRUTOR: Recebe a tela principal e o ID do evento
+    public TelaAtualizarParticipantesUsuario(TelaUsuario telaPrincipal, int participanteId) {
+        this.telaPrincipal = telaPrincipal;
+        this.participanteIdParaEditar = participanteId;
+        
+        setTitle("Atualizar Participante (ID: " + participanteId + ")");
         setSize(400, 500);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE); // Apenas esta janela será fechada
 
         JPanel painelFormulario = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -32,79 +41,123 @@ public class TelaAtualizarParticipantesUsuario extends JFrame {
         numberFormatter.setAllowsInvalid(false);
         numberFormatter.setMinimum(0);
 
+        // Campo ID: Agora é um JLabel para apenas exibir o ID
         gbc.gridx = 0; gbc.gridy = 0;
-        painelFormulario.add(new JLabel("ID Participante:"), gbc);
+        painelFormulario.add(new JLabel("ID:"), gbc);
         gbc.gridx = 1;
-        txtidParticipante = new JFormattedTextField(numberFormatter);
-        txtidParticipante.setColumns(20);
-        painelFormulario.add(txtidParticipante, gbc);
+        lblIdValor = new JLabel(String.valueOf(participanteId)); // Exibe o ID
+        painelFormulario.add(lblIdValor, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
         painelFormulario.add(new JLabel("Nome:"), gbc);
         gbc.gridx = 1;
-        txtnovoNome = new JTextField(20);
-        painelFormulario.add(txtnovoNome, gbc);
+        txtNome = new JTextField(20);
+        painelFormulario.add(txtNome, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
         painelFormulario.add(new JLabel("Sexo:"), gbc);
         gbc.gridx = 1;
-        txtnovoSexo = new JTextField(20);
-        painelFormulario.add(txtnovoSexo, gbc);
+        txtSexo = new JTextField(20);
+        painelFormulario.add(txtSexo, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
         painelFormulario.add(new JLabel("Email:"), gbc);
         gbc.gridx = 1;
-        txtnovoEmail = new JTextField(20);
-        painelFormulario.add(txtnovoEmail, gbc);
+        txtEmail = new JTextField(20);
+        painelFormulario.add(txtEmail, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
-        painelFormulario.add(new JLabel("Telefone:"), gbc);
+        painelFormulario.add(new JLabel("Celular:"), gbc);
         gbc.gridx = 1;
-        txtnovoTelefone = new JTextField(20);
-
-        txtnovoTelefone.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if (!Character.isDigit(c)) {
-                    e.consume();
-                }
-            }
-        });
-
-        painelFormulario.add(txtnovoTelefone, gbc);
+        txtCelular = new JTextField(20);
+        painelFormulario.add(txtCelular, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
+        painelFormulario.add(new JLabel("Senha:"), gbc);
+        gbc.gridx = 1;
+        txtSenha = new JTextField(20);
+        painelFormulario.add(txtSenha, gbc);
+
+        // Painel para os botões "Atualizar" e "Voltar"
+        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         JButton btnAtualizar = new JButton("Atualizar");
-        painelFormulario.add(btnAtualizar, gbc);
+        JButton btnVoltar = new JButton("Voltar"); // Renomeado de "Cancelar" para "Voltar"
 
+        painelBotoes.add(btnAtualizar);
+        painelBotoes.add(btnVoltar);
+
+        gbc.gridx = 0;
         gbc.gridy++;
-        JButton btnCancelar = new JButton("Cancelar");
-        painelFormulario.add(btnCancelar, gbc);
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.CENTER;
+        painelFormulario.add(painelBotoes, gbc);
 
-        add(painelFormulario);
+        JScrollPane scrollPane = new JScrollPane(painelFormulario);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        add(scrollPane);
 
+        // Ação para o botão ATUALIZAR
         btnAtualizar.addActionListener(e -> atualizarParticipante());
-        btnCancelar.addActionListener(e -> dispose());
+
+        // Ação para o botão VOLTAR
+        btnVoltar.addActionListener(e -> voltarParaTelaPrincipal());
+
+        // Carrega os dados do evento ao iniciar a tela
+        carregarDadosDoParticipante();
     }
 
     private void atualizarParticipante() {
         try {
-            int idParticipante = ((Number) txtidParticipante.getValue()).intValue();
-            String novoNome = txtnovoNome.getText();
-            String novoSexo = txtnovoSexo.getText();
-            String novoEmail = txtnovoEmail.getText();
-            String novoTelefone = txtnovoTelefone.getText(); 
+            // O ID agora é pego da variável de instância, não do campo de texto
+            int id = this.participanteIdParaEditar; 
+            String nome = txtNome.getText();
+            String sexo = txtSexo.getText();
+            String email = txtEmail.getText();
+            String celular = txtCelular.getText();
+            String senha = txtSenha.getText();
 
-            ParticipanteService ps = new ParticipanteService();
-            String resultado = ps.atualizarParticipante(idParticipante, novoNome, novoSexo, novoEmail, novoTelefone, novoTelefone);
+            // Chama o serviço de eventos com o ID correto e os novos dados
+            ps.atualizarParticipante(id, nome, sexo, email, celular, senha);
 
-            JOptionPane.showMessageDialog(this, resultado);
-            dispose();
+            JOptionPane.showMessageDialog(this, "Participante atualizado com sucesso!");
+            voltarParaTelaPrincipal(); // Volta para a tela principal e atualiza
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar participante: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar participante: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
+    // NOVO MÉTODO: Carrega os dados do evento usando o ID
+    private void carregarDadosDoParticipante() {
+        try {
+            Participante participante = ps.buscarParticipantePorId(this.participanteIdParaEditar);
+            if (participante != null) {
+                // Preenche os campos com os dados do evento
+                lblIdValor.setText(String.valueOf(participante.getId())); // Atualiza o JLabel com o ID
+                txtNome.setText(participante.getNome());
+                txtSexo.setText(participante.getSexo());
+                txtEmail.setText(participante.getEmail());
+                txtCelular.setText(participante.getCelular());
+                txtSenha.setText(participante.getSenha());
+               
+            } else {
+                JOptionPane.showMessageDialog(this, "Participante não encontrado com o ID: " + participanteIdParaEditar, "Erro", JOptionPane.ERROR_MESSAGE);
+                voltarParaTelaPrincipal(); // Volta se o evento não for encontrado
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar dados do participante: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            voltarParaTelaPrincipal(); // Volta se houver erro ao carregar
+        }
+    }
+
+    // Método para voltar à tela principal e atualizá-la
+    private void voltarParaTelaPrincipal() {
+        this.dispose(); // Fecha a janela atual
+        if (telaPrincipal != null) {
+            telaPrincipal.setVisible(true); // Torna a tela principal visível
+            telaPrincipal.atualizarTabelaPerfil(); // Chama o método de atualização
         }
     }
 }
