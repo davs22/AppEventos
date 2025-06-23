@@ -11,11 +11,13 @@ public class SqlService {
             case "id":
                 return "SELECT * FROM Eventos WHERE id = ?";
             case "nome":
-                return "SELECT * FROM Eventos WHERE nome = ?";
+                return "SELECT * FROM Eventos WHERE nome LIKE ?";
+            case "descricao":
+                return "SELECT * FROM Eventos WHERE descricao LIKE ?";
             case "data":
-                return "SELECT * FROM Eventos WHERE data = ?";
+                return "SELECT * FROM Eventos WHERE data LIKE ?";
             case "local":
-                return "SELECT * FROM Eventos WHERE local = ?";
+                return "SELECT * FROM Eventos WHERE local LIKE ?";
             case "palestranteid":
                 return "SELECT * FROM Eventos WHERE palestranteId = ?";
             case "capacidade":

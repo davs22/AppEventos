@@ -6,7 +6,6 @@ import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 
 import dao.ParticipanteDao;
-import table.Eventos;
 import table.Participante;
 
 public class ParticipanteService {

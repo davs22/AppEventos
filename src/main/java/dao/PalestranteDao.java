@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import table.Palestrante;
-import table.Participante;
 import util.SQLiteConnection;
 
 public class PalestranteDao {
@@ -51,7 +50,7 @@ public class PalestranteDao {
 
     try {
         SqlService sqlsService = new SqlService();
-        String sql = sqlsService.ParticipanteSQL(tipo); // retorna SQL com LIKE ou =
+        String sql = sqlsService.PalestranteSQL(tipo); // retorna SQL com LIKE ou =
 
         Connection conn = this.sqlConn.connect();
         PreparedStatement pstm = conn.prepareStatement(sql);

@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 import dao.PalestranteDao;
 import table.Palestrante;
-import table.Participante;
 
 public class PalestranteService {
     private PalestranteDao dao;
@@ -21,11 +20,8 @@ public class PalestranteService {
         return this.dao.listarTodos();
     }
 
-    public List<Palestrante> listarPorParamentro(String tipo, String valor) {
-        if (tipo == null || valor == null || tipo.isBlank() || valor.isBlank()) {
-            System.err.println("Tipo ou valor para pesquisa inválido.");
-            return List.of();
-        }
+    // Ajustado para retornar List<Palestrante> (não Palestrante) para pesquisa por parâmetro genérico
+    public List<Palestrante> listarPorParametro(String tipo, String valor) {
         return this.dao.listarPorParametro(tipo, valor);
     }
 
@@ -63,7 +59,8 @@ public class PalestranteService {
     }
 
     public boolean excluirPalestrante(int id) {
-    return this.dao.excluirPalestrantePorId(id);}
+        return this.dao.excluirPalestrantePorId(id);
+    }
 
     public String atualizarPalestrante(int idPalestrante, String novoNome, String novoCurriculo, String novaAreaAtuacao) {
         if (idPalestrante <= 0 ||
@@ -91,12 +88,12 @@ public class PalestranteService {
         }
     }
 
+    // Método que busca palestrante por ID via listarPorParametro retornando List e pegando o primeiro
     public Palestrante buscarPalestrantePorId(int id) throws SQLException {
-        // Usa o método listarPorParametro do seu DAO para buscar por "id"
-        List<Palestrante> palestranteEncontrados = dao.listarPorParametro("id", String.valueOf(id));
-        if (palestranteEncontrados != null && !palestranteEncontrados.isEmpty()) {
-            return palestranteEncontrados.get(0); // Retorna o primeiro evento encontrado (espera-se apenas um para ID)
+        List<Palestrante> palestrantesEncontrados = dao.listarPorParametro("id", String.valueOf(id));
+        if (palestrantesEncontrados != null && !palestrantesEncontrados.isEmpty()) {
+            return palestrantesEncontrados.get(0);
         }
-        return null; // Retorna null se não encontrar o evento
+        return null;
     }
 }

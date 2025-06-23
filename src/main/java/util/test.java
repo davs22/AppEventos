@@ -27,8 +27,8 @@ ParticipanteService parS = new ParticipanteService();
     palS.inserir("romulo", "ciencias", "astronomia");
     palS.inserir("rita", "portugues", "professora");
     
-    List<Palestrante> pale1 = palS.listarPorParamentro("areaAtuacao", "astronomia");
-    List<Palestrante> pale2 = palS.listarPorParamentro("curriculo", "portugues");
+    List<Palestrante> pale1 = palS.listarPorParametro("areaAtuacao", "astronomia");
+    List<Palestrante> pale2 = palS.listarPorParametro("curriculo", "portugues");
         System.out.println(pale1.get(0).getNome());
         System.out.println(pale2.get(0).getNome());
 

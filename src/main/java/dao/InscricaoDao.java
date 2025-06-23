@@ -164,25 +164,6 @@ public class InscricaoDao {
                 "Assinatura: ____________________\n";
     }
 
-    private int getNewId() {
-        try {
-            Connection conn = this.sqlConn.connect();
-            String sql = "SELECT MAX(id) AS max_id FROM Inscricao";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-            int id = 1;
-            if (rs.next()) {
-                id = rs.getInt("max_id") + 1;
-            }
-            stmt.close();
-            this.sqlConn.close(conn);
-            return id;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 1;
-        }
-    }
-
     public List<Eventos> listarEventosPorParticipante(int idParticipante) {
     List<Eventos> eventos = new ArrayList<>();
 

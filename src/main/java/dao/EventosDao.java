@@ -71,7 +71,7 @@ public class EventosDao {
                 pstm.setDate(1, sqlDate);
 
             } else {
-                pstm.setString(1, valor);
+                pstm.setString(1, "%" + valor + "%");
             }
 
             ResultSet rs = pstm.executeQuery();

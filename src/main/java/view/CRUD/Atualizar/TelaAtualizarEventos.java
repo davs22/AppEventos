@@ -11,6 +11,7 @@ import java.sql.Date; // Para java.sql.Date
 import java.text.NumberFormat;
 import java.text.ParseException; // Importe para tratamento de exceção de data
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class TelaAtualizarEventos extends JFrame {
 
@@ -173,28 +174,36 @@ public class TelaAtualizarEventos extends JFrame {
 
     // NOVO MÉTODO: Carrega os dados do evento usando o ID
     private void carregarDadosDoEvento() {
-        try {
-            Eventos evento = eventosService.buscarEventoPorId(this.eventoIdParaEditar);
-            if (evento != null) {
-                // Preenche os campos com os dados do evento
-                lblIdValor.setText(String.valueOf(evento.getId())); // Atualiza o JLabel com o ID
-                txtNome.setText(evento.getNome());
-                txtDescricao.setText(evento.getDescricao());
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                txtData.setText(sdf.format(evento.getData())); // Formata a data para exibir
-                txtLocal.setText(evento.getLocal());
-                txtIdPalestrante.setValue(evento.getPalestranteId());
-                txtCapacidade.setValue(evento.getCapacidade());
-            } else {
-                JOptionPane.showMessageDialog(this, "Evento não encontrado com o ID: " + eventoIdParaEditar, "Erro", JOptionPane.ERROR_MESSAGE);
-                voltarParaTelaPrincipal(); // Volta se o evento não for encontrado
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar dados do evento: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-            voltarParaTelaPrincipal(); // Volta se houver erro ao carregar
+    try {
+        // Busca o evento com base no ID
+        List<Eventos> eventos = eventosService.listarPorParametro("id", String.valueOf(eventoIdParaEditar));
+        
+        if (eventos != null && !eventos.isEmpty()) {
+            Eventos evento = eventos.get(0); // Pega o primeiro (e único) da lista
+
+            // Preenche os campos com os dados do evento
+            lblIdValor.setText(String.valueOf(evento.getId()));
+            txtNome.setText(evento.getNome());
+            txtDescricao.setText(evento.getDescricao());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            txtData.setText(sdf.format(evento.getData()));
+
+            txtLocal.setText(evento.getLocal());
+            txtIdPalestrante.setValue(evento.getPalestranteId());
+            txtCapacidade.setValue(evento.getCapacidade());
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Evento não encontrado com o ID: " + eventoIdParaEditar, "Erro", JOptionPane.ERROR_MESSAGE);
+            voltarParaTelaPrincipal();
         }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro ao carregar dados do evento: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+        voltarParaTelaPrincipal();
     }
+}
+
 
     // Método para voltar à tela principal e atualizá-la
     private void voltarParaTelaPrincipal() {
