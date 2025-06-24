@@ -30,11 +30,14 @@ public class EventosServiceTest {
         eventosService.criarEvento(nome, descricao, data, local, palestranteid, capacidade);
         try {
             List<Eventos> eventos = eventosService.listarEventos();
+
             boolean encontrado = eventos.stream()
-            .anyMatch(e -> nome.equals(e.getNome()) && local.equals(e.getLocal()));
+              .anyMatch(e -> nome.equals(e.getNome()) && local.equals(e.getLocal()));
             assertTrue(encontrado, "O evento criado estará na lista.");
         } catch (Exception e) {
+
             fail("Erro ao listar os eventos:" + e.getMessage());
+            
         }
     }
 }
