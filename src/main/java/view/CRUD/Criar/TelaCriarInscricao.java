@@ -11,9 +11,9 @@ import view.Inicio.TelaUsuario;
 public class TelaCriarInscricao extends JFrame {
     private TelaUsuario telaPrincipal;
 
-    // 2. Construtor que recebe a referência da tela principal
+    
     public TelaCriarInscricao(TelaUsuario telaPrincipal) {
-        this.telaPrincipal = telaPrincipal; // Armazena a referência
+        this.telaPrincipal = telaPrincipal; 
         setTitle("Inscricao");
         setSize(400, 400);
         setLocationRelativeTo(null);
@@ -45,8 +45,7 @@ public class TelaCriarInscricao extends JFrame {
         txtIdEvento.setColumns(20);
         painelFormulario.add(txtIdEvento, gbc);
 
-         // Painel para os botões "Salvar" e "Voltar"
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0)); // Alinha à direita
+        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0)); 
         JButton btnSalvar = new JButton("Salvar");
         JButton btnVoltar = new JButton("Voltar");
 
@@ -55,10 +54,10 @@ public class TelaCriarInscricao extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy++;
-        gbc.gridwidth = 2; // Ocupa duas colunas
-        gbc.fill = GridBagConstraints.NONE; // Não expande horizontalmente
-        gbc.anchor = GridBagConstraints.CENTER; // Centraliza os botões
-        painelFormulario.add(painelBotoes, gbc); // Adiciona o painel de botões
+        gbc.gridwidth = 2; 
+        gbc.fill = GridBagConstraints.NONE; 
+        gbc.anchor = GridBagConstraints.CENTER;
+        painelFormulario.add(painelBotoes, gbc); 
 
         JScrollPane scrollPane = new JScrollPane(painelFormulario);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -87,16 +86,15 @@ public class TelaCriarInscricao extends JFrame {
             }
         });
 
-        // Ação para o botão VOLTAR
         btnVoltar.addActionListener(e -> {
             voltarParaTelaPrincipal();
         });
     }
         private void voltarParaTelaPrincipal() {
-        this.dispose(); // Fecha a janela atual (TelaCriarEvento)
+        this.dispose(); 
         if (telaPrincipal != null) {
-            telaPrincipal.setVisible(true); // Torna a tela principal visível novamente
-            telaPrincipal.atualizarTabelaEventos(); // Chama o método para atualizar os dados na tela principal
+            telaPrincipal.setVisible(true); 
+            telaPrincipal.atualizarTabelaEventos(); 
         }
     }
     
