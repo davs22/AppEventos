@@ -31,9 +31,6 @@ public class TelaOrganizador extends JFrame {
     private JTable tabelaInscricoes;
     private DefaultTableModel modeloTabelaInscricoes;
 
-    private JTextField txtBuscaEventos;
-    private JButton btnBuscaEventos;
-
     private JComboBox<String> comboFiltroParticipantes;
     private JTextField txtBuscaParticipantes;
     private JButton btnBuscaParticipantes;
@@ -70,7 +67,7 @@ public class TelaOrganizador extends JFrame {
     // Painel de busca (combo + campo + botão)
     JPanel painelBusca = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JComboBox<String> comboFiltroEventos = new JComboBox<>(new String[]{
-        "nome", "descricao", "data", "local", "palestrante_id"
+        "nome", "descricao", "data", "local", "palestranteid"
     });
     JTextField txtBuscaEventos = new JTextField(20);
     JButton btnBuscaEventos = new JButton("Buscar");
@@ -158,8 +155,6 @@ public class TelaOrganizador extends JFrame {
 }
 
 
-
-    
 
 private JPanel criarPainelParticipantes() {
     JPanel painel = new JPanel(new BorderLayout(10, 10));
@@ -471,6 +466,9 @@ private void carregarParticipantes(String tipo, String valor) {
         if (tipo == null || tipo.isBlank() || valor == null || valor.isBlank()) {
             palestrantes = ps1.listarTodos();
         } else {
+            if(tipo.equals("area_atuacao")){
+                palestrantes = ps1.listarPorParametro("areaAtuacao", valor);
+            }else
             palestrantes = ps1.listarPorParametro(tipo, valor);
         }
 

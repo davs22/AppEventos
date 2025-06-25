@@ -8,7 +8,6 @@ import java.util.List;
 
 import service.EventosService;
 import service.InscricaoService;
-import service.PalestranteService;
 import service.ParticipanteService;
 import table.Eventos;
 import table.Inscricao;
@@ -28,7 +27,6 @@ public class TelaUsuario extends JFrame {
 
     private EventosService es = new EventosService();
     private ParticipanteService ps = new ParticipanteService();
-    private PalestranteService ps1 = new PalestranteService();
     private InscricaoService is = new InscricaoService();
 
     public TelaUsuario() {
@@ -54,9 +52,13 @@ public class TelaUsuario extends JFrame {
 
     // 🔍 Painel de busca
     JPanel painelBusca = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JComboBox<String> comboFiltroEventos = new JComboBox<>(new String[]{
+        "nome", "descricao", "data", "local", "palestranteid"
+    });
     JTextField txtBuscaEvento = new JTextField(20);
     JButton btnBuscarEvento = new JButton("Pesquisar");
     painelBusca.add(new JLabel("Buscar Evento:"));
+    painelBusca.add(comboFiltroEventos);
     painelBusca.add(txtBuscaEvento);
     painelBusca.add(btnBuscarEvento);
     painel.add(painelBusca, BorderLayout.NORTH); // Adiciona a barra de busca no topo
@@ -95,6 +97,12 @@ public class TelaUsuario extends JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um evento para se inscrever.", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
+    });
+
+    btnBuscarEvento.addActionListener(e -> {
+        String filtro = (String) comboFiltroEventos.getSelectedItem();
+        String valor = txtBuscaEvento.getText();
+        carregarEventos(filtro, valor);
     });
 
     carregarEventos();
@@ -226,6 +234,27 @@ public class TelaUsuario extends JFrame {
             e.printStackTrace();
         }
     }
+    private void carregarEventos(String tipo, String valor) {
+    modeloTabelaEventos.setRowCount(0);
+    try {
+        List<Eventos> eventos;
+
+        if (tipo == null || tipo.isBlank() || valor == null || valor.isBlank()) {
+            eventos = es.listarEventos();
+        } else {
+            eventos = es.listarPorParametro(tipo, valor);
+        }
+
+        for (Eventos e : eventos) {
+            modeloTabelaEventos.addRow(new Object[]{
+                e.getId(), e.getNome(), e.getDescricao(), e.getData(),
+                e.getLocal(), e.getCapacidade(), e.getPalestranteId()
+            });
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro ao listar eventos: " + e.getMessage());
+    }
+}
 
     private void carregarParticipantes() {
     modeloTabelaParticipantes.setRowCount(0); // Limpa a tabela

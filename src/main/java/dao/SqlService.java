@@ -33,10 +33,14 @@ public class SqlService {
                 return "SELECT * FROM Participante WHERE id = ?";
             case "nome":
                 return "SELECT * FROM Participante WHERE nome LIKE ?";
+            case "sexo":
+                return "SELECT * FROM Participante WHERE sexo LIKE ?";
             case "email":
                 return "SELECT * FROM Participante WHERE email LIKE ?";
             case "celular":
                 return "SELECT * FROM Participante WHERE celular LIKE ?";
+            case "tipo":
+                return "SELECT * FROM Participante WHERE tipo LIKE ?";
             default:
                 return "SELECT * FROM Participante";
         }

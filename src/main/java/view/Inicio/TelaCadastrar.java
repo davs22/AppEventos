@@ -3,7 +3,6 @@ package view.Inicio;
 import javax.swing.*;
 import java.awt.*;
 import service.ParticipanteService;
-import table.Participante;
 import view.TelaInicial;
 
 public class TelaCadastrar extends JFrame {
