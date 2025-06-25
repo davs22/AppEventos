@@ -10,7 +10,6 @@ Ao abrir o aplicativo, você será direcionado à tela inicial, onde poderá:
 - Visualizar os eventos disponíveis.
 - Navegar pelas categorias.
 - Fazer login ou cadastro (caso ainda não tenha uma conta).
-  <img src="EventosProjeto/img/teladecadastrologin.png" alt="Tela de Cadastro" width="600"/>
 
 ---
 
