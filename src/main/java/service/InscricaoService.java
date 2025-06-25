@@ -1,7 +1,6 @@
 package service;
 
 import dao.InscricaoDao;
-
 import java.time.LocalDate;
 import java.util.List;
 import table.Eventos;
@@ -37,13 +36,20 @@ public class InscricaoService {
             return "Participante já inscrito neste evento!";
         }
 
+        Eventos evento = eventosService.buscarEventoPorId(idEventos);
+        int capacidade = evento.getCapacidade();
+        int inscritos = dao.contarInscritosNoEvento(idEventos);
+
+        if (inscritos >= capacidade) {
+            return "Este evento já atingiu a capacidade máxima.";
+        }
+
         return dao.inscreverParticipante(idParticipante, idEventos);
     }
 
     public List<Inscricao> listarInscricoesComDetalhes() {
-    return dao.listarInscricoesComDetalhes();
+        return dao.listarInscricoesComDetalhes();
     }
-
 
     public boolean verificarInscricao(int idParticipante, int idEvento) {
         return dao.verificarInscricao(idParticipante, idEvento);
@@ -60,36 +66,36 @@ public class InscricaoService {
     }
 
     public String solicitarCertificado(int idParticipante, int idEvento) {
-    if (!participanteService.participanteExiste(idParticipante)) {
-        return "Erro: Participante não encontrado.";
-    }
-
-    if (!eventosService.eventoExiste(idEvento)) {
-        return "Erro: Evento não encontrado.";
-    }
-
-    try {
-        java.util.Date dataEventoUtil = eventosService.buscarEventoPorId(idEvento).getData();
-        LocalDate dataEventoLocal = new java.sql.Date(dataEventoUtil.getTime()).toLocalDate();
-
-        if (dataEventoLocal.isAfter(LocalDate.now())) {
-            return "O evento ainda não aconteceu. O certificado estará disponível após a data do evento.";
+        if (!participanteService.participanteExiste(idParticipante)) {
+            return "Erro: Participante não encontrado.";
         }
 
-        return dao.solicitarCertificado(idParticipante, idEvento);
+        if (!eventosService.eventoExiste(idEvento)) {
+            return "Erro: Evento não encontrado.";
+        }
 
-    } catch (Exception e) {
-        e.printStackTrace();
-        return "Erro ao gerar certificado: " + e.getMessage();
+        try {
+            java.util.Date dataEventoUtil = eventosService.buscarEventoPorId(idEvento).getData();
+            LocalDate dataEventoLocal = new java.sql.Date(dataEventoUtil.getTime()).toLocalDate();
+
+            if (dataEventoLocal.isAfter(LocalDate.now())) {
+                return "O evento ainda não aconteceu. O certificado estará disponível após a data do evento.";
+            }
+
+            return dao.solicitarCertificado(idParticipante, idEvento);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Erro ao gerar certificado: " + e.getMessage();
+        }
     }
-}
 
     public List<Eventos> listarEventosPorParticipante(int idParticipante) {
-    return dao.listarEventosPorParticipante(idParticipante);
+        return dao.listarEventosPorParticipante(idParticipante);
     }
 
     public List<Inscricao> listarInscricoesComDetalhesPorParticipante(int idParticipante) {
-    return dao.listarInscricoesComDetalhesPorParticipante(idParticipante);
+        return dao.listarInscricoesComDetalhesPorParticipante(idParticipante);
     }
 
 }

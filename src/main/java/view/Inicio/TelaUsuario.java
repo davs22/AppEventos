@@ -50,7 +50,6 @@ public class TelaUsuario extends JFrame {
     private JPanel criarPainelEventos() {
     JPanel painel = new JPanel(new BorderLayout(10, 10));
 
-    // 🔍 Painel de busca
     JPanel painelBusca = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JComboBox<String> comboFiltroEventos = new JComboBox<>(new String[]{
         "nome", "descricao", "data", "local", "palestranteid"
@@ -61,9 +60,8 @@ public class TelaUsuario extends JFrame {
     painelBusca.add(comboFiltroEventos);
     painelBusca.add(txtBuscaEvento);
     painelBusca.add(btnBuscarEvento);
-    painel.add(painelBusca, BorderLayout.NORTH); // Adiciona a barra de busca no topo
+    painel.add(painelBusca, BorderLayout.NORTH);
 
-    // 📋 Tabela de eventos
     String[] colunas = {"ID", "Nome", "Descrição", "Data", "Local", "Capacidade", "Palestrante ID"};
     modeloTabelaEventos = new DefaultTableModel(colunas, 0) {
         public boolean isCellEditable(int row, int column) {
@@ -75,13 +73,13 @@ public class TelaUsuario extends JFrame {
     JScrollPane scroll = new JScrollPane(tabelaEventos);
     painel.add(scroll, BorderLayout.CENTER);
 
-    // ✅ Botão de inscrição
     JPanel botoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
     JButton btnInscrever = new JButton("Inscrever");
+    JButton btnAtualizar = new JButton("Atualizar");
     botoes.add(btnInscrever);
+    botoes.add(btnAtualizar);
     painel.add(botoes, BorderLayout.SOUTH);
 
-    // 📌 Ação do botão de inscrição
     btnInscrever.addActionListener(e -> {
         int selectedRow = tabelaEventos.getSelectedRow();
         if (selectedRow >= 0) {
@@ -104,6 +102,8 @@ public class TelaUsuario extends JFrame {
         String valor = txtBuscaEvento.getText();
         carregarEventos(filtro, valor);
     });
+
+    btnAtualizar.addActionListener(e -> {carregarEventos();});
 
     carregarEventos();
     return painel;
@@ -130,14 +130,12 @@ public class TelaUsuario extends JFrame {
 
         btnEditar.addActionListener(e -> {
             int selectedRow = tabelaParticipantes.getSelectedRow();
-            if (selectedRow >= 0) { // Verifica se alguma linha foi selecionada
-                // Obtém o ID do evento da primeira coluna (índice 0) da linha selecionada
+            if (selectedRow >= 0) { 
                 int participanteId = (int) modeloTabelaParticipantes.getValueAt(selectedRow, 0);
 
-                // Instancia a TelaAtualizarEventos (sua tela de edição) passando o ID e a referência da tela principal
                 TelaAtualizarParticipantesUsuario telaAtualizar = new TelaAtualizarParticipantesUsuario(this, participanteId);
                 telaAtualizar.setVisible(true);
-                this.setVisible(false); // Esconde a tela principal
+                this.setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(this, "Por favor, selecione um participante para editar.",
                                               "Nenhum Participante Selecionado", JOptionPane.WARNING_MESSAGE);

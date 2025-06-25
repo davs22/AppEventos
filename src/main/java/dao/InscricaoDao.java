@@ -234,5 +234,23 @@ public class InscricaoDao {
     return inscricoes;
 }
 
+public int contarInscritosNoEvento(int idEvento) {
+    String sql = "SELECT COUNT(*) FROM Inscricao WHERE id_eventos = ?";
+    try (Connection conn = this.sqlConn.connect();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, idEvento);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
 
 }

@@ -64,7 +64,6 @@ public class TelaOrganizador extends JFrame {
     private JPanel criarPainelEventos() {
     JPanel painel = new JPanel(new BorderLayout(10, 10));
 
-    // Painel de busca (combo + campo + botão)
     JPanel painelBusca = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JComboBox<String> comboFiltroEventos = new JComboBox<>(new String[]{
         "nome", "descricao", "data", "local", "palestranteid"
@@ -78,7 +77,6 @@ public class TelaOrganizador extends JFrame {
 
     painel.add(painelBusca, BorderLayout.NORTH);
 
-    // Tabela de eventos
     String[] colunas = {"ID", "Nome", "Descrição", "Data", "Local", "Capacidade", "Palestrante ID"};
     modeloTabelaEventos = new DefaultTableModel(colunas, 0) {
         public boolean isCellEditable(int row, int column) {
@@ -141,14 +139,12 @@ public class TelaOrganizador extends JFrame {
         }
     });
 
-    // Listener do botão buscar
     btnBuscaEventos.addActionListener(e -> {
         String filtro = (String) comboFiltroEventos.getSelectedItem();
         String valor = txtBuscaEventos.getText();
         carregarEventos(filtro, valor);
     });
 
-    // Carregar todos os eventos inicialmente
     carregarEventos();
 
     return painel;
@@ -230,14 +226,12 @@ private JPanel criarPainelParticipantes() {
         }
     });
 
-    // Listener do botão buscar, chama carregarParticipantes com filtro
     btnBuscaParticipantes.addActionListener(e -> {
         String filtro = (String) comboFiltroParticipantes.getSelectedItem();
         String valor = txtBuscaParticipantes.getText();
         carregarParticipantes(filtro, valor);
     });
 
-    // Carrega tudo inicialmente
     carregarParticipantes();
 
     return painel;
@@ -246,7 +240,6 @@ private JPanel criarPainelParticipantes() {
     private JPanel criarPainelPalestrantes() {
     JPanel painel = new JPanel(new BorderLayout(10, 10));
 
-    // Painel de busca
     JPanel painelBusca = new JPanel(new FlowLayout(FlowLayout.LEFT));
     JLabel lblBuscar = new JLabel("Buscar por:");
     String[] opcoesBusca = {"nome", "curriculo", "area_atuacao"};
@@ -260,7 +253,6 @@ private JPanel criarPainelParticipantes() {
     painelBusca.add(btnBuscar);
     painel.add(painelBusca, BorderLayout.NORTH);
 
-    // Tabela
     String[] colunas = {"ID", "Nome", "Curriculo", "Área de Atuação"};
     modeloTabelaPalestrantes = new DefaultTableModel(colunas, 0) {
         public boolean isCellEditable(int row, int column) {
@@ -273,7 +265,6 @@ private JPanel criarPainelParticipantes() {
     JScrollPane scroll = new JScrollPane(tabelaPalestrantes);
     painel.add(scroll, BorderLayout.CENTER);
 
-    // Botões
     JPanel botoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
     JButton btnCriar = new JButton("Criar");
     JButton btnEditar = new JButton("Editar");
@@ -284,7 +275,6 @@ private JPanel criarPainelParticipantes() {
     botoes.add(btnExcluir);
     painel.add(botoes, BorderLayout.SOUTH);
 
-    // Ações dos botões CRUD
     btnCriar.addActionListener(e -> {
         TelaInserirPalestrante tela = new TelaInserirPalestrante(this);
         tela.setVisible(true);
@@ -320,18 +310,16 @@ private JPanel criarPainelParticipantes() {
         }
     });
 
-    // Ação do botão Buscar
     btnBuscar.addActionListener(e -> {
         String tipo = comboFiltro.getSelectedItem().toString().toLowerCase();
         String valor = txtBusca.getText().trim();
         if (valor.isEmpty()) {
-            carregarPalestrantes(); // Sem filtro
-        } else {
-            carregarPalestrantes(tipo, valor); // Com filtro
+            carregarPalestrantes(); 
+            carregarPalestrantes(tipo, valor);
         }
     });
 
-    carregarPalestrantes(); // Carregamento inicial
+    carregarPalestrantes();
     return painel;
 }
 
@@ -443,7 +431,6 @@ private void carregarParticipantes(String tipo, String valor) {
         JOptionPane.showMessageDialog(this, "Erro ao listar participantes: " + e.getMessage());
     }
 }
-
 
     private void carregarPalestrantes() {
         modeloTabelaPalestrantes.setRowCount(0);
