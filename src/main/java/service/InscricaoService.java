@@ -1,8 +1,11 @@
 package service;
 
 import dao.InscricaoDao;
-import java.util.List;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Date;
 import table.Eventos;
 import table.Inscricao;
 import util.SQLiteConnection;
@@ -66,27 +69,30 @@ public class InscricaoService {
     }
 
     public String solicitarCertificado(int idParticipante, int idEvento) {
-        // Verifica se participante existe
-        if (!participanteService.participanteExiste(idParticipante)) {
-            return "Erro: Participante não encontrado.";
-        }
-        // Verifica se evento existe
-        if (!eventosService.eventoExiste(idEvento)) {
-            return "Erro: Evento não encontrado.";
-        }
-        // Solicita certificado via DAO
-        return dao.solicitarCertificado(idParticipante, idEvento);
+    if (!participanteService.participanteExiste(idParticipante)) {
+        return "Erro: Participante não encontrado.";
     }
 
-    public String gerarCertificadoRepresentativo(String nomeParticipante, String nomeEvento) {
-        return "\n---------------------------\n" +
-                "        CERTIFICADO        \n" +
-                "---------------------------\n" +
-                "Certificamos que " + nomeParticipante +
-                " participou com êxito do evento:\n\"" + nomeEvento + "\"\n\n" +
-                "Data: " + java.time.LocalDate.now() + "\n" +
-                "Assinatura: ____________________\n";
+    if (!eventosService.eventoExiste(idEvento)) {
+        return "Erro: Evento não encontrado.";
     }
+
+    try {
+        // Corrigido: conversão de java.util.Date para java.sql.Date
+        java.util.Date dataEventoUtil = eventosService.buscarEventoPorId(idEvento).getData();
+        LocalDate dataEventoLocal = new java.sql.Date(dataEventoUtil.getTime()).toLocalDate();
+
+        if (dataEventoLocal.isAfter(LocalDate.now())) {
+            return "O evento ainda não aconteceu. O certificado estará disponível após a data do evento.";
+        }
+
+        return dao.solicitarCertificado(idParticipante, idEvento);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "Erro ao gerar certificado: " + e.getMessage();
+    }
+}
 
     public List<Eventos> listarEventosPorParticipante(int idParticipante) {
     return dao.listarEventosPorParticipante(idParticipante);

@@ -132,4 +132,8 @@ public class EventosService {
         }
     }
 
+    public Eventos buscarEventoPorId(int id) {
+    return dao.buscarPorId(id);
+}
+
 }

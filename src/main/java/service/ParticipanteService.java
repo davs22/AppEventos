@@ -120,8 +120,13 @@ public class ParticipanteService {
     return this.dao.excluirParticipantePorId(id);
 }
 
-public String criptografarSenha(String senhaPura) {
-    return BCrypt.hashpw(senhaPura, BCrypt.gensalt());
-}
+    public String criptografarSenha(String senhaPura) {
+        return BCrypt.hashpw(senhaPura, BCrypt.gensalt());
+    }
+
+    public String buscarNomePorId(int idParticipante) {
+        Participante p = dao.buscarPorId(idParticipante);
+        return p != null ? p.getNome() : "Desconhecido";
+    }
 
 }

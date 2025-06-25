@@ -15,7 +15,7 @@ import table.Participante;
 import utils.SessaoUsuario;
 import view.TelaInicial;
 import view.CRUD.Atualizar.TelaAtualizarParticipantesUsuario;
-
+import view.CRUD.Exibir.TelaCertificado;
 public class TelaUsuario extends JFrame {
 
     private JTable tabelaEventos;
@@ -166,12 +166,16 @@ public class TelaUsuario extends JFrame {
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         JButton btnBuscar = new JButton("Buscar Eventos Inscritos");
         JButton btnCancelarInscricao = new JButton("Cancelar Inscrição");
+        JButton btnGerarCertificado = new JButton("Gerar Certificado");
 
         btnBuscar.addActionListener(e -> carregarEventosInscritosPorId());
         btnCancelarInscricao.addActionListener(e -> cancelarInscricaoSelecionada());
+        btnGerarCertificado.addActionListener(e -> gerarCertificadoSelecionado());
 
         painelBotoes.add(btnBuscar);
         painelBotoes.add(btnCancelarInscricao);
+        painelBotoes.add(btnGerarCertificado);
+        
         painel.add(painelBotoes, BorderLayout.SOUTH);
 
         return painel;
@@ -295,6 +299,26 @@ public class TelaUsuario extends JFrame {
             e.printStackTrace();
         }
     }
+
+    private void gerarCertificadoSelecionado() {
+    int linhaSelecionada = tabelaEventosInscritos.getSelectedRow();
+    if (linhaSelecionada >= 0) {
+        int idParticipante = SessaoUsuario.idParticipanteLogado;
+        int idEvento = (int) modeloTabelaEventosInscritos.getValueAt(linhaSelecionada, 3);
+
+        String resultado = is.solicitarCertificado(idParticipante, idEvento);
+
+        if (resultado.startsWith("Certificamos")) {
+            TelaCertificado tela = new TelaCertificado(resultado);
+            tela.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, resultado, "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Selecione um evento para gerar o certificado.", "Aviso", JOptionPane.WARNING_MESSAGE);
+    }
+}
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

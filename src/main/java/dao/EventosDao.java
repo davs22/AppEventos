@@ -212,4 +212,31 @@ public class EventosDao {
 
         return lista;
     }
+
+    public Eventos buscarPorId(int id) {
+    Eventos evento = null;
+    String sql = "SELECT * FROM eventos WHERE id = ?";
+
+    try (Connection conn = sqlConn.connect();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, id);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            evento = new Eventos();
+            evento.setId(rs.getInt("id"));
+            evento.setNome(rs.getString("nome"));
+            evento.setDescricao(rs.getString("descricao"));
+            evento.setData(rs.getDate("data"));
+            evento.setLocal(rs.getString("local"));
+            evento.setCapacidade(rs.getInt("capacidade"));
+            evento.setPalestranteId(rs.getInt("palestrante_id"));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return evento;
+}
+
 }

@@ -92,7 +92,6 @@ public class ParticipanteDao {
     return lista;
 }
 
-
     public Participante buscarPorId(Integer id) {
         try {
             Participante participante = new Participante();
