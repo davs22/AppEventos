@@ -12,20 +12,17 @@ import java.io.IOException;
 
 public class SQLiteTesterMaster {
     public static void main(String[] args) throws IOException {
-        // Conectando ao DB
         SQLiteConnection sqlconn = new SQLiteConnection();
         Connection conn = sqlconn.connect();
 
-        // Solicitar escolha do usuário
         System.out.println(
                 "Digite 1 para: criar DB\nDigite 2 para: Deletar DB\nDigite 3 para: resetar DB\nDigite 4 para: pegar tabelas DB\nDigite 5 para: inserir adm no DB");
         Scanner scanner = new Scanner(System.in);
         int opcao = scanner.nextInt();
 
-        // Ação com base na escolha do usuário
         if (opcao == 1) {
             System.out.println("Criando DB");
-            // Executar SQL
+
             try (Statement stm = conn.createStatement()) {
 
                 stm.execute(
@@ -46,7 +43,7 @@ public class SQLiteTesterMaster {
 
         if (opcao == 2) {
             System.out.println("Deletado DB");
-            // Executar SQL
+
             try (Statement stm = conn.createStatement()) {
 
                 stm.execute("DROP TABLE IF EXISTS Inscricao;");
@@ -64,7 +61,6 @@ public class SQLiteTesterMaster {
 
         if (opcao == 3) {
             System.out.println("Resetar DB");
-            // Executar SQL
             try (Statement stm = conn.createStatement()) {
 
                 stm.execute("DROP TABLE IF EXISTS Inscricao;");
@@ -90,7 +86,6 @@ public class SQLiteTesterMaster {
         }
         if (opcao == 4) {
             System.out.println("pegando tabelas DB");
-            // Executar SQL
             try (Statement stm = conn.createStatement()) {
                 ResultSet rs = stm.executeQuery(
                         "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%';");

@@ -56,7 +56,7 @@ public class ParticipanteService {
             return "sucesso";
 
         } catch (Exception e) {
-            e.printStackTrace(); // ou logar em um sistema de log
+            e.printStackTrace(); 
             return "erro_excecao";
         }
     }
@@ -85,9 +85,9 @@ public class ParticipanteService {
 
         String senhaParaSalvar;
         if (novaSenha == null || novaSenha.trim().isEmpty()) {
-            senhaParaSalvar = participanteAtual.getSenha(); // mantém a senha atual (já criptografada)
+            senhaParaSalvar = participanteAtual.getSenha();
         } else {
-            senhaParaSalvar = BCrypt.hashpw(novaSenha, BCrypt.gensalt()); // criptografa nova senha
+            senhaParaSalvar = BCrypt.hashpw(novaSenha, BCrypt.gensalt()); 
         }
 
         return this.dao.atualizarParticipante(idParticipante, novoNome, novoSexo, novoEmail, novoTelefone, senhaParaSalvar);
@@ -108,12 +108,12 @@ public class ParticipanteService {
     }
 
     public Participante buscarParticipantePorId(int id) throws SQLException {
-        // Usa o método listarPorParametro do seu DAO para buscar por "id"
+       
         List<Participante> participanteEncontrados = dao.listarPorParametro("id", String.valueOf(id));
         if (participanteEncontrados != null && !participanteEncontrados.isEmpty()) {
-            return participanteEncontrados.get(0); // Retorna o primeiro evento encontrado (espera-se apenas um para ID)
+            return participanteEncontrados.get(0); 
         }
-        return null; // Retorna null se não encontrar o evento
+        return null; 
     }
 
     public boolean excluirParticipante(int id) {

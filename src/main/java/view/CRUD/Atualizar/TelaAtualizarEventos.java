@@ -1,32 +1,30 @@
-package view.CRUD.Atualizar; // Mantenha este pacote se preferir, ou renomeie para 'view.Editar' para consistência
+package view.CRUD.Atualizar; 
 
 import service.EventosService;
-import table.Eventos; // Importe a classe Eventos (seu modelo)
+import table.Eventos; 
 import view.Inicio.TelaOrganizador;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.sql.Date; // Para java.sql.Date
+import java.sql.Date; 
 import java.text.NumberFormat;
-import java.text.ParseException; // Importe para tratamento de exceção de data
+import java.text.ParseException; 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class TelaAtualizarEventos extends JFrame {
 
-    private TelaOrganizador telaPrincipal; // Referência à sua tela principal
-    private int eventoIdParaEditar; // Armazena o ID do evento que será editado
+    private TelaOrganizador telaPrincipal; 
+    private int eventoIdParaEditar; 
 
-    // Os campos agora podem ser preenchidos por um método
-    private JLabel lblIdValor; // Para exibir o ID sem que seja editável
+    private JLabel lblIdValor; 
     private JTextField txtNome, txtData, txtLocal;
     private JTextArea txtDescricao;
     private JFormattedTextField txtIdPalestrante, txtCapacidade;
 
-    private EventosService eventosService = new EventosService(); // Instância do serviço
+    private EventosService eventosService = new EventosService(); 
 
-    // NOVO CONSTRUTOR: Recebe a tela principal e o ID do evento
     public TelaAtualizarEventos(TelaOrganizador telaPrincipal, int eventoId) {
         this.telaPrincipal = telaPrincipal;
         this.eventoIdParaEditar = eventoId;
@@ -34,7 +32,7 @@ public class TelaAtualizarEventos extends JFrame {
         setTitle("Atualizar Evento (ID: " + eventoId + ")");
         setSize(400, 500);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE); // Apenas esta janela será fechada
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
 
         JPanel painelFormulario = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -48,11 +46,10 @@ public class TelaAtualizarEventos extends JFrame {
         numberFormatter.setAllowsInvalid(false);
         numberFormatter.setMinimum(0);
 
-        // Campo ID: Agora é um JLabel para apenas exibir o ID
         gbc.gridx = 0; gbc.gridy = 0;
         painelFormulario.add(new JLabel("ID:"), gbc);
         gbc.gridx = 1;
-        lblIdValor = new JLabel(String.valueOf(eventoId)); // Exibe o ID
+        lblIdValor = new JLabel(String.valueOf(eventoId));
         painelFormulario.add(lblIdValor, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
@@ -96,10 +93,9 @@ public class TelaAtualizarEventos extends JFrame {
         txtCapacidade.setColumns(20);
         painelFormulario.add(txtCapacidade, gbc);
 
-        // Painel para os botões "Atualizar" e "Voltar"
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         JButton btnAtualizar = new JButton("Atualizar");
-        JButton btnVoltar = new JButton("Voltar"); // Renomeado de "Cancelar" para "Voltar"
+        JButton btnVoltar = new JButton("Voltar"); 
 
         painelBotoes.add(btnAtualizar);
         painelBotoes.add(btnVoltar);
@@ -115,31 +111,25 @@ public class TelaAtualizarEventos extends JFrame {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane);
 
-        // Ação para o botão ATUALIZAR
         btnAtualizar.addActionListener(e -> atualizarEvento());
 
-        // Ação para o botão VOLTAR
         btnVoltar.addActionListener(e -> voltarParaTelaPrincipal());
 
-        // Carrega os dados do evento ao iniciar a tela
         carregarDadosDoEvento();
     }
 
     private void atualizarEvento() {
         try {
-            // O ID agora é pego da variável de instância, não do campo de texto
             int id = this.eventoIdParaEditar; 
             String nome = txtNome.getText();
             String descricao = txtDescricao.getText();
             String dataString = txtData.getText();
             String local = txtLocal.getText();
             
-            // Validação de null para campos formatados
             int palestranteId = 0;
             if (txtIdPalestrante.getValue() != null) {
                 palestranteId = ((Number) txtIdPalestrante.getValue()).intValue();
             } else {
-                // Opcional: exija que o campo seja preenchido ou defina um valor padrão
                 JOptionPane.showMessageDialog(this, "Por favor, preencha o ID do Palestrante.", "Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
                 return; 
             }
@@ -148,21 +138,19 @@ public class TelaAtualizarEventos extends JFrame {
             if (txtCapacidade.getValue() != null) {
                 capacidade = ((Number) txtCapacidade.getValue()).intValue();
             } else {
-                // Opcional: exija que o campo seja preenchido ou defina um valor padrão
                 JOptionPane.showMessageDialog(this, "Por favor, preencha a Capacidade.", "Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            sdf.setLenient(false); // Torna o parse rigoroso
+            sdf.setLenient(false); 
             java.util.Date dataUtil = sdf.parse(dataString);
-            Date sqlDate = new Date(dataUtil.getTime()); // Converte para java.sql.Date
+            Date sqlDate = new Date(dataUtil.getTime()); 
 
-            // Chama o serviço de eventos com o ID correto e os novos dados
             eventosService.editarEvento(id, nome, descricao, sqlDate, local, palestranteId, capacidade);
 
             JOptionPane.showMessageDialog(this, "Evento atualizado com sucesso!");
-            voltarParaTelaPrincipal(); // Volta para a tela principal e atualiza
+            voltarParaTelaPrincipal();
         } catch (ParseException ex) {
             JOptionPane.showMessageDialog(this, "Formato de data inválido. Use DD-MM-YYYY.", "Erro de Data", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
@@ -172,16 +160,13 @@ public class TelaAtualizarEventos extends JFrame {
         }
     }
 
-    // NOVO MÉTODO: Carrega os dados do evento usando o ID
     private void carregarDadosDoEvento() {
     try {
-        // Busca o evento com base no ID
         List<Eventos> eventos = eventosService.listarPorParametro("id", String.valueOf(eventoIdParaEditar));
         
         if (eventos != null && !eventos.isEmpty()) {
-            Eventos evento = eventos.get(0); // Pega o primeiro (e único) da lista
+            Eventos evento = eventos.get(0); 
 
-            // Preenche os campos com os dados do evento
             lblIdValor.setText(String.valueOf(evento.getId()));
             txtNome.setText(evento.getNome());
             txtDescricao.setText(evento.getDescricao());
@@ -205,12 +190,11 @@ public class TelaAtualizarEventos extends JFrame {
 }
 
 
-    // Método para voltar à tela principal e atualizá-la
     private void voltarParaTelaPrincipal() {
-        this.dispose(); // Fecha a janela atual
+        this.dispose(); 
         if (telaPrincipal != null) {
-            telaPrincipal.setVisible(true); // Torna a tela principal visível
-            telaPrincipal.atualizarTabelaEventos(); // Chama o método de atualização
+            telaPrincipal.setVisible(true);
+            telaPrincipal.atualizarTabelaEventos(); 
         }
     }
 }

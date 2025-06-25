@@ -14,7 +14,6 @@ PalestranteService palS = new PalestranteService();
 InscricaoService is = new InscricaoService();
 ParticipanteService parS = new ParticipanteService();
 
-//criando particpantes e exibindo
     parS.inserir("cleber", "M", "cleber@gmail.com", "(27)888882222", "cleber123");
     parS.inserir("rosangela", "F", "rosangela@gmail.com", "(27)333330000", "rosangela123");
 
@@ -23,7 +22,6 @@ ParticipanteService parS = new ParticipanteService();
         System.out.println(lista.get(0).getNome());
         System.out.println(lista2.get(0).getNome());
     
-//criando palestrantes
     palS.inserir("romulo", "ciencias", "astronomia");
     palS.inserir("rita", "portugues", "professora");
     
@@ -32,7 +30,6 @@ ParticipanteService parS = new ParticipanteService();
         System.out.println(pale1.get(0).getNome());
         System.out.println(pale2.get(0).getNome());
 
-//criando eventos
     es.criarEvento("orientção das estrelas", "aula teorica abordando gravidade e direções", "23-11-2025","plaza", 1, 200);
     es.criarEvento("evolução do portugues", "como se formou o portugus de hoje em dia que conehcemos", "22-12-2025", "plaza", 2, 200);
 

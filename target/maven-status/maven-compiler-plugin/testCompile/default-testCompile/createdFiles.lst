@@ -1,2 +1,4 @@
-test\EventosServiceTest.class
+test\ParticipanteServiceTest.class
 test\InscricaoServiceTest.class
+test\PalestranteServiceTest.class
+test\EventosServiceTest.class

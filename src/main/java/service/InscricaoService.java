@@ -3,9 +3,7 @@ package service;
 import dao.InscricaoDao;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
-import java.util.Date;
 import table.Eventos;
 import table.Inscricao;
 import util.SQLiteConnection;
@@ -29,20 +27,16 @@ public class InscricaoService {
     }
 
     public String inscreverParticipante(int idParticipante, int idEventos) {
-        // Verifica se participante existe
         if (!participanteService.participanteExiste(idParticipante)) {
             return "Erro: Participante não encontrado.";
         }
-        // Verifica se evento existe
         if (!eventosService.eventoExiste(idEventos)) {
             return "Erro: Evento não encontrado.";
         }
-        // Verifica se participante já está inscrito no evento
         if (dao.verificarInscricao(idParticipante, idEventos)) {
             return "Participante já inscrito neste evento!";
         }
 
-        // Se passou nas verificações, realiza a inscrição
         return dao.inscreverParticipante(idParticipante, idEventos);
     }
 
@@ -56,15 +50,12 @@ public class InscricaoService {
     }
 
     public String excluirInscricao(int idParticipante, int idEvento) {
-        // Verifica se participante existe
         if (!participanteService.participanteExiste(idParticipante)) {
             return "Erro: Participante não encontrado.";
         }
-        // Verifica se evento existe
         if (!eventosService.eventoExiste(idEvento)) {
             return "Erro: Evento não encontrado.";
         }
-        // Realiza exclusão
         return dao.excluirInscricao(idParticipante, idEvento);
     }
 
@@ -78,7 +69,6 @@ public class InscricaoService {
     }
 
     try {
-        // Corrigido: conversão de java.util.Date para java.sql.Date
         java.util.Date dataEventoUtil = eventosService.buscarEventoPorId(idEvento).getData();
         LocalDate dataEventoLocal = new java.sql.Date(dataEventoUtil.getTime()).toLocalDate();
 

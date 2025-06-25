@@ -1,12 +1,8 @@
--- victor: esse arquivo cria o DB se necessario modificação faça
-
---deletar as tabelas 
 DROP TABLE IF EXISTS Inscricao;
 DROP TABLE IF EXISTS Eventos;
 DROP TABLE IF EXISTS Palestrante;
 DROP TABLE IF EXISTS Participante;
 
--- Tabela de Participantes
 CREATE TABLE Participante (
     id INTEGER PRIMARY KEY,
     nome TEXT NOT NULL,
@@ -17,7 +13,6 @@ CREATE TABLE Participante (
     tipo TEXT NOT NULL DEFAULT 'participante'
 );
 
--- Tabela de Palestrantes
 CREATE TABLE Palestrante (
     id INTEGER PRIMARY KEY,
     nome TEXT NOT NULL,
@@ -25,7 +20,6 @@ CREATE TABLE Palestrante (
     areaAtuacao TEXT
 );
 
--- Tabela de Eventos
 CREATE TABLE Eventos (
     id INTEGER PRIMARY KEY,
     nome TEXT NOT NULL,
@@ -38,7 +32,6 @@ CREATE TABLE Eventos (
     
 );
 
--- Tabela associativa entre Evento e Participante (Inscrição)
 CREATE TABLE Inscricao (
     id INTEGER PRIMARY KEY,
     id_eventos INTEGER NOT NULL,

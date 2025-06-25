@@ -58,7 +58,7 @@ public class PalestranteDao {
         if (tipo.equalsIgnoreCase("id")) {
             pstm.setInt(1, Integer.parseInt(valor));
         } else {
-            pstm.setString(1, "%" + valor + "%");  // busca parcial com LIKE
+            pstm.setString(1, "%" + valor + "%"); 
         }
 
         ResultSet rs = pstm.executeQuery();
@@ -192,7 +192,7 @@ public class PalestranteDao {
 
         stmt.setInt(1, id);
         int linhasAfetadas = stmt.executeUpdate();
-        return linhasAfetadas > 0; // retorna true se algo foi deletado
+        return linhasAfetadas > 0; 
 
     } catch (SQLException e) {
         System.err.println("Erro ao excluir palestrante com ID " + id + ": " + e.getMessage());

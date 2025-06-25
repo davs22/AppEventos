@@ -10,16 +10,14 @@ import java.awt.*;
 import java.text.NumberFormat;
 public class TelaAtualizarParticipantesOrganizador extends JFrame {
 
-    private TelaOrganizador telaPrincipal; // Referência à sua tela principal
-    private int participanteIdParaEditar; // Armazena o ID do evento que será editado
+    private TelaOrganizador telaPrincipal; 
+    private int participanteIdParaEditar; 
 
-    // Os campos agora podem ser preenchidos por um método
-    private JLabel lblIdValor; // Para exibir o ID sem que seja editável
+    private JLabel lblIdValor; 
     private JTextField txtNome, txtSexo, txtEmail, txtCelular, txtSenha;
 
-    private ParticipanteService ps = new ParticipanteService(); // Instância do serviço
+    private ParticipanteService ps = new ParticipanteService(); 
 
-    // NOVO CONSTRUTOR: Recebe a tela principal e o ID do evento
     public TelaAtualizarParticipantesOrganizador(TelaOrganizador telaPrincipal, int participanteId) {
         this.telaPrincipal = telaPrincipal;
         this.participanteIdParaEditar = participanteId;
@@ -27,7 +25,7 @@ public class TelaAtualizarParticipantesOrganizador extends JFrame {
         setTitle("Atualizar Participante (ID: " + participanteId + ")");
         setSize(400, 500);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE); // Apenas esta janela será fechada
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
 
         JPanel painelFormulario = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -41,11 +39,10 @@ public class TelaAtualizarParticipantesOrganizador extends JFrame {
         numberFormatter.setAllowsInvalid(false);
         numberFormatter.setMinimum(0);
 
-        // Campo ID: Agora é um JLabel para apenas exibir o ID
         gbc.gridx = 0; gbc.gridy = 0;
         painelFormulario.add(new JLabel("ID:"), gbc);
         gbc.gridx = 1;
-        lblIdValor = new JLabel(String.valueOf(participanteId)); // Exibe o ID
+        lblIdValor = new JLabel(String.valueOf(participanteId)); 
         painelFormulario.add(lblIdValor, gbc);
 
         gbc.gridx = 0; gbc.gridy++;
@@ -78,10 +75,9 @@ public class TelaAtualizarParticipantesOrganizador extends JFrame {
         txtSenha = new JTextField(20);
         painelFormulario.add(txtSenha, gbc);
 
-        // Painel para os botões "Atualizar" e "Voltar"
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         JButton btnAtualizar = new JButton("Atualizar");
-        JButton btnVoltar = new JButton("Voltar"); // Renomeado de "Cancelar" para "Voltar"
+        JButton btnVoltar = new JButton("Voltar"); 
 
         painelBotoes.add(btnAtualizar);
         painelBotoes.add(btnVoltar);
@@ -97,19 +93,15 @@ public class TelaAtualizarParticipantesOrganizador extends JFrame {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane);
 
-        // Ação para o botão ATUALIZAR
         btnAtualizar.addActionListener(e -> atualizarParticipante());
 
-        // Ação para o botão VOLTAR
         btnVoltar.addActionListener(e -> voltarParaTelaPrincipal());
 
-        // Carrega os dados do evento ao iniciar a tela
         carregarDadosDoParticipante();
     }
 
     private void atualizarParticipante() {
         try {
-            // O ID agora é pego da variável de instância, não do campo de texto
             int id = this.participanteIdParaEditar; 
             String nome = txtNome.getText();
             String sexo = txtSexo.getText();
@@ -117,24 +109,21 @@ public class TelaAtualizarParticipantesOrganizador extends JFrame {
             String celular = txtCelular.getText();
             String senha = txtSenha.getText();
 
-            // Chama o serviço de eventos com o ID correto e os novos dados
             ps.atualizarParticipante(id, nome, sexo, email, celular, senha);
 
             JOptionPane.showMessageDialog(this, "Participante atualizado com sucesso!");
-            voltarParaTelaPrincipal(); // Volta para a tela principal e atualiza
+            voltarParaTelaPrincipal(); 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Erro ao atualizar participante: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
     }
 
-    // NOVO MÉTODO: Carrega os dados do evento usando o ID
     private void carregarDadosDoParticipante() {
         try {
             Participante participante = ps.buscarParticipantePorId(this.participanteIdParaEditar);
             if (participante != null) {
-                // Preenche os campos com os dados do evento
-                lblIdValor.setText(String.valueOf(participante.getId())); // Atualiza o JLabel com o ID
+                lblIdValor.setText(String.valueOf(participante.getId())); 
                 txtNome.setText(participante.getNome());
                 txtSexo.setText(participante.getSexo());
                 txtEmail.setText(participante.getEmail());
@@ -143,21 +132,20 @@ public class TelaAtualizarParticipantesOrganizador extends JFrame {
                
             } else {
                 JOptionPane.showMessageDialog(this, "Participante não encontrado com o ID: " + participanteIdParaEditar, "Erro", JOptionPane.ERROR_MESSAGE);
-                voltarParaTelaPrincipal(); // Volta se o evento não for encontrado
+                voltarParaTelaPrincipal(); 
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar dados do participante: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-            voltarParaTelaPrincipal(); // Volta se houver erro ao carregar
+            voltarParaTelaPrincipal(); 
         }
     }
 
-    // Método para voltar à tela principal e atualizá-la
     private void voltarParaTelaPrincipal() {
-        this.dispose(); // Fecha a janela atual
+        this.dispose(); 
         if (telaPrincipal != null) {
-            telaPrincipal.setVisible(true); // Torna a tela principal visível
-            telaPrincipal.atualizarTabelaParticipantes(); // Chama o método de atualização
+            telaPrincipal.setVisible(true); 
+            telaPrincipal.atualizarTabelaParticipantes(); 
         }
     }
 }

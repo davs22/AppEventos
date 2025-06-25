@@ -19,8 +19,6 @@ public class PalestranteService {
     public List<Palestrante> listarTodos() {
         return this.dao.listarTodos();
     }
-
-    // Ajustado para retornar List<Palestrante> (não Palestrante) para pesquisa por parâmetro genérico
     public List<Palestrante> listarPorParametro(String tipo, String valor) {
         return this.dao.listarPorParametro(tipo, valor);
     }
@@ -88,7 +86,6 @@ public class PalestranteService {
         }
     }
 
-    // Método que busca palestrante por ID via listarPorParametro retornando List e pegando o primeiro
     public Palestrante buscarPalestrantePorId(int id) throws SQLException {
         List<Palestrante> palestrantesEncontrados = dao.listarPorParametro("id", String.valueOf(id));
         if (palestrantesEncontrados != null && !palestrantesEncontrados.isEmpty()) {

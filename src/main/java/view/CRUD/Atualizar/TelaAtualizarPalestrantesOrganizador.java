@@ -7,7 +7,6 @@ import view.Inicio.TelaOrganizador;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-
 public class TelaAtualizarPalestrantesOrganizador extends JFrame {
 
     private TelaOrganizador telaPrincipal;
@@ -32,35 +31,30 @@ public class TelaAtualizarPalestrantesOrganizador extends JFrame {
         gbc.insets = new Insets(5,5,5,5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // ID (não editável)
         gbc.gridx = 0; gbc.gridy = 0;
         painelFormulario.add(new JLabel("ID:"), gbc);
         gbc.gridx = 1;
         lblIdValor = new JLabel(String.valueOf(palestranteId));
         painelFormulario.add(lblIdValor, gbc);
 
-        // Nome
         gbc.gridx = 0; gbc.gridy++;
         painelFormulario.add(new JLabel("Nome:"), gbc);
         gbc.gridx = 1;
         txtNome = new JTextField(20);
         painelFormulario.add(txtNome, gbc);
 
-        // Currículo
         gbc.gridx = 0; gbc.gridy++;
         painelFormulario.add(new JLabel("Currículo:"), gbc);
         gbc.gridx = 1;
         txtCurriculo = new JTextField(20);
         painelFormulario.add(txtCurriculo, gbc);
 
-        // Área de Atuação
         gbc.gridx = 0; gbc.gridy++;
         painelFormulario.add(new JLabel("Área de Atuação:"), gbc);
         gbc.gridx = 1;
         txtAreaAtuacao = new JTextField(20);
         painelFormulario.add(txtAreaAtuacao, gbc);
 
-        // Botões Atualizar e Voltar
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         JButton btnAtualizar = new JButton("Atualizar");
         JButton btnVoltar = new JButton("Voltar");
@@ -78,11 +72,9 @@ public class TelaAtualizarPalestrantesOrganizador extends JFrame {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane);
 
-        // Ações dos botões
         btnAtualizar.addActionListener(e -> atualizarPalestrante());
         btnVoltar.addActionListener(e -> voltarParaTelaPrincipal());
 
-        // Carregar dados do palestrante no início
         carregarDadosDoPalestrante();
     }
 

@@ -54,7 +54,7 @@ public class ParticipanteDao {
 
     try {
         SqlService sqlsService = new SqlService();
-        String sql = sqlsService.ParticipanteSQL(tipo); // retorna SQL com LIKE ou =
+        String sql = sqlsService.ParticipanteSQL(tipo); 
 
         Connection conn = this.sqlConn.connect();
         PreparedStatement pstm = conn.prepareStatement(sql);
@@ -62,7 +62,7 @@ public class ParticipanteDao {
         if (tipo.equalsIgnoreCase("id")) {
             pstm.setInt(1, Integer.parseInt(valor));
         } else {
-            pstm.setString(1, "%" + valor + "%");  // busca parcial com LIKE
+            pstm.setString(1, "%" + valor + "%");  
         }
 
         ResultSet rs = pstm.executeQuery();
@@ -192,7 +192,6 @@ public class ParticipanteDao {
             pstm.close();
             this.sqlConn.close(conn);
 
-            // Alinha com a lógica do ParticipanteService
             return resultado > 0 ? "sucesso" : "erro_insercao";
 
         } catch (Exception e) {
@@ -260,7 +259,7 @@ public class ParticipanteDao {
                     return p;
                 }
             }
-            return null; // Login falhou
+            return null; 
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -277,7 +276,7 @@ public class ParticipanteDao {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return rs.getInt(1) > 0; // se COUNT > 0, o participante existe
+                return rs.getInt(1) > 0; 
             } else {
                 return false;
             }
@@ -338,7 +337,7 @@ public class ParticipanteDao {
 
         stmt.setInt(1, id);
         int linhasAfetadas = stmt.executeUpdate();
-        return linhasAfetadas > 0; // retorna true se algo foi deletado
+        return linhasAfetadas > 0; 
 
     } catch (SQLException e) {
         System.err.println("Erro ao excluir participante com ID " + id + ": " + e.getMessage());

@@ -31,6 +31,7 @@ view\CRUD\Exibir\TelaExibirPalestrantes.class
 view\CRUD\Atualizar\TelaAtualizarParticipantesOrganizador.class
 view\Inicio\TelaOrganizador$3.class
 service\InscricaoService.class
+view\CRUD\Exibir\TelaCertificado.class
 view\CRUD\Criar\TelaInserirPalestrante.class
 view\Inicio\TelaUsuario$1.class
 table\Inscricao.class
